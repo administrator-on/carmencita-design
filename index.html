@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CARMENCITA DESIGN - Panel de Control</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Librería para exportar a Excel con pestañas nativas -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
@@ -44,7 +44,6 @@
         .stat-card h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); word-break: break-all; }
         .explicacion-tag { font-size: 0.68rem; color: var(--text-muted); display: block; margin-top: 2px; line-height: 1.2; }
 
-        /* Contenedor Especial para Notificaciones de Entrega */
         .alerts-container { width: 100%; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
         .alert-item { padding: 0.85rem 1.25rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; justify-content: space-between; border-left: 5px solid transparent; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .alert-hoy { background-color: #fef2f2; border-left-color: var(--danger); color: #991b1b; }
@@ -80,6 +79,7 @@
         .bg-efectivo { background-color: #fef3c7; color: #92400e; }
         .bg-banco { background-color: #e0f2fe; color: #0369a1; }
         .badge-pendiente { background-color: #ffedd5; color: #c2410c; }
+        .badge-encamino { background-color: #e0f2fe; color: #0369a1; }
         .badge-entregado { background-color: #dcfce7; color: #15803d; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 2000; justify-content: center; align-items: center; padding: 1rem; }
@@ -120,7 +120,7 @@
             <button id="btn-ventas" onclick="irA('ventas')">🛍️ Ventas/Clientes</button>
             <button id="btn-entregas" onclick="irA('entregas')">📦 Órdenes de Entrega</button>
             <button id="btn-cobros" onclick="irA('cobros')">🚨 Cobros Activos</button>
-            <button id="btn-nomina" onclick="irA('nomina')">👷 Pago Operarios</button>
+            <button id="btn-nomina" onclick="irA('nomina')">👷 Pago Trabajadores</button>
             <button id="btn-gastos" onclick="irA('gastos')">💡 Gastos Empresa</button>
             <button id="btn-cajamenor" onclick="irA('cajamenor')">🪙 Caja Menor</button>
         </nav>
@@ -132,7 +132,6 @@
 
     <!-- Contenedor Principal -->
     <main>
-        <!-- CONTENEDOR DE ALERTAS DE ENTREGA (CRON) -->
         <div class="alerts-container" id="panel-alertas-automaticas"></div>
 
         <!-- INDICADORES FINANCIEROS -->
@@ -169,7 +168,7 @@
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 2px;" id="txt-modulo-desc">Resumen visual claro del dinero de tu negocio.</p>
         </header>
 
-        <!-- BARRA DE BÚSQUEDA Y FILTROS COMPARTIDA -->
+        <!-- BARRA DE BÚSQUEDA Y FILTROS -->
         <div class="filter-bar" id="barra-busqueda-general">
             <div style="flex: 1; min-width: 200px;" class="campo">
                 <label id="lbl-buscador-dinamico">🔍 Buscar en este módulo</label>
@@ -233,7 +232,13 @@
             </div>
 
             <div class="panel">
-                <h3>🛍️ Contratos y Clientes Activos</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                    <h3 style="border:none; padding:0; margin:0;">🛍️ Contratos y Clientes Activos</h3>
+                    <button class="btn btn-azul" onclick="toggleFormularioVenta()" id="btn-toggle-venta">
+                        ➕ Nueva Venta
+                    </button>
+                </div>
+
                 <div class="table-responsive">
                     <table id="t-ventas">
                         <thead><tr><th>Factura Nº</th><th>F. Registro</th><th>Cliente</th><th>Proyecto</th><th>Total</th><th>Abonado</th><th>Pactada para</th><th>Acciones</th></tr></thead>
@@ -241,26 +246,33 @@
                     </table>
                 </div>
 
-                <h3 style="color:var(--info); margin-top:1.5rem;" id="lbl-formulario-modo">➕ Registrar Nuevo Contrato de Venta</h3>
-                <input type="hidden" id="v-id-edicion" value="">
-                <div class="flex-form">
-                    <div class="campo"><label>Número de Factura Física (Talonario)</label><input type="text" id="v-factura" placeholder="Ej: 0254"></div>
-                    <div class="campo"><label>Nombre del Cliente</label><input type="text" id="v-cliente" placeholder="Cliente"></div>
-                    <div class="campo"><label>Cédula o NIT</label><input type="text" id="v-cedula" placeholder="Documento"></div>
-                    <div class="campo"><label>Dirección de Entrega</label><input type="text" id="v-direccion" placeholder="Dirección"></div>
-                    <div class="campo"><label>Barrio</label><input type="text" id="v-barrio" placeholder="Barrio"></div>
-                    <div class="campo"><label>Teléfono / WhatsApp</label><input type="text" id="v-telefono" placeholder="Celular"></div>
-                    <div class="campo"><label>Correo Electrónico</label><input type="email" id="v-correo" placeholder="Correo"></div>
-                    <div class="campo"><label>Descripción del Trabajo</label><input type="text" id="v-desc" placeholder="Ej: Cocina mueble RH"></div>
-                    <div class="campo"><label>Valor Total ($)</label><input type="text" id="v-total" oninput="formatMoni(this)" placeholder="Total"></div>
-                    <div class="campo" id="box-v-fecha"><label>Fecha del Contrato (Opcional)</label><input type="date" id="v-fecha-registro"><small style="font-size:0.68rem; color:var(--text-muted);">Dejar vacío si es de hoy.</small></div>
-                    <div class="campo"><label>Fecha Pactada de Entrega (Opcional)</label><input type="date" id="v-fecha-pactada"><small style="font-size:0.68rem; color:var(--text-muted);">Vacío = Calcula por defecto 17 días hábiles.</small></div>
-                    <div class="campo" id="box-v-abono"><label>Abono de Cuota Hoy ($)</label><input type="text" id="v-abono" oninput="formatMoni(this)" placeholder="0 si no hay"></div>
-                    <div class="campo" id="box-v-medio"><label>Medio de Recibo</label><select id="v-medio"><option value="Banco">Banco</option><option value="Efectivo Grande">Efectivo Principal</option></select></div>
-                </div>
-                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-                    <button class="btn btn-verde" style="flex:1;" onclick="guardarVenta()" id="btn-guardar-venta-accion">🚀 Guardar Contrato</button>
-                    <button class="btn" style="background:#64748b; display:none;" id="btn-cancelar-edicion-venta" onclick="cancelarEdicionVenta()">Cancelar Edición</button>
+                <!-- FORMULARIO DE VENTA (OCULTO POR DEFECTO) -->
+                <div id="formulario-venta-container" style="display: none; margin-top: 1.5rem; border-top: 2px dashed var(--border); padding-top: 1rem;">
+                    <h3 style="color:var(--info);" id="lbl-formulario-modo">➕ Registrar Nuevo Contrato de Venta</h3>
+                    <input type="hidden" id="v-id-edicion" value="">
+                    <div class="flex-form">
+                        <div class="campo"><label>Número de Factura Física (Talonario)</label><input type="text" id="v-factura" placeholder="Ej: 0254"></div>
+                        <div class="campo"><label>Nombre del Cliente</label><input type="text" id="v-cliente" placeholder="Cliente"></div>
+                        <div class="campo"><label>Cédula o NIT</label><input type="text" id="v-cedula" placeholder="Documento"></div>
+                        <div class="campo"><label>Dirección de Entrega</label><input type="text" id="v-direccion" placeholder="Dirección"></div>
+                        <div class="campo"><label>Barrio</label><input type="text" id="v-barrio" placeholder="Barrio"></div>
+                        <div class="campo"><label>Teléfono / WhatsApp</label><input type="text" id="v-telefono" placeholder="Celular"></div>
+                        <div class="campo"><label>Correo Electrónico</label><input type="email" id="v-correo" placeholder="Correo"></div>
+                        <div class="campo"><label>Descripción del Trabajo</label><input type="text" id="v-desc" placeholder="Ej: Cocina mueble RH"></div>
+                        <div class="campo"><label>Valor Total ($)</label><input type="text" id="v-total" oninput="formatMoni(this)" placeholder="Total"></div>
+                        <div class="campo" id="box-v-fecha"><label>Fecha del Contrato (Opcional)</label><input type="date" id="v-fecha-registro"><small style="font-size:0.68rem; color:var(--text-muted);">Dejar vacío si es de hoy.</small></div>
+                        <div class="campo"><label>Fecha Pactada de Entrega (Opcional)</label><input type="date" id="v-fecha-pactada"><small style="font-size:0.68rem; color:var(--text-muted);">Vacío = Calcula por defecto 17 días hábiles.</small></div>
+                        
+                        <div class="campo" id="box-v-medio"><label>Medio de Recibo (Abono Inicial)</label><select id="v-medio" onchange="alternarVisibilidadMetodoPagoDividido(this.value)"><option value="Banco">Banco</option><option value="Efectivo Grande">Efectivo Principal</option><option value="DIVIDIDO">🔄 Múltiples Medios (Dividido)</option></select></div>
+                        <div class="campo" id="box-v-abono"><label>Abono de Cuota Hoy ($)</label><input type="text" id="v-abono" oninput="formatMoni(this)" placeholder="0 si no hay"></div>
+                        
+                        <div class="campo" id="box-v-abono-banco" style="display:none;"><label style="color:var(--info);">Monto pagado por BANCO ($)</label><input type="text" id="v-abono-banco" oninput="formatMoni(this)" placeholder="Monto Banco"></div>
+                        <div class="campo" id="box-v-abono-efectivo" style="display:none;"><label style="color:var(--accent);">Monto pagado por EFECTIVO ($)</label><input type="text" id="v-abono-efectivo" oninput="formatMoni(this)" placeholder="Monto Efectivo"></div>
+                    </div>
+                    <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                        <button class="btn btn-verde" style="flex:1;" onclick="guardarVenta()" id="btn-guardar-venta-accion">🚀 Guardar Contrato</button>
+                        <button class="btn" style="background:#64748b; display:none;" id="btn-cancelar-edicion-venta" onclick="cancelarEdicionVenta()">Cancelar Edición</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -291,28 +303,31 @@
             </div>
         </div>
 
-        <!-- MÓDULO PAGO OPERARIOS -->
+        <!-- MÓDULO PAGO TRABAJADORES -->
         <div id="mod-nomina" class="seccion-vista">
-            <button class="btn btn-azul" style="margin-bottom:1rem; width:100%;" onclick="toggleSeccionTrabajador()">➕ Crear Nuevo Trabajador / Operario</button>
-            
-            <div id="box-crear-trabajador-rapido" class="seccion-ocultable">
-                <h3 style="font-size:0.95rem; margin-bottom:0.75rem; border:none; padding:0; color:var(--info);">Ficha Personal del Operario</h3>
-                <div class="flex-form">
-                    <div class="campo"><label>Nombre Completo</label><input type="text" id="t-nombre" placeholder="Nombre"></div>
-                    <div class="campo"><label>Cédula de Ciudadanía</label><input type="text" id="t-cedula" placeholder="Cédula"></div>
-                    <div class="campo"><label>Teléfono / WhatsApp</label><input type="text" id="t-telefono" placeholder="Celular"></div>
-                    <div class="campo"><label>Dirección</label><input type="text" id="t-direccion" placeholder="Residencia"></div>
-                    <div class="campo"><label>Correo</label><input type="text" id="t-correo" placeholder="Opcional"></div>
-                    <div class="campo"><label>Cargo / Oficio Especializado</label><input type="text" id="t-cargo" placeholder="Ej: Maestro Carpintero, Pintor..."></div>
-                </div>
-                <div style="display:flex; gap:0.5rem; justify-content:flex-end; margin-top:0.5rem;">
-                    <button class="btn btn-verde" onclick="guardarTrabajadorRapido()">💾 Guardar Ficha</button>
-                    <button class="btn" style="background:#64748b;" onclick="toggleSeccionTrabajador()">Cerrar</button>
-                </div>
-            </div>
-
             <div class="panel">
-                <h3>👷 Historial de Vales y Adelantos</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                    <h3 style="border:none; padding:0; margin:0;">👷 Personal y Fichas de Trabajadores</h3>
+                    <button class="btn btn-azul" style="padding: 0.4rem 1rem; font-size: 0.8rem;" onclick="toggleSeccionTrabajador()">➕ Crear Nuevo Trabajador</button>
+                </div>
+                
+                <div id="box-crear-trabajador-rapido" class="seccion-ocultable">
+                    <h3 style="font-size:0.95rem; margin-bottom:0.75rem; border:none; padding:0; color:var(--info);">Ficha Personal del Operario</h3>
+                    <div class="flex-form">
+                        <div class="campo"><label>Nombre Completo</label><input type="text" id="t-nombre" placeholder="Nombre"></div>
+                        <div class="campo"><label>Cédula de Ciudadanía</label><input type="text" id="t-cedula" placeholder="Cédula"></div>
+                        <div class="campo"><label>Teléfono / WhatsApp</label><input type="text" id="t-telefono" placeholder="Celular"></div>
+                        <div class="campo"><label>Dirección</label><input type="text" id="t-direccion" placeholder="Residencia"></div>
+                        <div class="campo"><label>Correo</label><input type="text" id="t-correo" placeholder="Opcional"></div>
+                        <div class="campo"><label>Cargo / Oficio Especializado</label><input type="text" id="t-cargo" placeholder="Ej: Maestro Carpintero, Pintor..."></div>
+                    </div>
+                    <div style="display:flex; gap:0.5rem; justify-content:flex-end; margin-top:0.5rem;">
+                        <button class="btn btn-verde" onclick="guardarTrabajadorRapido()">💾 Guardar Ficha</button>
+                        <button class="btn" style="background:#64748b;" onclick="toggleSeccionTrabajador()">Cerrar</button>
+                    </div>
+                </div>
+
+                <h3>💸 Historial de Vales y Adelantos</h3>
                 <div class="table-responsive">
                     <table id="t-nomina">
                         <thead><tr><th>Fecha</th><th>Trabajador</th><th>Concepto</th><th>Detalle Explicativo</th><th>Origen</th><th>Monto</th><th>X</th></tr></thead>
@@ -327,7 +342,7 @@
                     <div class="campo"><label>¿De dónde sale la plata?</label><select id="n-origen"><option value="Banco">Banco (Transferencia)</option><option value="Efectivo Grande">Efectivo Principal</option></select></div>
                     <div class="campo"><label>Monto Pagado ($)</label><input type="text" id="n-monto" oninput="formatMoni(this)" placeholder="Monto"></div>
                 </div>
-                <button class="btn btn-verde" style="width:100%; margin-top:0.5rem;" onclick="guardarNomina()">Registrar Pago a Operario</button>
+                <button class="btn btn-verde" style="width:100%; margin-top:0.5rem;" onclick="guardarNomina()">Registrar Pago a Trabajador</button>
             </div>
         </div>
 
@@ -466,7 +481,18 @@
             document.getElementById('f-hasta').value = ultimoDiaStr;
         }
 
-        // Función adaptada para calcular por defecto exactamente 17 días hábiles
+        function alternarVisibilidadMetodoPagoDividido(valor) {
+            if (valor === 'DIVIDIDO') {
+                document.getElementById('box-v-abono').style.display = 'none';
+                document.getElementById('box-v-abono-banco').style.display = 'flex';
+                document.getElementById('box-v-abono-efectivo').style.display = 'flex';
+            } else {
+                document.getElementById('box-v-abono').style.display = 'flex';
+                document.getElementById('box-v-abono-banco').style.display = 'none';
+                document.getElementById('box-v-abono-efectivo').style.display = 'none';
+            }
+        }
+
         function calcularDiasHabilesPorDefecto(fechaInicialStr) {
             if(!fechaInicialStr) return '';
             let fecha = new Date(fechaInicialStr + 'T12:00:00');
@@ -479,16 +505,13 @@
             return fecha.toISOString().split('T')[0];
         }
 
-        // Evalúa alertas (Hoy y Mañana) solo para contratos "Pendientes"
         function evaluarYMostrarAlertasLogistica(ventas) {
             const pAlertas = document.getElementById('panel-alertas-automaticas');
             pAlertas.innerHTML = '';
             if(!ventas || ventas.length === 0) return;
 
             let hoyStr = new Date().toISOString().split('T')[0];
-            
-            let manana = new Date();
-            manana.setDate(manana.getDate() + 1);
+            let manana = new Date(); manana.setDate(manana.getDate() + 1);
             let mananaStr = manana.toISOString().split('T')[0];
 
             ventas.forEach(v => {
@@ -523,7 +546,10 @@
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === idVenta);
             if(v) {
-                v.estadoEntrega = (v.estadoEntrega === 'Entregado') ? 'Pendiente' : 'Entregado';
+                let actual = v.estadoEntrega || 'Pendiente';
+                if(actual === 'Pendiente') { v.estadoEntrega = 'En Camino'; } 
+                else if(actual === 'En Camino') { v.estadoEntrega = 'Entregado'; } 
+                else { v.estadoEntrega = 'Pendiente'; }
                 salvar();
             }
         }
@@ -564,6 +590,22 @@
             XLSX.writeFile(wb, `Respaldo_CarmencitaDesign_${fechaNombre}.xlsx`);
         }
 
+        // Alternar visibilidad del formulario de venta
+        function toggleFormularioVenta() {
+            const container = document.getElementById('formulario-venta-container');
+            const btn = document.getElementById('btn-toggle-venta');
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                btn.innerText = '❌ Cerrar Venta';
+                btn.style.background = '#dc2626';
+            } else {
+                container.style.display = 'none';
+                btn.innerText = '➕ Nueva Venta';
+                btn.style.background = '#0284c7';
+                cancelarEdicionVenta();
+            }
+        }
+
         function render() {
             if(!window.getDbData) return; 
             let db = window.getDbData();
@@ -582,14 +624,19 @@
                 return true;
             }
 
-            // Alertas en Vista Rápida
             evaluarYMostrarAlertasLogistica(db.ventas);
 
-            // Ordenamiento cronológico global
-            if (db.ventas) { db.ventas.sort((a, b) => new Date(b.fechaRegistro || '') - new Date(a.fechaRegistro || '')); }
-            if (db.ingresosDirectos) { db.ingresosDirectos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)); }
-            if (db.gastos) { db.gastos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)); }
-            if (db.nomina) { db.nomina.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)); }
+            if (!db.ventas) db.ventas = [];
+            if (!db.ingresosDirectos) db.ingresosDirectos = [];
+            if (!db.gastos) db.gastos = [];
+            if (!db.nomina) db.nomina = [];
+            if (!db.trabajadores) db.trabajadores = [];
+            if (!db.cajaMenor) db.cajaMenor = [];
+
+            db.ventas.sort((a, b) => new Date(b.fechaRegistro || '') - new Date(a.fechaRegistro || ''));
+            db.ingresosDirectos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            db.gastos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            db.nomina.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
             let ingresosBanco = db.ingresosDirectos.filter(i => i.medio === 'Banco' && cumpleFiltroBase(i.fecha, '')).reduce((s, i) => s + i.monto, 0);
             let ingresosEfectivo = db.ingresosDirectos.filter(i => i.medio === 'Efectivo Grande' && cumpleFiltroBase(i.fecha, '')).reduce((s, i) => s + i.monto, 0);
@@ -632,11 +679,10 @@
                 }
             }
 
-            // 1. RENDERING VISTA RÁPIDA (INGRESOS / EGRESOS)
             const bEntradas = document.querySelector('#t-dashboard-entradas tbody'); bEntradas.innerHTML = '';
             db.ingresosDirectos.forEach(i => {
                 if(cumpleFiltroBase(i.fecha, i.origen + " " + i.medio)) {
-                    bEntradas.innerHTML += `<tr><td>${i.fecha}</td><td><strong>${i.origen}</strong></td><td><span class="badge bg-banco">${i.medio}</span></td><td style="color:var(--success); font-weight:600;">${m(i.monto)}</td><td><button class="btn-accion btn-eliminar" onclick="eliminarIngresoDirecto('${i.id}')">x</button></td></tr>`;
+                    bEntradas.innerHTML += `<tr><td>${i.fecha}</td><td><strong>${i.origen}</strong></td><td><span class="badge bg-banco">${i.medio === 'Efectivo Grande' ? 'Efectivo' : i.medio}</span></td><td style="color:var(--success); font-weight:600;">${m(i.monto)}</td><td><button class="btn-accion btn-eliminar" onclick="eliminarIngresoDirecto('${i.id}')">x</button></td></tr>`;
                 }
             });
 
@@ -652,10 +698,8 @@
                 }
             });
 
-            // 2. RENDERING VENTAS Y CLIENTES
             const bVentas = document.querySelector('#t-ventas tbody'); bVentas.innerHTML = '';
             db.ventas.forEach(v => {
-                let pendiente = v.total - v.abonado;
                 let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
                 let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
                 if(cumpleFiltroBase(fechaOrig, v.cliente + " " + v.desc + " " + v.factura)) {
@@ -669,7 +713,7 @@
                             <td>
                                 <div style="display:flex; gap:3px;">
                                     <button class="btn-accion btn-azul" style="padding:4px 6px;" onclick="verDetalleCliente('${v.id}')">👁️</button>
-                                    <button class="btn-accion" style="background:#e2e8f0; color:#0f172a; padding:4px 6px;" onclick="iniciarEdicionVenta('${v.id}')">✏️</button>
+                                    <button class="btn-accion" style="background:#cbd5e1; color:#0f172a; padding:4px 6px;" onclick="iniciarEdicionVenta('${v.id}')">✏️</button>
                                     <button class="btn-accion btn-verde" style="padding:4px 6px;" onclick="abrirCajaAbono('${v.id}', '${v.cliente}')">💵 +</button>
                                     <button class="btn-accion btn-eliminar" style="padding:4px 6px;" onclick="eliminarVenta('${v.id}')">x</button>
                                 </div>
@@ -678,14 +722,16 @@
                 }
             });
 
-            // 3. RENDERING ÓRDENES DE ENTREGA (Actualizado)
             const bEntregas = document.querySelector('#t-entregas tbody'); bEntregas.innerHTML = '';
             db.ventas.forEach(v => {
                 let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
                 let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
                 let est = v.estadoEntrega || 'Pendiente';
-                let claseEst = (est === 'Entregado') ? 'badge-entregado' : 'badge-pendiente';
-                let txtBoton = (est === 'Entregado') ? '↩️ Pendiente' : '✅ Despachar';
+                
+                let claseEst = 'badge-pendiente';
+                let txtBoton = '🚛 Despachar';
+                if(est === 'En Camino') { claseEst = 'badge-encamino'; txtBoton = '✅ Confirmar'; }
+                else if(est === 'Entregado') { claseEst = 'badge-entregado'; txtBoton = '↩️ Reajustar'; }
 
                 if(cumpleFiltroBase(fechaOrig, v.cliente + " " + v.desc + " " + v.factura + " " + est)) {
                     bEntregas.innerHTML += `
@@ -704,14 +750,15 @@
                 }
             });
 
-            // 4. RENDERING COBROS ACTIVOS
             const bCobros = document.querySelector('#t-cobros tbody'); bCobros.innerHTML = '';
             db.ventas.forEach(v => {
                 let pendiente = v.total - v.abonado;
                 if(pendiente > 0) {
                     if(cumpleFiltroBase('', v.cliente + " " + v.desc || '')) {
-                        let msg = `Hola ${v.cliente}, recordamos amablemente tu saldo en mora de ${m(pendiente)} correspondiente a la factura Nº ${v.factura || 'S/N'} del proyecto ${v.desc}. ¡Muchas gracias!`;
-                        let uri = `https://api.whatsapp.com/send?phone=57${v.telefono.replace(/\s+/g, '')}&text=${encodeURIComponent(msg)}`;
+                        // MENSAJE DE WHATSAPP MEJORADO CON SALUDO DE LA EMPRESA
+                        let msg = `Hola ${v.cliente}, le saludamos de la empresa CARMENCITA DESIGN. Le recordamos amablemente que su saldo pendiente es de ${m(pendiente)} correspondiente a la factura Nº ${v.factura || 'S/N'} del proyecto ${v.desc}. ¡Agradecemos su pronta respuesta!`;
+                        let cleanNumCel = v.telefono.replace(/\D/g, '');
+                        let uri = `https://wa.me/57${cleanNumCel}?text=${encodeURIComponent(msg)}`;
                         bCobros.innerHTML += `
                             <tr>
                                 <td><span class="badge bg-efectivo"># ${v.factura || 'S/N'}</span></td>
@@ -723,15 +770,13 @@
                 }
             });
 
-            // 5. RENDERING PAGO OPERARIOS
             const bNomina = document.querySelector('#t-nomina tbody'); bNomina.innerHTML = '';
             db.nomina.forEach(n => {
                 if(cumpleFiltroBase(n.fecha, n.nombre + " " + n.detalle)) {
-                    bNomina.innerHTML += `<tr><td>${n.fecha}</td><td><strong>${n.nombre}</strong></td><td><span class="badge bg-efectivo">PAGO/ABONO</span></td><td>${n.detalle}</td><td>${n.origen}</td><td style="color:var(--danger); font-weight:600;">${m(n.monto)}</td><td><button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')">x</button></td></tr>`;
+                    bNomina.innerHTML += `<tr><td>${n.fecha}</td><td><strong>${n.nombre}</strong></td><td><span class="badge bg-efectivo">VALE / PAGO</span></td><td>${n.detalle}</td><td>${n.origen}</td><td style="color:var(--danger); font-weight:600;">${m(n.monto)}</td><td><button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')">x</button></td></tr>`;
                 }
             });
 
-            // 6. RENDERING GASTOS
             const bGastos = document.querySelector('#t-gastos tbody'); bGastos.innerHTML = '';
             db.gastos.forEach(g => {
                 if(cumpleFiltroBase(g.fecha, g.cat + " " + g.concepto)) {
@@ -739,7 +784,6 @@
                 }
             });
 
-            // 7. RENDERING CAJA MENOR
             const bMenor = document.querySelector('#t-cajamenor tbody'); bMenor.innerHTML = '';
             db.cajaMenor.forEach(cm => {
                 if(cumpleFiltroBase(cm.fecha, cm.concepto + " " + cm.tipo)) {
@@ -752,6 +796,7 @@
         function verDetalleCliente(id) {
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === id);
+            if(!v) return;
             let fOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
             let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fOrig);
             let h = `
@@ -776,25 +821,40 @@
         function iniciarEdicionVenta(id) {
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === id);
+            if(!v) return;
+
+            // Mostrar el formulario si estaba oculto
+            const container = document.getElementById('formulario-venta-container');
+            const btn = document.getElementById('btn-toggle-venta');
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                btn.innerText = '❌ Cerrar Venta';
+                btn.style.background = '#dc2626';
+            }
+
             document.getElementById('v-id-edicion').value = v.id;
             document.getElementById('v-factura').value = v.factura || '';
-            document.getElementById('v-cliente').value = v.cliente;
-            document.getElementById('v-cedula').value = v.cedula;
-            document.getElementById('v-direccion').value = v.direccion;
-            document.getElementById('v-barrio').value = v.barrio;
-            document.getElementById('v-telefono').value = v.telefono;
-            document.getElementById('v-correo').value = v.correo;
-            document.getElementById('v-desc').value = v.desc;
-            document.getElementById('v-total').value = v.total.toLocaleString('es-CO');
+            document.getElementById('v-cliente').value = v.cliente || '';
+            document.getElementById('v-cedula').value = v.cedula || '';
+            document.getElementById('v-direccion').value = v.direccion || '';
+            document.getElementById('v-barrio').value = v.barrio || '';
+            document.getElementById('v-telefono').value = v.telefono || '';
+            document.getElementById('v-correo').value = v.correo || '';
+            document.getElementById('v-desc').value = v.desc || '';
+            document.getElementById('v-total').value = v.total ? v.total.toLocaleString('es-CO') : '';
             document.getElementById('v-fecha-registro').value = v.fechaRegistro || '';
             document.getElementById('v-fecha-pactada').value = v.fechaPactada || '';
             
             document.getElementById('box-v-abono').style.display = 'none';
             document.getElementById('box-v-medio').style.display = 'none';
+            document.getElementById('box-v-abono-banco').style.display = 'none';
+            document.getElementById('box-v-abono-efectivo').style.display = 'none';
             
             document.getElementById('lbl-formulario-modo').innerText = "✏️ Modificar Datos del Contrato";
             document.getElementById('btn-guardar-venta-accion').innerText = "💾 Aplicar Cambios";
             document.getElementById('btn-cancelar-edicion-venta').style.display = 'inline-flex';
+            
+            document.getElementById('lbl-formulario-modo').scrollIntoView({ behavior: 'smooth' });
         }
 
         function cancelarEdicionVenta() {
@@ -805,8 +865,15 @@
             document.getElementById('v-desc').value = ''; document.getElementById('v-total').value = ''; document.getElementById('v-fecha-registro').value = '';
             document.getElementById('v-fecha-pactada').value = '';
             
-            document.getElementById('box-v-abono').style.display = 'flex';
+            document.getElementById('v-medio').value = 'Banco';
+            document.getElementById('v-abono').value = '';
+            document.getElementById('v-abono-banco').value = '';
+            document.getElementById('v-abono-efectivo').value = '';
+            
             document.getElementById('box-v-medio').style.display = 'flex';
+            document.getElementById('box-v-abono').style.display = 'flex';
+            document.getElementById('box-v-abono-banco').style.display = 'none';
+            document.getElementById('box-v-abono-efectivo').style.display = 'none';
             
             document.getElementById('lbl-formulario-modo').innerText = "➕ Registrar Nuevo Contrato de Venta";
             document.getElementById('btn-guardar-venta-accion').innerText = "🚀 Guardar Contrato";
@@ -816,6 +883,7 @@
         function guardarVenta() {
             let db = window.getDbData();
             let idEdicion = document.getElementById('v-id-edicion').value;
+            
             let factura = document.getElementById('v-factura').value;
             let cliente = document.getElementById('v-cliente').value;
             let cedula = document.getElementById('v-cedula').value;
@@ -833,26 +901,48 @@
             if(!factura) return alert('Por favor ingresa el número de Factura Física de tu talonario.');
             if(!cliente || total <= 0) return alert('Verifica datos y monto total.');
 
-            if(idEdicion) {
+            if(idEdicion && idEdicion !== "") {
                 let v = db.ventas.find(x => x.id === idEdicion);
-                v.factura = factura; v.cliente = cliente; v.cedula = cedula; v.direccion = direccion;
-                v.barrio = barrio; v.telefono = telefono; v.correo = correo;
-                v.desc = desc; v.total = total; v.fechaRegistro = fechaFinal; v.fechaPactada = fechaPactada;
+                if(v) {
+                    v.factura = factura; v.cliente = cliente; v.cedula = cedula; v.direccion = direccion;
+                    v.barrio = barrio; v.telefono = telefono; v.correo = correo;
+                    v.desc = desc; v.total = total; v.fechaRegistro = fechaFinal; v.fechaPactada = fechaPactada;
+                }
                 cancelarEdicionVenta();
             } else {
-                let abono = cleanNum(document.getElementById('v-abono').value);
-                let medio = document.getElementById('v-medio').value;
-                let idVentaNueva = 'v_'+Date.now();
-                db.ventas.push({ id: idVentaNueva, factura, fechaRegistro: fechaFinal, fechaPactada, cliente, cedula, direccion, barrio, telefono, correo, desc, total, abonado: abono, estadoEntrega: 'Pendiente' });
-                
-                if (abono > 0) {
-                    db.ingresosDirectos.push({ id: 'i_'+Date.now(), fecha: fechaFinal, origen: `Abono Inicial (Factura #${factura}) - ${cliente} (${idVentaNueva})`, medio, monto: abono });
+                let medioSeleccionado = document.getElementById('v-medio').value;
+                let abonoCalculadoTotal = 0;
+                let idVentaNueva = 'v_' + Date.now();
+
+                if (medioSeleccionado === 'DIVIDIDO') {
+                    let abonoBanco = cleanNum(document.getElementById('v-abono-banco').value);
+                    let abonoEfectivo = cleanNum(document.getElementById('v-abono-efectivo').value);
+                    abonoCalculadoTotal = abonoBanco + abonoEfectivo;
+
+                    if (abonoBanco > 0) {
+                        db.ingresosDirectos.push({ id: 'i_b_' + Date.now(), fecha: fechaFinal, origen: `Abono Inicial Banco (Factura #${factura}) - ${cliente} (${idVentaNueva})`, medio: 'Banco', monto: abonoBanco });
+                    }
+                    if (abonoEfectivo > 0) {
+                        db.ingresosDirectos.push({ id: 'i_e_' + Date.now(), fecha: fechaFinal, origen: `Abono Inicial Efectivo (Factura #${factura}) - ${cliente} (${idVentaNueva})`, medio: 'Efectivo Grande', monto: abonoEfectivo });
+                    }
+                } else {
+                    let abonoUnico = cleanNum(document.getElementById('v-abono').value);
+                    abonoCalculadoTotal = abonoUnico;
+                    if (abonoUnico > 0) {
+                        db.ingresosDirectos.push({ id: 'i_' + Date.now(), fecha: fechaFinal, origen: `Abono Inicial (Factura #${factura}) - ${cliente} (${idVentaNueva})`, medio: medioSeleccionado, monto: abonoUnico });
+                    }
                 }
+
+                db.ventas.push({ id: idVentaNueva, factura, fechaRegistro: fechaFinal, fechaPactada, cliente, cedula, direccion, barrio, telefono, correo, desc, total, abonado: abonoCalculadoTotal, estadoEntrega: 'Pendiente' });
                 
+                // Reset de campos limpios
                 document.getElementById('v-factura').value = ''; document.getElementById('v-cliente').value = ''; document.getElementById('v-cedula').value = ''; document.getElementById('v-direccion').value = ''; 
                 document.getElementById('v-barrio').value = ''; document.getElementById('v-telefono').value = ''; document.getElementById('v-correo').value = ''; 
                 document.getElementById('v-desc').value = ''; document.getElementById('v-total').value = ''; document.getElementById('v-abono').value = ''; 
+                document.getElementById('v-abono-banco').value = ''; document.getElementById('v-abono-efectivo').value = '';
                 document.getElementById('v-fecha-registro').value = ''; document.getElementById('v-fecha-pactada').value = '';
+                document.getElementById('v-medio').value = 'Banco';
+                alternarVisibilidadMetodoPagoDividido('Banco');
             }
             salvar();
         }
@@ -869,6 +959,7 @@
             if(!nombre || !cedula || !cargo) return alert('Verifica campos.');
             db.trabajadores.push({ id: 't_'+Date.now(), nombre, cedula, telefono, direccion, correo, cargo });
             document.getElementById('t-nombre').value = ''; document.getElementById('t-cedula').value = ''; document.getElementById('t-cargo').value = '';
+            document.getElementById('t-telefono').value = ''; document.getElementById('t-direccion').value = ''; document.getElementById('t-correo').value = '';
             toggleSeccionTrabajador(); salvar();
         }
 
@@ -878,6 +969,7 @@
             document.getElementById('abono-id-cliente').value = id;
             document.getElementById('abono-monto-input').value = '';
             document.getElementById('abono-fecha-input').value = new Date().toISOString().split('T')[0];
+            document.getElementById('box-abono-practico').scrollIntoView({ behavior: 'smooth' });
         }
         function cerrarBoxAbono() { document.getElementById('box-abono-practico').style.display = 'none'; }
         
@@ -889,8 +981,11 @@
             let fechaAbono = document.getElementById('abono-fecha-input').value || new Date().toISOString().split('T')[0];
 
             if (monto <= 0) return alert('Monto inválido.');
-            let v = db.ventas.find(x => x.id === id); v.abonado += monto;
-            db.ingresosDirectos.push({ id: 'i_'+Date.now(), fecha: fechaAbono, origen: `Abono Cartera (Factura #${v.factura || 'S/N'}) - ${v.cliente} (${id})`, medio, monto });
+            let v = db.ventas.find(x => x.id === id); 
+            if(v) {
+                v.abonado += monto;
+                db.ingresosDirectos.push({ id: 'i_'+Date.now(), fecha: fechaAbono, origen: `Abono Cartera (Factura #${v.factura || 'S/N'}) - ${v.cliente} (${id})`, medio, monto });
+            }
             cerrarBoxAbono(); salvar();
         }
 
@@ -901,7 +996,7 @@
             let origen = document.getElementById('n-origen').value;
             let monto = cleanNum(document.getElementById('n-monto').value);
 
-            if(!nombre || monto <= 0) return alert('Verifica.');
+            if(!nombre || monto <= 0) return alert('Verifica monto.');
             db.nomina.push({ id: 'n_'+Date.now(), fecha: new Date().toISOString().split('T')[0], nombre, tipo: 'Pago o Abono', detalle, origen, monto });
             document.getElementById('n-detalle').value = ''; document.getElementById('n-monto').value = '';
             salvar();
@@ -916,7 +1011,7 @@
             let medio = document.getElementById('g-medio').value;
             let monto = cleanNum(document.getElementById('g-monto').value);
 
-            if(!catFinal || monto <= 0) return alert('Verifica.');
+            if(!catFinal || monto <= 0) return alert('Verifica monto.');
             db.gastos.push({ id: 'g_'+Date.now(), fecha: new Date().toISOString().split('T')[0], cat: catFinal, concepto, medio, monto });
             document.getElementById('g-concepto').value = ''; document.getElementById('g-monto').value = '';
             salvar();
@@ -927,7 +1022,7 @@
             let tipo = document.getElementById('cm-tipo').value;
             let concepto = document.getElementById('cm-concepto').value;
             let monto = cleanNum(document.getElementById('cm-monto').value);
-            if(!concepto || monto <= 0) return alert('Verifica.');
+            if(!concepto || monto <= 0) return alert('Verifica monto.');
             db.cajaMenor.push({ id: 'cm_'+Date.now(), fecha: new Date().toISOString().split('T')[0], tipo, concepto, monto });
             document.getElementById('cm-concepto').value = ''; document.getElementById('cm-monto').value = '';
             salvar();
@@ -935,11 +1030,9 @@
 
         function eliminarVenta(id) { 
             let db = window.getDbData(); 
-            if(confirm('¿Estás seguro de eliminar este contrato? Esto removerá permanentemente todos sus abonos de la Vista Rápida.')) { 
+            if(confirm('¿Estás seguro de eliminar este contrato? Esto removerá permanentemente todos sus abonos vinculados.')) { 
                 db.ventas = db.ventas.filter(x => x.id !== id); 
-                if(db.ingresosDirectos) {
-                    db.ingresosDirectos = db.ingresosDirectos.filter(i => !i.origen.includes(`(${id})`));
-                }
+                db.ingresosDirectos = db.ingresosDirectos.filter(i => !i.origen.includes(`(${id})`));
                 salvar(); 
             } 
         }
@@ -959,7 +1052,7 @@
             }
         }
 
-        function eliminarNomina(id) { let db = window.getDbData(); if(confirm('¿Eliminar registro de nómina?')) { db.nomina = db.nomina.filter(x=>x.id!==id); salvar(); } }
+        function eliminarNomina(id) { let db = window.getDbData(); if(confirm('¿Eliminar este registro?')) { db.nomina = db.nomina.filter(x=>x.id!==id); salvar(); } }
         function eliminarGasto(id) { let db = window.getDbData(); if(confirm('¿Eliminar este gasto?')) { db.gastos = db.gastos.filter(x=>x.id!==id); salvar(); } }
         function eliminarCM(id) { let db = window.getDbData(); if(confirm('¿Eliminar movimiento de caja menor?')) { db.cajaMenor = db.cajaMenor.filter(x=>x.id!==id); salvar(); } }
 
@@ -978,7 +1071,7 @@
                 ventas: "🔍 Buscar por Cliente, Proyecto o Número de Factura",
                 entregas: "🔍 Buscar por Cliente, Factura, Dirección o Estado",
                 cobros: "🔍 Buscar Deudor, Proyecto o Factura",
-                nomina: "🔍 Buscar Vales por Nombre de Operario",
+                nomina: "🔍 Buscar por Nombre de Trabajador",
                 gastos: "🔍 Buscar Gasto por Categoría o Concepto",
                 cajamenor: "🔍 Buscar Movimiento de Caja Menor"
             };
@@ -999,7 +1092,7 @@
                 ventas: "🛍️ Ventas y Fichas de Clientes", 
                 entregas: "📦 Órdenes de Entrega de Carpintería",
                 cobros: "🚨 Cartera y Cobros en Espera", 
-                nomina: "👷 Pagos y Descuentos a Operarios", 
+                nomina: "👷 Pagos y Descuentos a Trabajadores", 
                 gastos: "💡 Gastos y Egresos de Empresa", 
                 cajamenor: "🪙 Caja Menor Taller" 
             };
