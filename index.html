@@ -20,6 +20,7 @@
             --success: #16a34a;
             --danger: #dc2626;
             --info: #0284c7;
+            --warning: #eab308;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -42,6 +43,12 @@
         .stat-card p { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 0.4rem; letter-spacing: 0.5px; }
         .stat-card h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); word-break: break-all; }
         .explicacion-tag { font-size: 0.68rem; color: var(--text-muted); display: block; margin-top: 2px; line-height: 1.2; }
+
+        /* Contenedor Especial para Notificaciones de Entrega */
+        .alerts-container { width: 100%; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .alert-item { padding: 0.85rem 1.25rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; justify-content: space-between; border-left: 5px solid transparent; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .alert-hoy { background-color: #fef2f2; border-left-color: var(--danger); color: #991b1b; }
+        .alert-manana { background-color: #fffbeb; border-left-color: var(--warning); color: #92400e; }
 
         .filter-bar { background: var(--white); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--border); margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; width: 100%; }
         .es-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; width: 100%; }
@@ -106,7 +113,7 @@
     <aside>
         <div class="brand">
             <h1>CARMENCITA DESIGN</h1>
-            <span>Mobiliario y Diseño</span>
+            <span>Muebles y Rusticos</span>
         </div>
         <nav>
             <button id="btn-dashboard" class="active" onclick="irA('dashboard')">📊 Vista Rápida</button>
@@ -125,6 +132,9 @@
 
     <!-- Contenedor Principal -->
     <main>
+        <!-- CONTENEDOR DE ALERTAS DE ENTREGA (CRON) -->
+        <div class="alerts-container" id="panel-alertas-automaticas"></div>
+
         <!-- INDICADORES FINANCIEROS -->
         <div class="stats-grid" id="contenedor-kpis-principal">
             <div class="stat-card" style="border-left: 4px solid var(--success); background-color: #f0fdf4;">
@@ -226,7 +236,7 @@
                 <h3>🛍️ Contratos y Clientes Activos</h3>
                 <div class="table-responsive">
                     <table id="t-ventas">
-                        <thead><tr><th>F. Registro</th><th>Cliente</th><th>Proyecto</th><th>Total</th><th>Abonado</th><th>Saldo</th><th>Acciones</th></tr></thead>
+                        <thead><tr><th>Factura Nº</th><th>F. Registro</th><th>Cliente</th><th>Proyecto</th><th>Total</th><th>Abonado</th><th>Pactada para</th><th>Acciones</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -234,6 +244,7 @@
                 <h3 style="color:var(--info); margin-top:1.5rem;" id="lbl-formulario-modo">➕ Registrar Nuevo Contrato de Venta</h3>
                 <input type="hidden" id="v-id-edicion" value="">
                 <div class="flex-form">
+                    <div class="campo"><label>Número de Factura Física (Talonario)</label><input type="text" id="v-factura" placeholder="Ej: 0254"></div>
                     <div class="campo"><label>Nombre del Cliente</label><input type="text" id="v-cliente" placeholder="Cliente"></div>
                     <div class="campo"><label>Cédula o NIT</label><input type="text" id="v-cedula" placeholder="Documento"></div>
                     <div class="campo"><label>Dirección de Entrega</label><input type="text" id="v-direccion" placeholder="Dirección"></div>
@@ -242,7 +253,8 @@
                     <div class="campo"><label>Correo Electrónico</label><input type="email" id="v-correo" placeholder="Correo"></div>
                     <div class="campo"><label>Descripción del Trabajo</label><input type="text" id="v-desc" placeholder="Ej: Cocina mueble RH"></div>
                     <div class="campo"><label>Valor Total ($)</label><input type="text" id="v-total" oninput="formatMoni(this)" placeholder="Total"></div>
-                    <div class="campo" id="box-v-fecha"><label>Fecha del Contrato (Opcional)</label><input type="date" id="v-fecha-registro"><small style="font-size:0.68rem; color:var(--text-muted);">Dejar vacío si es de hoy o seleccionar si es antiguo.</small></div>
+                    <div class="campo" id="box-v-fecha"><label>Fecha del Contrato (Opcional)</label><input type="date" id="v-fecha-registro"><small style="font-size:0.68rem; color:var(--text-muted);">Dejar vacío si es de hoy.</small></div>
+                    <div class="campo"><label>Fecha Pactada de Entrega (Opcional)</label><input type="date" id="v-fecha-pactada"><small style="font-size:0.68rem; color:var(--text-muted);">Vacío = Calcula por defecto 17 días hábiles.</small></div>
                     <div class="campo" id="box-v-abono"><label>Abono de Cuota Hoy ($)</label><input type="text" id="v-abono" oninput="formatMoni(this)" placeholder="0 si no hay"></div>
                     <div class="campo" id="box-v-medio"><label>Medio de Recibo</label><select id="v-medio"><option value="Banco">Banco</option><option value="Efectivo Grande">Efectivo Principal</option></select></div>
                 </div>
@@ -256,10 +268,10 @@
         <!-- MÓDULO ÓRDENES DE ENTREGA -->
         <div id="mod-entregas" class="seccion-vista">
             <div class="panel" style="border-top: 4px solid var(--accent);">
-                <h3>📦 Control de Despachos (Cronograma de 18 Días Hábiles)</h3>
+                <h3>📦 Control de Despachos y Cronograma Logístico</h3>
                 <div class="table-responsive">
                     <table id="t-entregas">
-                        <thead><tr><th>F. Compra</th><th>Cliente</th><th>Proyecto / Muebles</th><th>Dirección de Despacho</th><th>📆 Límite Entrega</th><th>Estado</th><th>Operación</th></tr></thead>
+                        <thead><tr><th>Factura Nº</th><th>F. Compra</th><th>Cliente</th><th>Proyecto / Muebles</th><th>Dirección de Despacho</th><th>📆 Límite / Pactada</th><th>Estado</th><th>Operación</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -272,7 +284,7 @@
                 <h3>🚨 Cuentas por Cobrar Pendientes</h3>
                 <div class="table-responsive">
                     <table id="t-cobros">
-                        <thead><tr><th>Cliente</th><th>Teléfono</th><th>Proyecto</th><th>Deuda Actual</th><th>Operación</th></tr></thead>
+                        <thead><tr><th>Factura Nº</th><th>Cliente</th><th>Teléfono</th><th>Proyecto</th><th>Deuda Actual</th><th>Operación</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -454,16 +466,41 @@
             document.getElementById('f-hasta').value = ultimoDiaStr;
         }
 
-        function calcular18DiasHabiles(fechaInicialStr) {
+        // Función adaptada para calcular por defecto exactamente 17 días hábiles
+        function calcularDiasHabilesPorDefecto(fechaInicialStr) {
             if(!fechaInicialStr) return '';
             let fecha = new Date(fechaInicialStr + 'T12:00:00');
             let diasSuma = 0;
-            while (diasSuma < 18) {
+            while (diasSuma < 17) {
                 fecha.setDate(fecha.getDate() + 1);
                 let diaSemana = fecha.getDay();
                 if (diaSemana !== 0 && diaSemana !== 6) { diasSuma++; }
             }
             return fecha.toISOString().split('T')[0];
+        }
+
+        // Evalúa alertas (Hoy y Mañana) solo para contratos "Pendientes"
+        function evaluarYMostrarAlertasLogistica(ventas) {
+            const pAlertas = document.getElementById('panel-alertas-automaticas');
+            pAlertas.innerHTML = '';
+            if(!ventas || ventas.length === 0) return;
+
+            let hoyStr = new Date().toISOString().split('T')[0];
+            
+            let manana = new Date();
+            manana.setDate(manana.getDate() + 1);
+            let mananaStr = manana.toISOString().split('T')[0];
+
+            ventas.forEach(v => {
+                if(v.estadoEntrega !== 'Entregado') {
+                    let fPactada = v.fechaPactada || calcularDiasHabilesPorDefecto(v.fechaRegistro);
+                    if(fPactada === hoyStr) {
+                        pAlertas.innerHTML += `<div class="alert-item alert-hoy">🚨 <strong>ENTREGA PARA HOY:</strong> La factura Nº ${v.factura || 'S/N'} del cliente ${v.cliente} (${v.desc}) debe despacharse hoy mismo. <span>Fecha: ${fPactada}</span></div>`;
+                    } else if(fPactada === mananaStr) {
+                        pAlertas.innerHTML += `<div class="alert-item alert-manana">⚠️ <strong>ENTREGA MAÑANA:</strong> Recordatorio, mañana se vence el plazo pactado del cliente ${v.cliente} (Factura Nº ${v.factura || 'S/N'}). <span>Fecha: ${fPactada}</span></div>`;
+                    }
+                }
+            });
         }
 
         function toggleSeccionTrabajador() {
@@ -496,9 +533,10 @@
             let wb = XLSX.utils.book_new();
 
             let dataVentas = db.ventas.map(v => ({
-                "ID": v.id, "Fecha Registro": v.fechaRegistro || '', "Cliente": v.cliente, "Cédula/NIT": v.cedula || '', 
+                "Factura Nº": v.factura || '', "Fecha Registro": v.fechaRegistro || '', "Cliente": v.cliente, "Cédula/NIT": v.cedula || '', 
                 "Teléfono": v.telefono, "Dirección": v.direccion, "Barrio": v.barrio || '', "Proyecto": v.desc, 
-                "Valor Total": v.total, "Total Abonado": v.abonado, "Saldo Pendiente": (v.total - v.abonado), "Estado Despacho": v.estadoEntrega || 'Pendiente'
+                "Valor Total": v.total, "Total Abonado": v.abonado, "Saldo Pendiente": (v.total - v.abonado), 
+                "Fecha Pactada Entrega": v.fechaPactada || calcularDiasHabilesPorDefecto(v.fechaRegistro), "Estado Despacho": v.estadoEntrega || 'Pendiente'
             }));
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dataVentas), "Ventas_Contratos");
 
@@ -544,7 +582,10 @@
                 return true;
             }
 
-            // Ordenamiento cronológico global (recientes arriba)
+            // Alertas en Vista Rápida
+            evaluarYMostrarAlertasLogistica(db.ventas);
+
+            // Ordenamiento cronológico global
             if (db.ventas) { db.ventas.sort((a, b) => new Date(b.fechaRegistro || '') - new Date(a.fechaRegistro || '')); }
             if (db.ingresosDirectos) { db.ingresosDirectos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)); }
             if (db.gastos) { db.gastos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)); }
@@ -616,16 +657,18 @@
             db.ventas.forEach(v => {
                 let pendiente = v.total - v.abonado;
                 let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
-                if(cumpleFiltroBase(fechaOrig, v.cliente + " " + v.desc + " " + v.cedula)) {
+                let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
+                if(cumpleFiltroBase(fechaOrig, v.cliente + " " + v.desc + " " + v.factura)) {
                     bVentas.innerHTML += `
                         <tr>
+                            <td><span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${v.factura || 'S/N'}</span></td>
                             <td>${fechaOrig}</td>
                             <td><strong>${v.cliente}</strong></td>
                             <td>${v.desc}</td><td>${m(v.total)}</td><td style="color:var(--info);">${m(v.abonado)}</td>
-                            <td style="color:var(--danger); font-weight:600;">${m(pendiente)}</td>
+                            <td style="color:var(--accent); font-weight:600;">📅 ${fPactadaFinal}</td>
                             <td>
                                 <div style="display:flex; gap:3px;">
-                                    <button class="btn-accion btn-azul" style="padding:4px 6px;" onclick="verDetalleCliente('${v.id}')">👁️ Ver</button>
+                                    <button class="btn-accion btn-azul" style="padding:4px 6px;" onclick="verDetalleCliente('${v.id}')">👁️</button>
                                     <button class="btn-accion" style="background:#e2e8f0; color:#0f172a; padding:4px 6px;" onclick="iniciarEdicionVenta('${v.id}')">✏️</button>
                                     <button class="btn-accion btn-verde" style="padding:4px 6px;" onclick="abrirCajaAbono('${v.id}', '${v.cliente}')">💵 +</button>
                                     <button class="btn-accion btn-eliminar" style="padding:4px 6px;" onclick="eliminarVenta('${v.id}')">x</button>
@@ -635,23 +678,24 @@
                 }
             });
 
-            // 3. RENDERING ÓRDENES DE ENTREGA
+            // 3. RENDERING ÓRDENES DE ENTREGA (Actualizado)
             const bEntregas = document.querySelector('#t-entregas tbody'); bEntregas.innerHTML = '';
             db.ventas.forEach(v => {
                 let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
-                let limiteEntrega = calcular18DiasHabiles(fechaOrig);
+                let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
                 let est = v.estadoEntrega || 'Pendiente';
                 let claseEst = (est === 'Entregado') ? 'badge-entregado' : 'badge-pendiente';
                 let txtBoton = (est === 'Entregado') ? '↩️ Pendiente' : '✅ Despachar';
 
-                if(cumpleFiltroBase(fechaOrig, v.cliente + " " + v.desc + " " + v.direccion + " " + v.barrio + " " + est)) {
+                if(cumpleFiltroBase(fechaOrig, v.cliente + " " + v.desc + " " + v.factura + " " + est)) {
                     bEntregas.innerHTML += `
                         <tr>
+                            <td><span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${v.factura || 'S/N'}</span></td>
                             <td>${fechaOrig}</td>
                             <td><strong>${v.cliente}</strong></td>
                             <td>${v.desc}</td>
                             <td>${v.direccion || 'Taller'} (${v.barrio || 'S/B'})</td>
-                            <td style="color:var(--accent); font-weight:700;">📅 ${limiteEntrega}</td>
+                            <td style="color:var(--accent); font-weight:700;">📅 ${fPactadaFinal}</td>
                             <td><span class="badge ${claseEst}">${est}</span></td>
                             <td>
                                 <button class="btn-accion btn-azul" style="padding:4px 8px;" onclick="cambiarEstadoEntrega('${v.id}')">${txtBoton}</button>
@@ -665,11 +709,12 @@
             db.ventas.forEach(v => {
                 let pendiente = v.total - v.abonado;
                 if(pendiente > 0) {
-                    if(cumpleFiltroBase('', v.cliente + " " + v.desc)) {
-                        let msg = `Hola ${v.cliente}, recordamos amablemente tu saldo en mora de ${m(pendiente)} del proyecto ${v.desc}. ¡Muchas gracias!`;
+                    if(cumpleFiltroBase('', v.cliente + " " + v.desc || '')) {
+                        let msg = `Hola ${v.cliente}, recordamos amablemente tu saldo en mora de ${m(pendiente)} correspondiente a la factura Nº ${v.factura || 'S/N'} del proyecto ${v.desc}. ¡Muchas gracias!`;
                         let uri = `https://api.whatsapp.com/send?phone=57${v.telefono.replace(/\s+/g, '')}&text=${encodeURIComponent(msg)}`;
                         bCobros.innerHTML += `
                             <tr>
+                                <td><span class="badge bg-efectivo"># ${v.factura || 'S/N'}</span></td>
                                 <td><strong>${v.cliente}</strong></td><td>${v.telefono}</td><td>${v.desc}</td>
                                 <td style="color:var(--danger); font-weight:700;">${m(pendiente)}</td>
                                 <td><a href="${uri}" target="_blank" class="btn btn-verde" style="padding:4px 8px; font-size:0.75rem;">💬 Cobrar</a></td>
@@ -708,7 +753,9 @@
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === id);
             let fOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
+            let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fOrig);
             let h = `
+                <p><strong>Factura Física Nº:</strong> ${v.factura || 'S/N'}</p>
                 <p><strong>Cliente:</strong> ${v.cliente}</p>
                 <p><strong>Cédula/NIT:</strong> ${v.cedula || 'No registrada'}</p>
                 <p><strong>Teléfono:</strong> ${v.telefono}</p>
@@ -716,7 +763,7 @@
                 <p><strong>Barrio:</strong> ${v.barrio || 'No registrado'}</p>
                 <p><strong>Proyecto:</strong> ${v.desc}</p>
                 <p><strong>F. Contrato:</strong> ${fOrig}</p>
-                <p style="color:var(--accent)"><strong>📆 Entrega Estimada:</strong> ${calcular18DiasHabiles(fOrig)}</p>
+                <p style="color:var(--accent)"><strong>📆 Entrega Pactada Final:</strong> ${fPactadaFinal}</p>
                 <p><strong>Valor Contrato:</strong> ${m(v.total)}</p>
                 <p style="color:var(--success)"><strong>Abonado:</strong> ${m(v.abonado)}</p>
                 <p style="color:var(--danger)"><strong>Saldo Pendiente:</strong> ${m(v.total - v.abonado)}</p>
@@ -730,6 +777,7 @@
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === id);
             document.getElementById('v-id-edicion').value = v.id;
+            document.getElementById('v-factura').value = v.factura || '';
             document.getElementById('v-cliente').value = v.cliente;
             document.getElementById('v-cedula').value = v.cedula;
             document.getElementById('v-direccion').value = v.direccion;
@@ -739,6 +787,7 @@
             document.getElementById('v-desc').value = v.desc;
             document.getElementById('v-total').value = v.total.toLocaleString('es-CO');
             document.getElementById('v-fecha-registro').value = v.fechaRegistro || '';
+            document.getElementById('v-fecha-pactada').value = v.fechaPactada || '';
             
             document.getElementById('box-v-abono').style.display = 'none';
             document.getElementById('box-v-medio').style.display = 'none';
@@ -750,9 +799,11 @@
 
         function cancelarEdicionVenta() {
             document.getElementById('v-id-edicion').value = '';
+            document.getElementById('v-factura').value = '';
             document.getElementById('v-cliente').value = ''; document.getElementById('v-cedula').value = ''; document.getElementById('v-direccion').value = '';
             document.getElementById('v-barrio').value = ''; document.getElementById('v-telefono').value = ''; document.getElementById('v-correo').value = '';
             document.getElementById('v-desc').value = ''; document.getElementById('v-total').value = ''; document.getElementById('v-fecha-registro').value = '';
+            document.getElementById('v-fecha-pactada').value = '';
             
             document.getElementById('box-v-abono').style.display = 'flex';
             document.getElementById('box-v-medio').style.display = 'flex';
@@ -765,6 +816,7 @@
         function guardarVenta() {
             let db = window.getDbData();
             let idEdicion = document.getElementById('v-id-edicion').value;
+            let factura = document.getElementById('v-factura').value;
             let cliente = document.getElementById('v-cliente').value;
             let cedula = document.getElementById('v-cedula').value;
             let direccion = document.getElementById('v-direccion').value;
@@ -776,28 +828,31 @@
             
             let fechaSeleccionada = document.getElementById('v-fecha-registro').value;
             let fechaFinal = fechaSeleccionada ? fechaSeleccionada : new Date().toISOString().split('T')[0];
+            let fechaPactada = document.getElementById('v-fecha-pactada').value;
 
+            if(!factura) return alert('Por favor ingresa el número de Factura Física de tu talonario.');
             if(!cliente || total <= 0) return alert('Verifica datos y monto total.');
 
             if(idEdicion) {
                 let v = db.ventas.find(x => x.id === idEdicion);
-                v.cliente = cliente; v.cedula = cedula; v.direccion = direccion;
+                v.factura = factura; v.cliente = cliente; v.cedula = cedula; v.direccion = direccion;
                 v.barrio = barrio; v.telefono = telefono; v.correo = correo;
-                v.desc = desc; v.total = total; v.fechaRegistro = fechaFinal;
+                v.desc = desc; v.total = total; v.fechaRegistro = fechaFinal; v.fechaPactada = fechaPactada;
                 cancelarEdicionVenta();
             } else {
                 let abono = cleanNum(document.getElementById('v-abono').value);
                 let medio = document.getElementById('v-medio').value;
                 let idVentaNueva = 'v_'+Date.now();
-                db.ventas.push({ id: idVentaNueva, fechaRegistro: fechaFinal, cliente, cedula, direccion, barrio, telefono, correo, desc, total, abonado: abono, estadoEntrega: 'Pendiente' });
+                db.ventas.push({ id: idVentaNueva, factura, fechaRegistro: fechaFinal, fechaPactada, cliente, cedula, direccion, barrio, telefono, correo, desc, total, abonado: abono, estadoEntrega: 'Pendiente' });
                 
                 if (abono > 0) {
-                    db.ingresosDirectos.push({ id: 'i_'+Date.now(), fecha: fechaFinal, origen: `Abono Inicial - ${cliente} (${idVentaNueva})`, medio, monto: abono });
+                    db.ingresosDirectos.push({ id: 'i_'+Date.now(), fecha: fechaFinal, origen: `Abono Inicial (Factura #${factura}) - ${cliente} (${idVentaNueva})`, medio, monto: abono });
                 }
                 
-                document.getElementById('v-cliente').value = ''; document.getElementById('v-cedula').value = ''; document.getElementById('v-direccion').value = ''; 
+                document.getElementById('v-factura').value = ''; document.getElementById('v-cliente').value = ''; document.getElementById('v-cedula').value = ''; document.getElementById('v-direccion').value = ''; 
                 document.getElementById('v-barrio').value = ''; document.getElementById('v-telefono').value = ''; document.getElementById('v-correo').value = ''; 
-                document.getElementById('v-desc').value = ''; document.getElementById('v-total').value = ''; document.getElementById('v-abono').value = ''; document.getElementById('v-fecha-registro').value = '';
+                document.getElementById('v-desc').value = ''; document.getElementById('v-total').value = ''; document.getElementById('v-abono').value = ''; 
+                document.getElementById('v-fecha-registro').value = ''; document.getElementById('v-fecha-pactada').value = '';
             }
             salvar();
         }
@@ -835,7 +890,7 @@
 
             if (monto <= 0) return alert('Monto inválido.');
             let v = db.ventas.find(x => x.id === id); v.abonado += monto;
-            db.ingresosDirectos.push({ id: 'i_'+Date.now(), fecha: fechaAbono, origen: `Abono Cartera - ${v.cliente} (${id})`, medio, monto });
+            db.ingresosDirectos.push({ id: 'i_'+Date.now(), fecha: fechaAbono, origen: `Abono Cartera (Factura #${v.factura || 'S/N'}) - ${v.cliente} (${id})`, medio, monto });
             cerrarBoxAbono(); salvar();
         }
 
@@ -878,7 +933,6 @@
             salvar();
         }
 
-        // ELIMINACIÓN DE VENTA: Remueve el contrato y purga todos los abonos en cascada
         function eliminarVenta(id) { 
             let db = window.getDbData(); 
             if(confirm('¿Estás seguro de eliminar este contrato? Esto removerá permanentemente todos sus abonos de la Vista Rápida.')) { 
@@ -890,12 +944,9 @@
             } 
         }
 
-        // ELIMINACIÓN INDIVIDUAL DESDE LA VISTA RÁPIDA DE INGRESOS
         function eliminarIngresoDirecto(id) {
             let db = window.getDbData();
-            if(confirm('¿Deseas eliminar este ingreso específico? Si provino de un abono de venta, deberás ajustar manualmente el saldo en la ficha del cliente.')) {
-                
-                // Opcional: Descontar del total del cliente si contiene el patrón de ID de venta (id)
+            if(confirm('¿Deseas eliminar este ingreso específico?')) {
                 let ingreso = db.ingresosDirectos.find(x => x.id === id);
                 if (ingreso && ingreso.origen.includes('(')) {
                     let partes = ingreso.origen.split('(');
@@ -903,7 +954,6 @@
                     let v = db.ventas.find(x => x.id === vId);
                     if (v) { v.abonado = Math.max(0, v.abonado - ingreso.monto); }
                 }
-
                 db.ingresosDirectos = db.ingresosDirectos.filter(x => x.id !== id);
                 salvar();
             }
@@ -925,9 +975,9 @@
 
             const labels = {
                 dashboard: "🔍 Buscar en Entradas/Salidas",
-                ventas: "🔍 Buscar por Cliente, Proyecto o Cédula",
-                entregas: "🔍 Buscar por Cliente, Dirección, Barrio o Estado",
-                cobros: "🔍 Buscar Deudor o Trabajo",
+                ventas: "🔍 Buscar por Cliente, Proyecto o Número de Factura",
+                entregas: "🔍 Buscar por Cliente, Factura, Dirección o Estado",
+                cobros: "🔍 Buscar Deudor, Proyecto o Factura",
                 nomina: "🔍 Buscar Vales por Nombre de Operario",
                 gastos: "🔍 Buscar Gasto por Categoría o Concepto",
                 cajamenor: "🔍 Buscar Movimiento de Caja Menor"
