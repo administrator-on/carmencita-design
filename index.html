@@ -26,7 +26,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-primary); color: var(--text-main); display: flex; min-height: 100vh; flex-direction: row; width: 100%; overflow-x: hidden; }
 
-        /* ===== MENÚ LATERAL ===== */
         aside { 
             width: 260px; 
             background-color: var(--bg-sidebar); 
@@ -47,7 +46,6 @@
             transform: translateX(-100%);
         }
 
-        /* Botón Hamburguesa (visible solo en móvil/tablet) */
         .menu-toggle {
             display: none;
             position: fixed;
@@ -71,7 +69,6 @@
             left: 270px;
         }
 
-        /* Overlay para cerrar el menú al hacer clic fuera */
         .menu-overlay {
             display: none;
             position: fixed;
@@ -152,6 +149,7 @@
         .badge-pendiente { background-color: #ffedd5; color: #c2410c; }
         .badge-encamino { background-color: #e0f2fe; color: #0369a1; }
         .badge-entregado { background-color: #dcfce7; color: #15803d; }
+        .badge-abono { background-color: #fce7f3; color: #9d174d; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 2000; justify-content: center; align-items: center; padding: 1rem; }
         .modal-content { background: var(--white); padding: 1.5rem; border-radius: 0.5rem; width: 100%; max-width: 500px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
@@ -164,7 +162,6 @@
         .dot { width: 8px; height: 8px; background: #e2e8f0; border-radius: 50%; display: inline-block; }
         .dot.online { background: var(--success); box-shadow: 0 0 8px var(--success); }
 
-        /* ===== RESPONSIVE ===== */
         @media(max-width: 1024px) {
             .menu-toggle {
                 display: block;
@@ -343,6 +340,7 @@
                 <p style="font-size:0.85rem; margin-bottom:1rem;">Cliente: <strong id="lbl-abono-cliente"></strong></p>
                 <input type="hidden" id="abono-id-cliente">
                 <div style="display:flex; flex-wrap:wrap; gap:0.75rem; align-items:flex-end;">
+                    <div class="campo" style="flex:1; min-width:150px;"><label>Nº Recibo Abono</label><input type="text" id="abono-numero" placeholder="Ej: 045"></div>
                     <div class="campo" style="flex:1; min-width:180px;"><label>Monto a abonar ($)</label><input type="text" id="abono-monto-input" oninput="formatMoni(this)" placeholder="Ej: 1.000.000"></div>
                     <div class="campo" style="width:160px;"><label>Medio de Recibo</label><select id="abono-medio-input"><option value="Banco">Banco</option><option value="Efectivo Grande">Efectivo Principal</option></select></div>
                     <div class="campo" style="width:140px;"><label>Fecha Abono</label><input type="date" id="abono-fecha-input"></div>
@@ -601,7 +599,6 @@
             }
         }
 
-        // Cerrar menú al cambiar de módulo (en móvil)
         function cerrarMenuSiMovil() {
             if (window.innerWidth <= 1024) {
                 const sidebar = document.getElementById('sidebar');
@@ -739,7 +736,6 @@
             XLSX.writeFile(wb, `Respaldo_CarmencitaDesign_${fechaNombre}.xlsx`);
         }
 
-        // Alternar visibilidad del formulario de venta
         function toggleFormularioVenta() {
             const container = document.getElementById('formulario-venta-container');
             const btn = document.getElementById('btn-toggle-venta');
@@ -831,7 +827,30 @@
             const bEntradas = document.querySelector('#t-dashboard-entradas tbody'); bEntradas.innerHTML = '';
             db.ingresosDirectos.forEach(i => {
                 if(cumpleFiltroBase(i.fecha, i.origen + " " + i.medio)) {
-                    bEntradas.innerHTML += `<tr><td>${i.fecha}</td><td><strong>${i.origen}</strong></td><td><span class="badge bg-banco">${i.medio === 'Efectivo Grande' ? 'Efectivo' : i.medio}</span></td><td style="color:var(--success); font-weight:600;">${m(i.monto)}</td><td><button class="btn-accion btn-eliminar" onclick="eliminarIngresoDirecto('${i.id}')">x</button></td></tr>`;
+                    // Determinar si es FACTURA DE VENTA (abono inicial) o FACTURA ABONADO (abono posterior)
+                    let esAbonoInicial = i.origen.includes('Abono Inicial');
+                    let esAbonoCartera = i.origen.includes('Abono Cartera');
+                    
+                    let etiqueta = '';
+                    let badgeColor = '';
+                    if (esAbonoInicial) {
+                        etiqueta = 'FACTURA DE VENTA';
+                        badgeColor = 'bg-efectivo';
+                    } else if (esAbonoCartera) {
+                        etiqueta = 'FACTURA ABONADO';
+                        badgeColor = 'badge-abono';
+                    } else {
+                        etiqueta = 'INGRESO EXTRA';
+                        badgeColor = 'bg-banco';
+                    }
+                    
+                    bEntradas.innerHTML += `<tr>
+                        <td>${i.fecha}</td>
+                        <td><strong>${i.origen}</strong><br><span class="badge ${badgeColor}" style="margin-top:3px; display:inline-block;">${etiqueta}</span></td>
+                        <td><span class="badge bg-banco">${i.medio === 'Efectivo Grande' ? 'Efectivo' : i.medio}</span></td>
+                        <td style="color:var(--success); font-weight:600;">${m(i.monto)}</td>
+                        <td><button class="btn-accion btn-eliminar" onclick="eliminarIngresoDirecto('${i.id}')">x</button></td>
+                    </tr>`;
                 }
             });
 
@@ -904,7 +923,6 @@
                 let pendiente = v.total - v.abonado;
                 if(pendiente > 0) {
                     if(cumpleFiltroBase('', v.cliente + " " + v.desc || '')) {
-                        // MENSAJE DE WHATSAPP MEJORADO CON SALUDO DE LA EMPRESA
                         let msg = `Hola ${v.cliente}, le saludamos de la empresa CARMENCITA DESIGN. Le recordamos amablemente que su saldo pendiente es de ${m(pendiente)} correspondiente a la factura Nº ${v.factura || 'S/N'} del proyecto ${v.desc}. ¡Agradecemos su pronta respuesta!`;
                         let cleanNumCel = v.telefono.replace(/\D/g, '');
                         let uri = `https://wa.me/57${cleanNumCel}?text=${encodeURIComponent(msg)}`;
@@ -972,7 +990,6 @@
             let v = db.ventas.find(x => x.id === id);
             if(!v) return;
 
-            // Mostrar el formulario si estaba oculto
             const container = document.getElementById('formulario-venta-container');
             const btn = document.getElementById('btn-toggle-venta');
             if (container.style.display === 'none') {
@@ -1117,6 +1134,7 @@
             document.getElementById('lbl-abono-cliente').innerText = cliente;
             document.getElementById('abono-id-cliente').value = id;
             document.getElementById('abono-monto-input').value = '';
+            document.getElementById('abono-numero').value = '';
             document.getElementById('abono-fecha-input').value = new Date().toISOString().split('T')[0];
             document.getElementById('box-abono-practico').scrollIntoView({ behavior: 'smooth' });
         }
@@ -1125,17 +1143,27 @@
         function procesarAbonoEstructurado() {
             let db = window.getDbData();
             let id = document.getElementById('abono-id-cliente').value;
+            let numeroAbono = document.getElementById('abono-numero').value.trim();
             let monto = cleanNum(document.getElementById('abono-monto-input').value);
             let medio = document.getElementById('abono-medio-input').value;
             let fechaAbono = document.getElementById('abono-fecha-input').value || new Date().toISOString().split('T')[0];
 
             if (monto <= 0) return alert('Monto inválido.');
+            if (!numeroAbono) return alert('Por favor ingresa el número de recibo de abono (talonario).');
+            
             let v = db.ventas.find(x => x.id === id); 
             if(v) {
                 v.abonado += monto;
-                db.ingresosDirectos.push({ id: 'i_'+Date.now(), fecha: fechaAbono, origen: `Abono Cartera (Factura #${v.factura || 'S/N'}) - ${v.cliente} (${id})`, medio, monto });
+                db.ingresosDirectos.push({ 
+                    id: 'i_'+Date.now(), 
+                    fecha: fechaAbono, 
+                    origen: `Abono Cartera (Factura #${v.factura || 'S/N'}) - ${v.cliente} (${id}) [Recibo #${numeroAbono}]`, 
+                    medio, 
+                    monto 
+                });
             }
-            cerrarBoxAbono(); salvar();
+            cerrarBoxAbono(); 
+            salvar();
         }
 
         function guardarNomina() {
@@ -1247,13 +1275,11 @@
             };
             document.getElementById('txt-modulo-titulo').innerText = t[id];
             
-            // Cerrar menú en móvil al cambiar de sección
             cerrarMenuSiMovil();
             
             render();
         }
 
-        // Cerrar menú al hacer clic en un enlace del menú (mejora para móvil)
         document.querySelectorAll('nav button').forEach(btn => {
             btn.addEventListener('click', function() {
                 if (window.innerWidth <= 1024) {
