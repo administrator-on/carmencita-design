@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
+        /* ===== TODO EL CSS IGUAL QUE ANTES ===== */
         :root {
             --bg-primary: #f1f5f9;
             --bg-sidebar: #0f172a;
@@ -133,8 +134,6 @@
         .btn-accion { padding: 0.35rem 0.5rem; font-size: 0.75rem; border-radius: 0.25rem; border: none; cursor: pointer; font-weight: 600; }
         .btn-eliminar { background-color: #fee2e2; color: #991b1b; }
         .btn-editar { background-color: #dbeafe; color: #1e40af; }
-        .btn-whatsapp { background-color: #25D366; color: white; }
-        .btn-whatsapp:hover { background-color: #1da851; color: white; }
 
         .badge { padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
         .bg-efectivo { background-color: #fef3c7; color: #92400e; }
@@ -215,6 +214,13 @@
         .conductor-cell .tel {
             color: var(--text-muted);
             font-size: 0.7rem;
+        }
+
+        .modal-content.abono-editar {
+            max-width: 450px;
+        }
+        .modal-content.abono-editar .campo {
+            margin-bottom: 0.5rem;
         }
 
         @media(max-width: 1024px) {
@@ -354,7 +360,7 @@
                     <h3 style="color: var(--success);">📥 INGRESOS</h3>
                     <div class="table-responsive">
                         <table id="t-dashboard-entradas">
-                            <thead><tr><th>Fecha</th><th>Cliente / Origen</th><th>Factura</th><th>Tipo</th><th>Monto</th><th>X</th></tr></thead>
+                            <thead><tr><th>Fecha</th><th>Cliente / Origen</th><th>Factura</th><th>Tipo</th><th>Monto</th><th>Acciones</th></tr></thead>
                             <tbody></tbody>
                         </table>
                     </div>
@@ -719,6 +725,32 @@
                 <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
                     <button class="btn btn-verde" onclick="guardarEdicionDespacho()" style="flex:1;">💾 Guardar Cambios</button>
                     <button class="btn" style="background:#64748b;" onclick="cerrarModalEditarDespacho()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA EDITAR ABONO -->
+    <div id="modal-editar-abono" class="modal">
+        <div class="modal-content abono-editar">
+            <span class="close-modal" onclick="cerrarModalEditarAbono()">&times;</span>
+            <h3 style="color:var(--info);">✏️ Editar Abono</h3>
+            <input type="hidden" id="edit-abono-id">
+            <input type="hidden" id="edit-abono-venta-id">
+            <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.5rem;">
+                <div class="campo"><label>Número de Recibo</label><input type="text" id="edit-abono-numero" placeholder="Ej: 045"></div>
+                <div class="campo"><label>Monto ($)</label><input type="text" id="edit-abono-monto" oninput="formatMoni(this)" placeholder="Monto"></div>
+                <div class="campo"><label>Medio de Pago</label>
+                    <select id="edit-abono-medio">
+                        <option value="Banco">Banco</option>
+                        <option value="Efectivo Grande">Efectivo</option>
+                    </select>
+                </div>
+                <div class="campo"><label>Fecha</label><input type="date" id="edit-abono-fecha"></div>
+                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                    <button class="btn btn-verde" onclick="guardarEdicionAbono()" style="flex:1;">💾 Guardar Cambios</button>
+                    <button class="btn btn-rojo" onclick="eliminarAbono()" style="flex:0.5;">🗑️ Eliminar</button>
+                    <button class="btn" style="background:#64748b;" onclick="cerrarModalEditarAbono()">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -1207,7 +1239,7 @@
             }, 300);
         }
 
-        // ===== ENVIAR COTIZACIÓN POR WHATSAPP (DESDE FORMULARIO) =====
+        // ===== ENVIAR COTIZACIÓN POR WHATSAPP =====
         function enviarCotizacionWhatsApp() {
             let telefono = document.getElementById('c-telefono').value.trim();
             if (!telefono) return alert('Por favor ingresa el número de teléfono del cliente.');
@@ -1251,7 +1283,6 @@
             window.open(uri, '_blank');
         }
 
-        // ===== ENVIAR COTIZACIÓN EXISTENTE POR WHATSAPP (CON DETALLE COMPLETO) =====
         function enviarCotizacionExistenteWhatsApp(id) {
             let db = window.getDbData();
             let c = db.cotizaciones.find(x => x.id === id);
@@ -1291,7 +1322,6 @@
             window.open(uri, '_blank');
         }
 
-        // ===== ENVIAR WHATSAPP DESDE ÓRDENES DE ENTREGA (MENSAJE GENÉRICO) =====
         function enviarWhatsAppEntrega(idVenta) {
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === idVenta);
@@ -1314,7 +1344,6 @@
             window.open(uri, '_blank');
         }
 
-        // ===== ENVIAR WHATSAPP DESDE COTIZACIONES (MENSAJE GENÉRICO) =====
         function enviarWhatsAppCotizacion(id) {
             let db = window.getDbData();
             let c = db.cotizaciones.find(x => x.id === id);
@@ -1526,70 +1555,102 @@
             }
         }
 
-        function abrirCajaAbono(id, cliente) {
-            document.getElementById('box-abono-practico').style.display = 'block';
-            document.getElementById('lbl-abono-cliente').innerText = cliente;
-            document.getElementById('abono-id-cliente').value = id;
-            document.getElementById('abono-monto-input').value = '';
-            document.getElementById('abono-numero').value = '';
-            document.getElementById('abono-fecha-input').value = new Date().toISOString().split('T')[0];
-            document.getElementById('abono-medio-input').value = 'Banco';
-            document.getElementById('abono-banco-input').value = '';
-            document.getElementById('abono-efectivo-input').value = '';
-            document.getElementById('box-abono-banco').style.display = 'none';
-            document.getElementById('box-abono-efectivo').style.display = 'none';
-            document.getElementById('box-abono-practico').scrollIntoView({ behavior: 'smooth' });
+        // ===== FUNCIONES PARA EDITAR ABONOS =====
+        function abrirModalEditarAbono(idIngreso) {
+            let db = window.getDbData();
+            let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
+            if (!ingreso) return alert('Abono no encontrado.');
+            
+            let ventaId = '';
+            let match = ingreso.origen.match(/\(([^)]+)\)/);
+            if (match) ventaId = match[1];
+            
+            let numeroRecibo = '';
+            let reciboMatch = ingreso.origen.match(/\[Recibo #([^\]]+)\]/);
+            if (reciboMatch) numeroRecibo = reciboMatch[1];
+            
+            document.getElementById('edit-abono-id').value = idIngreso;
+            document.getElementById('edit-abono-venta-id').value = ventaId;
+            document.getElementById('edit-abono-numero').value = numeroRecibo || '';
+            document.getElementById('edit-abono-monto').value = ingreso.monto ? ingreso.monto.toLocaleString('es-CO') : '';
+            document.getElementById('edit-abono-medio').value = ingreso.medio || 'Banco';
+            document.getElementById('edit-abono-fecha').value = ingreso.fecha || new Date().toISOString().split('T')[0];
+            
+            document.getElementById('modal-editar-abono').style.display = 'flex';
         }
 
-        function cerrarBoxAbono() { document.getElementById('box-abono-practico').style.display = 'none'; }
+        function cerrarModalEditarAbono() {
+            document.getElementById('modal-editar-abono').style.display = 'none';
+            document.getElementById('edit-abono-id').value = '';
+            document.getElementById('edit-abono-venta-id').value = '';
+        }
 
-        function procesarAbonoEstructurado() {
+        function guardarEdicionAbono() {
+            let idIngreso = document.getElementById('edit-abono-id').value;
+            let ventaId = document.getElementById('edit-abono-venta-id').value;
+            let numeroRecibo = document.getElementById('edit-abono-numero').value.trim();
+            let monto = cleanNum(document.getElementById('edit-abono-monto').value);
+            let medio = document.getElementById('edit-abono-medio').value;
+            let fecha = document.getElementById('edit-abono-fecha').value;
+
+            if (monto <= 0) return alert('Monto inválido.');
+            if (!fecha) return alert('Selecciona una fecha válida.');
+
             let db = window.getDbData();
-            let id = document.getElementById('abono-id-cliente').value;
-            let numeroAbono = document.getElementById('abono-numero').value.trim();
-            let medio = document.getElementById('abono-medio-input').value;
-            let fechaAbono = document.getElementById('abono-fecha-input').value || new Date().toISOString().split('T')[0];
             
-            let montoTotal = 0;
-            let abonos = [];
-
-            if (medio === 'DIVIDIDO') {
-                let montoBanco = cleanNum(document.getElementById('abono-banco-input').value);
-                let montoEfectivo = cleanNum(document.getElementById('abono-efectivo-input').value);
-                montoTotal = montoBanco + montoEfectivo;
-                
-                if (montoBanco > 0) {
-                    abonos.push({ medio: 'Banco', monto: montoBanco });
+            let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
+            if (!ingreso) return alert('Abono no encontrado.');
+            
+            let venta = db.ventas.find(x => x.id === ventaId);
+            
+            let diferencia = monto - ingreso.monto;
+            
+            let nuevoOrigen = ingreso.origen;
+            if (numeroRecibo) {
+                nuevoOrigen = nuevoOrigen.replace(/\[Recibo #[^\]]*\]/, `[Recibo #${numeroRecibo}]`);
+                if (!nuevoOrigen.includes('[Recibo #')) {
+                    nuevoOrigen = nuevoOrigen + ` [Recibo #${numeroRecibo}]`;
                 }
-                if (montoEfectivo > 0) {
-                    abonos.push({ medio: 'Efectivo Grande', monto: montoEfectivo });
-                }
-                if (montoTotal <= 0) return alert('Ingresa al menos un monto válido.');
             } else {
-                let monto = cleanNum(document.getElementById('abono-monto-input').value);
-                if (monto <= 0) return alert('Monto inválido.');
-                montoTotal = monto;
-                abonos.push({ medio: medio, monto: monto });
+                nuevoOrigen = nuevoOrigen.replace(/\[Recibo #[^\]]*\]/, '');
             }
-
-            if (!numeroAbono) return alert('Ingresa el número de recibo de abono.');
             
-            let v = db.ventas.find(x => x.id === id);
-            if (v) {
-                v.abonado += montoTotal;
-                
-                abonos.forEach(a => {
-                    db.ingresosDirectos.push({ 
-                        id: 'i_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-                        fecha: fechaAbono, 
-                        origen: `Abono Cartera ${a.medio} (Factura #${v.factura || 'S/N'}) - ${v.cliente} (${id}) [Recibo #${numeroAbono}]`, 
-                        medio: a.medio, 
-                        monto: a.monto 
-                    });
-                });
+            ingreso.monto = monto;
+            ingreso.medio = medio;
+            ingreso.fecha = fecha;
+            ingreso.origen = nuevoOrigen;
+            
+            if (venta) {
+                venta.abonado = Math.max(0, venta.abonado + diferencia);
             }
-            cerrarBoxAbono();
+            
+            cerrarModalEditarAbono();
             salvar();
+            alert('✅ Abono actualizado correctamente.');
+        }
+
+        function eliminarAbono() {
+            let idIngreso = document.getElementById('edit-abono-id').value;
+            let ventaId = document.getElementById('edit-abono-venta-id').value;
+            
+            if (!confirm('¿Estás seguro de eliminar este abono?')) return;
+            
+            let db = window.getDbData();
+            
+            let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
+            if (!ingreso) return alert('Abono no encontrado.');
+            
+            let venta = db.ventas.find(x => x.id === ventaId);
+            
+            if (venta) {
+                venta.abonado = Math.max(0, venta.abonado - ingreso.monto);
+            }
+            
+            db.ingresosDirectos = db.ingresosDirectos.filter(x => x.id !== idIngreso);
+            
+            cerrarModalEditarAbono();
+            salvar();
+            alert('🗑️ Abono eliminado correctamente.');
         }
 
         // ===== FUNCIONES DE DESPACHO =====
@@ -1629,7 +1690,6 @@
             alert(`✅ Despacho confirmado para la factura Nº ${v.factura || 'S/N'}\n🚛 Conductor: ${conductor || 'No registrado'}\n📅 ${v.despacho.fechaHora}`);
         }
 
-        // ===== FUNCIONES DE EDICIÓN DE DESPACHO =====
         function abrirModalEditarDespacho(idVenta) {
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === idVenta);
@@ -1892,18 +1952,9 @@
             if (idEdicion && idEdicion !== "") {
                 let cm = db.cajaMenor.find(x => x.id === idEdicion);
                 if (cm) {
-                    // Si el tipo cambió, ajustar el efecto en los KPIs
-                    if (cm.tipo === 'Reembolso') {
-                        db.ingresosDirectos = db.ingresosDirectos.filter(x => x.id !== cm.id + '_kpi');
-                    } else if (cm.tipo === 'Gasto Menor') {
-                        db.gastos = db.gastos.filter(x => x.id !== cm.id + '_kpi');
-                    }
-                    
                     cm.tipo = tipo;
                     cm.concepto = concepto;
                     cm.monto = monto;
-                    
-                    aplicarEfectoCajaMenor(cm.id, tipo, monto, cm.fecha);
                 }
                 cancelarEdicionCaja();
             } else {
@@ -1918,37 +1969,86 @@
                     monto 
                 });
                 
-                aplicarEfectoCajaMenor(id, tipo, monto, fecha);
-                
                 document.getElementById('cm-concepto').value = '';
                 document.getElementById('cm-monto').value = '';
             }
             salvar();
         }
 
-        // Caja Menor NO afecta los KPIs principales (solo es un registro interno)
-        function aplicarEfectoCajaMenor(id, tipo, monto, fecha) {
-            // Caja menor es independiente - no afecta ingresos/egresos principales
-            // Solo se registra en su propia tabla
-            console.log('Movimiento de caja menor registrado:', tipo, monto);
-        }
-
         function eliminarCM(id) {
             let db = window.getDbData();
             if (confirm('¿Eliminar este movimiento de caja menor?')) {
-                // Eliminar el registro de caja menor
                 db.cajaMenor = db.cajaMenor.filter(x => x.id !== id);
-                
-                // Eliminar cualquier registro huérfano en ingresosDirectos o gastos
-                // que pudiera tener el ID + '_kpi' (de versiones anteriores)
-                db.ingresosDirectos = db.ingresosDirectos.filter(x => x.id !== id + '_kpi');
-                db.gastos = db.gastos.filter(x => x.id !== id + '_kpi');
-                
                 salvar();
             }
         }
 
-        // ===== ELIMINAR INGRESO DIRECTO =====
+        function abrirCajaAbono(id, cliente) {
+            document.getElementById('box-abono-practico').style.display = 'block';
+            document.getElementById('lbl-abono-cliente').innerText = cliente;
+            document.getElementById('abono-id-cliente').value = id;
+            document.getElementById('abono-monto-input').value = '';
+            document.getElementById('abono-numero').value = '';
+            document.getElementById('abono-fecha-input').value = new Date().toISOString().split('T')[0];
+            document.getElementById('abono-medio-input').value = 'Banco';
+            document.getElementById('abono-banco-input').value = '';
+            document.getElementById('abono-efectivo-input').value = '';
+            document.getElementById('box-abono-banco').style.display = 'none';
+            document.getElementById('box-abono-efectivo').style.display = 'none';
+            document.getElementById('box-abono-practico').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cerrarBoxAbono() { document.getElementById('box-abono-practico').style.display = 'none'; }
+
+        function procesarAbonoEstructurado() {
+            let db = window.getDbData();
+            let id = document.getElementById('abono-id-cliente').value;
+            let numeroAbono = document.getElementById('abono-numero').value.trim();
+            let medio = document.getElementById('abono-medio-input').value;
+            let fechaAbono = document.getElementById('abono-fecha-input').value || new Date().toISOString().split('T')[0];
+            
+            let montoTotal = 0;
+            let abonos = [];
+
+            if (medio === 'DIVIDIDO') {
+                let montoBanco = cleanNum(document.getElementById('abono-banco-input').value);
+                let montoEfectivo = cleanNum(document.getElementById('abono-efectivo-input').value);
+                montoTotal = montoBanco + montoEfectivo;
+                
+                if (montoBanco > 0) {
+                    abonos.push({ medio: 'Banco', monto: montoBanco });
+                }
+                if (montoEfectivo > 0) {
+                    abonos.push({ medio: 'Efectivo Grande', monto: montoEfectivo });
+                }
+                if (montoTotal <= 0) return alert('Ingresa al menos un monto válido.');
+            } else {
+                let monto = cleanNum(document.getElementById('abono-monto-input').value);
+                if (monto <= 0) return alert('Monto inválido.');
+                montoTotal = monto;
+                abonos.push({ medio: medio, monto: monto });
+            }
+
+            if (!numeroAbono) return alert('Ingresa el número de recibo de abono.');
+            
+            let v = db.ventas.find(x => x.id === id);
+            if (v) {
+                v.abonado += montoTotal;
+                
+                abonos.forEach(a => {
+                    db.ingresosDirectos.push({ 
+                        id: 'i_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                        fecha: fechaAbono, 
+                        origen: `Abono Cartera ${a.medio} (Factura #${v.factura || 'S/N'}) - ${v.cliente} (${id}) [Recibo #${numeroAbono}]`, 
+                        medio: a.medio, 
+                        monto: a.monto 
+                    });
+                });
+            }
+            cerrarBoxAbono();
+            salvar();
+        }
+
         function eliminarIngresoDirecto(id) {
             let db = window.getDbData();
             if (confirm('¿Eliminar este ingreso?')) {
@@ -1963,7 +2063,6 @@
             }
         }
 
-        // ===== ELIMINAR GASTO DIRECTO =====
         function eliminarGastoDirecto(id) {
             let db = window.getDbData();
             if (confirm('¿Eliminar este egreso?')) {
@@ -2140,7 +2239,7 @@
             db.cotizaciones.sort((a, b) => new Date(b.fecha || '') - new Date(a.fecha || ''));
             db.cajaMenor.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
-            // KPIs - Caja Menor NO afecta los KPIs principales
+            // KPIs
             let ingresosBanco = db.ingresosDirectos.filter(i => i.medio === 'Banco' && cumpleFiltroBase(i.fecha, '')).reduce((s, i) => s + i.monto, 0);
             let ingresosEfectivo = db.ingresosDirectos.filter(i => i.medio === 'Efectivo Grande' && cumpleFiltroBase(i.fecha, '')).reduce((s, i) => s + i.monto, 0);
             let gastosBanco = db.gastos.filter(g => g.medio === 'Banco' && cumpleFiltroBase(g.fecha, '')).reduce((s, g) => s + g.monto, 0);
@@ -2187,21 +2286,28 @@
                 }
             }
 
-            // Dashboard Entradas - CON BOTÓN ELIMINAR
+            // Dashboard Entradas - CON BOTÓN EDITAR Y ELIMINAR - CON FACTURA Y RECIBO VISIBLES
             const bEntradas = document.querySelector('#t-dashboard-entradas tbody');
             bEntradas.innerHTML = '';
             db.ingresosDirectos.forEach(i => {
                 if (cumpleFiltroBase(i.fecha, i.origen + " " + i.medio)) {
                     let clienteNombre = i.origen;
                     let facturaNum = 'S/N';
+                    let reciboNum = '';
                     let tipoLabel = 'INGRESO EXTRA';
                     let badgeColor = 'bg-banco';
 
+                    // Extraer factura original
                     if (i.origen.includes('Factura #')) {
                         let match = i.origen.match(/Factura #([^\s)]+)/);
                         if (match) facturaNum = match[1];
                     }
 
+                    // Extraer número de recibo de abono
+                    let reciboMatch = i.origen.match(/\[Recibo #([^\]]+)\]/);
+                    if (reciboMatch) reciboNum = reciboMatch[1];
+
+                    // Determinar tipo y limpiar nombre del cliente
                     if (i.origen.includes('Abono Inicial')) {
                         tipoLabel = 'FACTURA DE VENTA';
                         badgeColor = 'bg-efectivo';
@@ -2214,13 +2320,22 @@
                         if (cleanMatch) clienteNombre = cleanMatch[1].trim();
                     }
 
+                    // Construir la visualización de factura
+                    let facturaDisplay = `<span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${facturaNum}</span>`;
+                    if (reciboNum && tipoLabel === 'FACTURA ABONADO') {
+                        facturaDisplay += ` → <span class="badge" style="background:#fce7f3; color:#9d174d; font-weight:700;">Recibo #${reciboNum}</span>`;
+                    }
+
                     bEntradas.innerHTML += `<tr>
                         <td>${i.fecha}</td>
                         <td><strong>${clienteNombre}</strong></td>
-                        <td><span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${facturaNum}</span></td>
+                        <td>${facturaDisplay}</td>
                         <td><span class="badge ${badgeColor}">${tipoLabel}</span></td>
                         <td style="color:var(--success); font-weight:600;">${m(i.monto)}</td>
-                        <td><button class="btn-accion btn-eliminar" onclick="eliminarIngresoDirecto('${i.id}')">x</button></td>
+                        <td>
+                            <button class="btn-accion btn-editar" onclick="abrirModalEditarAbono('${i.id}')" style="padding:2px 4px;">✏️</button>
+                            <button class="btn-accion btn-eliminar" onclick="eliminarIngresoDirecto('${i.id}')" style="padding:2px 4px;">x</button>
+                        </td>
                     </tr>`;
                 }
             });
@@ -2279,7 +2394,7 @@
                 }
             });
 
-            // Entregas - CON BOTÓN WHATSAPP
+            // Entregas
             const bEntregas = document.querySelector('#t-entregas tbody');
             bEntregas.innerHTML = '';
             db.ventas.forEach(v => {
@@ -2343,7 +2458,7 @@
                 }
             });
 
-            // Cotizaciones - CON BOTÓN WHATSAPP ADICIONAL
+            // Cotizaciones
             const bCotizaciones = document.querySelector('#t-cotizaciones tbody');
             bCotizaciones.innerHTML = '';
             db.cotizaciones.forEach(c => {
