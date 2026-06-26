@@ -389,7 +389,7 @@
                     <div class="campo" style="width:160px;"><label>Medio de Pago</label>
                         <select id="abono-medio-input" onchange="alternarVisibilidadAbonoDividido(this.value)">
                             <option value="Banco">Banco</option>
-                            <option value="Efectivo Grande">Efectivo</option>
+                            <option value="Efectivo">Efectivo</option>
                             <option value="DIVIDIDO">🔄 Dividido (Banco + Efectivo)</option>
                         </select>
                     </div>
@@ -431,7 +431,7 @@
                         <div class="campo"><label>Medio Pago</label>
                             <select id="v-medio" onchange="alternarVisibilidadMetodoPagoDividido(this.value)">
                                 <option value="Banco">Banco</option>
-                                <option value="Efectivo Grande">Efectivo</option>
+                                <option value="Efectivo">Efectivo</option>
                                 <option value="DIVIDIDO">🔄 Dividido (Banco + Efectivo)</option>
                             </select>
                         </div>
@@ -580,8 +580,14 @@
                     <div class="flex-form">
                         <div class="campo"><label>Operario</label><select id="n-select-trabajador"></select></div>
                         <div class="campo"><label>Detalle</label><input type="text" id="n-detalle" placeholder="Adelanto cocina Pedro"></div>
-                        <div class="campo"><label>Origen</label><select id="n-origen"><option value="Banco">Banco</option><option value="Efectivo Grande">Efectivo</option></select></div>
+                        <div class="campo"><label>Origen</label>
+                            <select id="n-origen">
+                                <option value="Banco">Banco</option>
+                                <option value="Efectivo">Efectivo</option>
+                            </select>
+                        </div>
                         <div class="campo"><label>Monto ($)</label><input type="text" id="n-monto" oninput="formatMoni(this)"></div>
+                        <div class="campo"><label>Fecha de Pago</label><input type="date" id="n-fecha"></div>
                     </div>
                     <button class="btn btn-verde" onclick="guardarNomina()" id="btn-guardar-nomina-accion">Registrar Pago</button>
                     <button class="btn" style="background:#64748b; display:none;" id="btn-cancelar-edicion-nomina" onclick="cancelarEdicionNomina()">Cancelar</button>
@@ -618,8 +624,14 @@
                         </div>
                         <div class="campo" id="box-cat-manual" style="display:none;"><label>Escribe categoría</label><input type="text" id="g-cat-manual"></div>
                         <div class="campo"><label>Concepto</label><input type="text" id="g-concepto"></div>
-                        <div class="campo"><label>Medio</label><select id="g-medio"><option value="Banco">Banco</option><option value="Efectivo Grande">Efectivo</option></select></div>
+                        <div class="campo"><label>Medio</label>
+                            <select id="g-medio">
+                                <option value="Banco">Banco</option>
+                                <option value="Efectivo">Efectivo</option>
+                            </select>
+                        </div>
                         <div class="campo"><label>Monto ($)</label><input type="text" id="g-monto" oninput="formatMoni(this)"></div>
+                        <div class="campo"><label>Fecha del Gasto</label><input type="date" id="g-fecha"></div>
                     </div>
                     <button class="btn btn-verde" onclick="guardarGasto()" id="btn-guardar-gasto-accion">Guardar Gasto</button>
                     <button class="btn" style="background:#64748b; display:none;" id="btn-cancelar-edicion-gasto" onclick="cancelarEdicionGasto()">Cancelar</button>
@@ -650,6 +662,7 @@
                         </div>
                         <div class="campo"><label>Concepto</label><input type="text" id="cm-concepto" placeholder="Detalle"></div>
                         <div class="campo"><label>Monto ($)</label><input type="text" id="cm-monto" oninput="formatMoni(this)"></div>
+                        <div class="campo"><label>Fecha</label><input type="date" id="cm-fecha"></div>
                     </div>
                     <button class="btn btn-verde" onclick="guardarCajaMenor()" id="btn-guardar-caja-accion">Registrar Operación</button>
                     <button class="btn" style="background:#64748b; display:none;" id="btn-cancelar-edicion-caja" onclick="cancelarEdicionCaja()">Cancelar</button>
@@ -743,7 +756,7 @@
                 <div class="campo"><label>Medio de Pago</label>
                     <select id="edit-abono-medio">
                         <option value="Banco">Banco</option>
-                        <option value="Efectivo Grande">Efectivo</option>
+                        <option value="Efectivo">Efectivo</option>
                     </select>
                 </div>
                 <div class="campo"><label>Fecha</label><input type="date" id="edit-abono-fecha"></div>
@@ -1506,7 +1519,7 @@
                             id: 'i_e_' + Date.now(), 
                             fecha: fechaFinal, 
                             origen: `Abono Inicial EFECTIVO (Factura #${factura}) - ${cliente} (${idVentaNueva})`, 
-                            medio: 'Efectivo Grande', 
+                            medio: 'Efectivo', 
                             monto: abonoEfectivo 
                         });
                     }
@@ -1755,12 +1768,13 @@
             }
         }
 
-        // ===== FUNCIONES NÓMINA =====
+        // ===== FUNCIONES NÓMINA (CON FECHA) =====
         function cancelarEdicionNomina() {
             document.getElementById('n-id-edicion').value = '';
             document.getElementById('n-detalle').value = '';
             document.getElementById('n-monto').value = '';
             document.getElementById('n-origen').value = 'Banco';
+            document.getElementById('n-fecha').value = new Date().toISOString().split('T')[0];
             document.getElementById('lbl-formulario-nomina-modo').innerText = '💸 Entregar Adelanto o Semanal';
             document.getElementById('btn-guardar-nomina-accion').innerText = 'Registrar Pago';
             document.getElementById('btn-cancelar-edicion-nomina').style.display = 'none';
@@ -1776,6 +1790,7 @@
             document.getElementById('n-detalle').value = n.detalle || '';
             document.getElementById('n-origen').value = n.origen || 'Banco';
             document.getElementById('n-monto').value = n.monto ? n.monto.toLocaleString('es-CO') : '';
+            document.getElementById('n-fecha').value = n.fecha || new Date().toISOString().split('T')[0];
             
             document.getElementById('lbl-formulario-nomina-modo').innerText = '✏️ Editar Vale';
             document.getElementById('btn-guardar-nomina-accion').innerText = '💾 Guardar Cambios';
@@ -1792,6 +1807,7 @@
             let detalle = document.getElementById('n-detalle').value.trim();
             let origen = document.getElementById('n-origen').value;
             let monto = cleanNum(document.getElementById('n-monto').value);
+            let fecha = document.getElementById('n-fecha').value || new Date().toISOString().split('T')[0];
 
             if (!nombre || monto <= 0) return alert('Verifica datos.');
 
@@ -1802,12 +1818,13 @@
                     n.detalle = detalle;
                     n.origen = origen;
                     n.monto = monto;
+                    n.fecha = fecha;
                 }
                 cancelarEdicionNomina();
             } else {
                 db.nomina.push({ 
                     id: 'n_' + Date.now(), 
-                    fecha: new Date().toISOString().split('T')[0], 
+                    fecha: fecha, 
                     nombre, 
                     tipo: 'Pago', 
                     detalle, 
@@ -1816,6 +1833,7 @@
                 });
                 document.getElementById('n-detalle').value = '';
                 document.getElementById('n-monto').value = '';
+                document.getElementById('n-fecha').value = new Date().toISOString().split('T')[0];
             }
             salvar();
         }
@@ -1828,7 +1846,7 @@
             } 
         }
 
-        // ===== FUNCIONES GASTOS =====
+        // ===== FUNCIONES GASTOS (CON FECHA) =====
         function cancelarEdicionGasto() {
             document.getElementById('g-id-edicion').value = '';
             document.getElementById('g-cat').value = 'Servicios Publicos';
@@ -1836,6 +1854,7 @@
             document.getElementById('g-concepto').value = '';
             document.getElementById('g-medio').value = 'Banco';
             document.getElementById('g-monto').value = '';
+            document.getElementById('g-fecha').value = new Date().toISOString().split('T')[0];
             document.getElementById('box-cat-manual').style.display = 'none';
             document.getElementById('lbl-formulario-gasto-modo').innerText = '➕ Registrar Nuevo Gasto';
             document.getElementById('btn-guardar-gasto-accion').innerText = 'Guardar Gasto';
@@ -1858,6 +1877,7 @@
             document.getElementById('g-concepto').value = g.concepto || '';
             document.getElementById('g-medio').value = g.medio || 'Banco';
             document.getElementById('g-monto').value = g.monto ? g.monto.toLocaleString('es-CO') : '';
+            document.getElementById('g-fecha').value = g.fecha || new Date().toISOString().split('T')[0];
             
             document.getElementById('lbl-formulario-gasto-modo').innerText = '✏️ Editar Gasto';
             document.getElementById('btn-guardar-gasto-accion').innerText = '💾 Guardar Cambios';
@@ -1876,6 +1896,7 @@
             let concepto = document.getElementById('g-concepto').value.trim();
             let medio = document.getElementById('g-medio').value;
             let monto = cleanNum(document.getElementById('g-monto').value);
+            let fecha = document.getElementById('g-fecha').value || new Date().toISOString().split('T')[0];
 
             if (!catFinal || monto <= 0) return alert('Verifica datos.');
 
@@ -1886,12 +1907,13 @@
                     g.concepto = concepto;
                     g.medio = medio;
                     g.monto = monto;
+                    g.fecha = fecha;
                 }
                 cancelarEdicionGasto();
             } else {
                 db.gastos.push({ 
                     id: 'g_' + Date.now(), 
-                    fecha: new Date().toISOString().split('T')[0], 
+                    fecha: fecha, 
                     cat: catFinal, 
                     concepto, 
                     medio, 
@@ -1899,6 +1921,7 @@
                 });
                 document.getElementById('g-concepto').value = '';
                 document.getElementById('g-monto').value = '';
+                document.getElementById('g-fecha').value = new Date().toISOString().split('T')[0];
             }
             salvar();
         }
@@ -1911,12 +1934,13 @@
             } 
         }
 
-        // ===== FUNCIONES CAJA MENOR =====
+        // ===== FUNCIONES CAJA MENOR (CON FECHA) =====
         function cancelarEdicionCaja() {
             document.getElementById('cm-id-edicion').value = '';
             document.getElementById('cm-tipo').value = 'Gasto Menor';
             document.getElementById('cm-concepto').value = '';
             document.getElementById('cm-monto').value = '';
+            document.getElementById('cm-fecha').value = new Date().toISOString().split('T')[0];
             document.getElementById('lbl-formulario-caja-modo').innerText = '🔄 Movimiento de Caja Menor';
             document.getElementById('btn-guardar-caja-accion').innerText = 'Registrar Operación';
             document.getElementById('btn-cancelar-edicion-caja').style.display = 'none';
@@ -1931,6 +1955,7 @@
             document.getElementById('cm-tipo').value = cm.tipo || 'Gasto Menor';
             document.getElementById('cm-concepto').value = cm.concepto || '';
             document.getElementById('cm-monto').value = cm.monto ? cm.monto.toLocaleString('es-CO') : '';
+            document.getElementById('cm-fecha').value = cm.fecha || new Date().toISOString().split('T')[0];
             
             document.getElementById('lbl-formulario-caja-modo').innerText = '✏️ Editar Movimiento de Caja';
             document.getElementById('btn-guardar-caja-accion').innerText = '💾 Guardar Cambios';
@@ -1946,6 +1971,7 @@
             let tipo = document.getElementById('cm-tipo').value;
             let concepto = document.getElementById('cm-concepto').value.trim();
             let monto = cleanNum(document.getElementById('cm-monto').value);
+            let fecha = document.getElementById('cm-fecha').value || new Date().toISOString().split('T')[0];
             
             if (!concepto || monto <= 0) return alert('Verifica datos.');
 
@@ -1955,10 +1981,10 @@
                     cm.tipo = tipo;
                     cm.concepto = concepto;
                     cm.monto = monto;
+                    cm.fecha = fecha;
                 }
                 cancelarEdicionCaja();
             } else {
-                let fecha = new Date().toISOString().split('T')[0];
                 let id = 'cm_' + Date.now();
                 
                 db.cajaMenor.push({ 
@@ -1971,6 +1997,7 @@
                 
                 document.getElementById('cm-concepto').value = '';
                 document.getElementById('cm-monto').value = '';
+                document.getElementById('cm-fecha').value = new Date().toISOString().split('T')[0];
             }
             salvar();
         }
@@ -2019,7 +2046,7 @@
                     abonos.push({ medio: 'Banco', monto: montoBanco });
                 }
                 if (montoEfectivo > 0) {
-                    abonos.push({ medio: 'Efectivo Grande', monto: montoEfectivo });
+                    abonos.push({ medio: 'Efectivo', monto: montoEfectivo });
                 }
                 if (montoTotal <= 0) return alert('Ingresa al menos un monto válido.');
             } else {
@@ -2241,11 +2268,11 @@
 
             // KPIs
             let ingresosBanco = db.ingresosDirectos.filter(i => i.medio === 'Banco' && cumpleFiltroBase(i.fecha, '')).reduce((s, i) => s + i.monto, 0);
-            let ingresosEfectivo = db.ingresosDirectos.filter(i => i.medio === 'Efectivo Grande' && cumpleFiltroBase(i.fecha, '')).reduce((s, i) => s + i.monto, 0);
+            let ingresosEfectivo = db.ingresosDirectos.filter(i => i.medio === 'Efectivo' && cumpleFiltroBase(i.fecha, '')).reduce((s, i) => s + i.monto, 0);
             let gastosBanco = db.gastos.filter(g => g.medio === 'Banco' && cumpleFiltroBase(g.fecha, '')).reduce((s, g) => s + g.monto, 0);
-            let gastosEfectivo = db.gastos.filter(g => g.medio === 'Efectivo Grande' && cumpleFiltroBase(g.fecha, '')).reduce((s, g) => s + g.monto, 0);
+            let gastosEfectivo = db.gastos.filter(g => g.medio === 'Efectivo' && cumpleFiltroBase(g.fecha, '')).reduce((s, g) => s + g.monto, 0);
             let nominaBanco = db.nomina.filter(n => n.origen === 'Banco' && cumpleFiltroBase(n.fecha, '')).reduce((s, n) => s + n.monto, 0);
-            let nominaEfectivo = db.nomina.filter(n => n.origen === 'Efectivo Grande' && cumpleFiltroBase(n.fecha, '')).reduce((s, n) => s + n.monto, 0);
+            let nominaEfectivo = db.nomina.filter(n => n.origen === 'Efectivo' && cumpleFiltroBase(n.fecha, '')).reduce((s, n) => s + n.monto, 0);
 
             let globalIngresadoTodo = ingresosBanco + ingresosEfectivo;
             let totalDisponibleBanco = ingresosBanco - (gastosBanco + nominaBanco);
@@ -2286,7 +2313,7 @@
                 }
             }
 
-            // Dashboard Entradas - CON BOTÓN EDITAR Y ELIMINAR - CON FACTURA Y RECIBO VISIBLES
+            // Dashboard Entradas
             const bEntradas = document.querySelector('#t-dashboard-entradas tbody');
             bEntradas.innerHTML = '';
             db.ingresosDirectos.forEach(i => {
@@ -2297,17 +2324,14 @@
                     let tipoLabel = 'INGRESO EXTRA';
                     let badgeColor = 'bg-banco';
 
-                    // Extraer factura original
                     if (i.origen.includes('Factura #')) {
                         let match = i.origen.match(/Factura #([^\s)]+)/);
                         if (match) facturaNum = match[1];
                     }
 
-                    // Extraer número de recibo de abono
                     let reciboMatch = i.origen.match(/\[Recibo #([^\]]+)\]/);
                     if (reciboMatch) reciboNum = reciboMatch[1];
 
-                    // Determinar tipo y limpiar nombre del cliente
                     if (i.origen.includes('Abono Inicial')) {
                         tipoLabel = 'FACTURA DE VENTA';
                         badgeColor = 'bg-efectivo';
@@ -2320,7 +2344,6 @@
                         if (cleanMatch) clienteNombre = cleanMatch[1].trim();
                     }
 
-                    // Construir la visualización de factura
                     let facturaDisplay = `<span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${facturaNum}</span>`;
                     if (reciboNum && tipoLabel === 'FACTURA ABONADO') {
                         facturaDisplay += ` → <span class="badge" style="background:#fce7f3; color:#9d174d; font-weight:700;">Recibo #${reciboNum}</span>`;
@@ -2340,7 +2363,7 @@
                 }
             });
 
-            // Dashboard Salidas - CON BOTÓN ELIMINAR
+            // Dashboard Salidas
             const bSalidas = document.querySelector('#t-dashboard-salidas tbody');
             bSalidas.innerHTML = '';
             db.gastos.forEach(g => {
