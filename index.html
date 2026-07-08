@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
-        /* ===== TODO EL CSS IGUAL QUE ANTES ===== */
         :root {
             --bg-primary: #f1f5f9;
             --bg-sidebar: #0f172a;
@@ -106,6 +105,7 @@
         .alert-item { padding: 0.85rem 1.25rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; justify-content: space-between; border-left: 5px solid transparent; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .alert-hoy { background-color: #fef2f2; border-left-color: var(--danger); color: #991b1b; }
         .alert-manana { background-color: #fffbeb; border-left-color: var(--warning); color: #92400e; }
+        .alert-cumple { background-color: #dbeafe; border-left-color: var(--info); color: #1e40af; }
 
         .filter-bar { background: var(--white); padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--border); margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; width: 100%; }
         .es-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; width: 100%; }
@@ -115,7 +115,74 @@
         .panel { background-color: var(--white); border-radius: 0.5rem; border: 1px solid var(--border); padding: 1.25rem; margin-bottom: 1.5rem; width: 100%; overflow: hidden; }
         .panel h3 { font-size: 1rem; margin-bottom: 1rem; font-weight: 700; color: var(--text-dark); border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
 
-        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 0.25rem; background: var(--white); }
+        /* ===== CONTENEDORES CON SCROLL INDEPENDIENTE ===== */
+        .table-scroll {
+            max-height: 320px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .table-scroll table {
+            min-width: 700px;
+        }
+        .table-scroll thead th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #f8fafc;
+            border-bottom: 2px solid var(--border);
+        }
+        .table-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .table-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .table-scroll-2 {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .table-scroll-2 table {
+            min-width: 700px;
+        }
+        .table-scroll-2 thead th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #f8fafc;
+            border-bottom: 2px solid var(--border);
+        }
+        .table-scroll-2::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .table-scroll-2::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        .table-scroll-2::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .table-scroll-2::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 0; border: none; background: transparent; }
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; min-width: 700px; }
         th { background-color: #f8fafc; padding: 0.75rem; color: var(--text-dark); font-weight: 600; border-bottom: 2px solid var(--border); }
         td { padding: 0.75rem; border-bottom: 1px solid #e2e8f0; color: var(--text-main); vertical-align: middle; }
@@ -134,6 +201,10 @@
         .btn-accion { padding: 0.35rem 0.5rem; font-size: 0.75rem; border-radius: 0.25rem; border: none; cursor: pointer; font-weight: 600; }
         .btn-eliminar { background-color: #fee2e2; color: #991b1b; }
         .btn-editar { background-color: #dbeafe; color: #1e40af; }
+        .btn-whatsapp { background-color: #25D366; color: white; }
+        .btn-whatsapp:hover { background-color: #1da851; color: white; }
+        .btn-cerrar-modal { background-color: #64748b; color: white; }
+        .btn-ojito { background-color: #e0e7ff; color: #3730a3; }
 
         .badge { padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
         .bg-efectivo { background-color: #fef3c7; color: #92400e; }
@@ -146,9 +217,107 @@
         .badge-aprobada { background-color: #dcfce7; color: #15803d; }
         .badge-caja { background-color: #fef3c7; color: #92400e; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 2000; justify-content: center; align-items: center; padding: 1rem; }
-        .modal-content { background: var(--white); padding: 1.5rem; border-radius: 0.5rem; width: 100%; max-width: 500px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
-        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 1.2rem; cursor: pointer; font-weight: 700; color: var(--text-muted); }
+        /* ===== MODALES FLOTANTES ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .modal-overlay.activo {
+            display: flex;
+        }
+        .modal-flotante {
+            background: var(--white);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 750px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+        .modal-flotante .close-modal-top {
+            position: sticky;
+            top: 0;
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            background: var(--white);
+            padding: 0 0 0 10px;
+            z-index: 5;
+        }
+        .modal-flotante .close-modal-top:hover {
+            color: var(--danger);
+        }
+        .modal-flotante h3 {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-flotante .flex-form {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            border: 1px dashed var(--border);
+            margin-bottom: 0.5rem;
+        }
+        .modal-flotante .producto-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+            background: white;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid var(--border);
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .modal-flotante .producto-row .campo { flex: 1; min-width: 100px; }
+        .modal-flotante .producto-row .campo.cantidad { flex: 0.5; min-width: 60px; }
+        .modal-flotante .producto-row .campo.precio { flex: 0.7; min-width: 80px; }
+        .modal-flotante .producto-row .campo.detalle { flex: 2; min-width: 150px; }
+
+        .modal-flotante .tabla-productos-temp {
+            width: 100%;
+            font-size: 0.85rem;
+            border-collapse: collapse;
+            margin: 0.5rem 0;
+        }
+        .modal-flotante .tabla-productos-temp th {
+            background: #f1f5f9;
+            padding: 0.4rem 0.6rem;
+            text-align: left;
+            border-bottom: 2px solid var(--border);
+            font-weight: 600;
+        }
+        .modal-flotante .tabla-productos-temp td {
+            padding: 0.4rem 0.6rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .modal-flotante .tabla-productos-temp .total-row {
+            font-weight: 700;
+            background: #f8fafc;
+        }
+        .modal-flotante .btn-accion { padding: 2px 6px; font-size: 0.7rem; }
 
         .box-flotante { display: none; background: #f0fdf4; border: 2px solid var(--success); padding: 1.25rem; margin-bottom: 1.5rem; border-radius: 0.5rem; width: 100%; }
         .seccion-ocultable { display: none; background: #f8fafc; padding: 1rem; border: 1px solid var(--border); border-radius: 0.375rem; margin-bottom: 1.5rem; width: 100%; }
@@ -221,6 +390,41 @@
         }
         .modal-content.abono-editar .campo {
             margin-bottom: 0.5rem;
+        }
+
+        .botones-nomina {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        @media(max-width: 768px) {
+            .table-scroll {
+                max-height: 220px;
+            }
+            .table-scroll-2 {
+                max-height: 150px;
+            }
+            .modal-flotante {
+                max-width: 100%;
+                padding: 1rem;
+                margin: 0.5rem;
+                max-height: 95vh;
+            }
+            .modal-flotante .producto-row {
+                flex-direction: column;
+            }
+            .modal-flotante .producto-row .campo {
+                min-width: 100%;
+            }
+            .botones-nomina {
+                flex-direction: column;
+                width: 100%;
+            }
+            .botones-nomina .btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
 
         @media(max-width: 1024px) {
@@ -358,20 +562,24 @@
             <div class="es-grid">
                 <div class="panel" id="panel-dashboard-entradas" style="border-top: 3px solid var(--success);">
                     <h3 style="color: var(--success);">📥 INGRESOS</h3>
-                    <div class="table-responsive">
-                        <table id="t-dashboard-entradas">
-                            <thead><tr><th>Fecha</th><th>Cliente / Origen</th><th>Factura</th><th>Tipo</th><th>Monto</th><th>Acciones</th></tr></thead>
-                            <tbody></tbody>
-                        </table>
+                    <div class="table-scroll">
+                        <div class="table-responsive">
+                            <table id="t-dashboard-entradas">
+                                <thead><tr><th>Fecha</th><th>Cliente / Origen</th><th>Factura</th><th>Tipo</th><th>Monto</th><th>Acciones</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class="panel" id="panel-dashboard-salidas" style="border-top: 3px solid var(--danger);">
                     <h3 style="color: var(--danger);">📤 EGRESOS</h3>
-                    <div class="table-responsive">
-                        <table id="t-dashboard-salidas">
-                            <thead><tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Monto</th><th>X</th></tr></thead>
-                            <tbody></tbody>
-                        </table>
+                    <div class="table-scroll">
+                        <div class="table-responsive">
+                            <table id="t-dashboard-salidas">
+                                <thead><tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Monto</th><th>Acciones</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -379,68 +587,21 @@
 
         <!-- MÓDULO VENTAS -->
         <div id="mod-ventas" class="seccion-vista">
-            <div id="box-abono-practico" class="box-flotante">
-                <h3 style="color: var(--success); margin-bottom:8px; border:none; padding:0;">➕ Registrar Abono de Cartera</h3>
-                <p style="font-size:0.85rem; margin-bottom:1rem;">Cliente: <strong id="lbl-abono-cliente"></strong></p>
-                <input type="hidden" id="abono-id-cliente">
-                <div style="display:flex; flex-wrap:wrap; gap:0.75rem; align-items:flex-end;">
-                    <div class="campo" style="flex:1; min-width:150px;"><label>Nº Recibo</label><input type="text" id="abono-numero" placeholder="Ej: 045"></div>
-                    <div class="campo" style="flex:1; min-width:180px;"><label>Monto ($)</label><input type="text" id="abono-monto-input" oninput="formatMoni(this)" placeholder="Ej: 1.000.000"></div>
-                    <div class="campo" style="width:160px;"><label>Medio de Pago</label>
-                        <select id="abono-medio-input" onchange="alternarVisibilidadAbonoDividido(this.value)">
-                            <option value="Banco">Banco</option>
-                            <option value="Efectivo">Efectivo</option>
-                            <option value="DIVIDIDO">🔄 Dividido (Banco + Efectivo)</option>
-                        </select>
-                    </div>
-                    <div class="campo" id="box-abono-banco" style="display:none; width:160px;"><label>Abono por BANCO ($)</label><input type="text" id="abono-banco-input" oninput="formatMoni(this)" placeholder="Monto Banco"></div>
-                    <div class="campo" id="box-abono-efectivo" style="display:none; width:160px;"><label>Abono por EFECTIVO ($)</label><input type="text" id="abono-efectivo-input" oninput="formatMoni(this)" placeholder="Monto Efectivo"></div>
-                    <div class="campo" style="width:140px;"><label>Fecha Abono</label><input type="date" id="abono-fecha-input"></div>
-                    <button class="btn btn-verde" onclick="procesarAbonoEstructurado()">Guardar Abono</button>
-                    <button class="btn" style="background:#64748b;" onclick="cerrarBoxAbono()">X</button>
-                </div>
-            </div>
             <div class="panel">
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:1rem;">
                     <h3 style="border:none; padding:0; margin:0;">🛍️ Contratos y Clientes</h3>
-                    <button class="btn btn-azul" onclick="toggleFormularioVenta()" id="btn-toggle-venta">➕ Nueva Venta</button>
-                </div>
-                <div class="table-responsive">
-                    <table id="t-ventas">
-                        <thead><tr><th>Factura</th><th>F.Registro</th><th>Cliente</th><th>Proyecto</th><th>Total</th><th>Abonado</th><th>Pactada</th><th>Acciones</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div id="formulario-venta-container" style="display:none; margin-top:1.5rem; border-top:2px dashed var(--border); padding-top:1rem;">
-                    <h3 style="color:var(--info);" id="lbl-formulario-modo">➕ Nuevo Contrato</h3>
-                    <input type="hidden" id="v-id-edicion">
-                    <div class="flex-form">
-                        <div class="campo"><label>Factura Nº</label><input type="text" id="v-factura" placeholder="Ej: 0254"></div>
-                        <div class="campo"><label>Cliente</label><input type="text" id="v-cliente" placeholder="Cliente"></div>
-                        <div class="campo"><label>Cédula/NIT</label><input type="text" id="v-cedula" placeholder="Documento"></div>
-                        <div class="campo"><label>Dirección</label><input type="text" id="v-direccion" placeholder="Dirección"></div>
-                        <div class="campo"><label>Barrio</label><input type="text" id="v-barrio" placeholder="Barrio"></div>
-                        <div class="campo"><label>Teléfono</label><input type="text" id="v-telefono" placeholder="Celular"></div>
-                        <div class="campo"><label>Correo</label><input type="email" id="v-correo" placeholder="Correo"></div>
-                        <div class="campo" style="grid-column: span 2;"><label>Proyecto / Productos</label>
-                            <textarea id="v-desc" placeholder="Ej: Cocina integral RH + mesón cuarzo&#10;Habitación principal con cabecera tapizada&#10;Instalación incluida" rows="3"></textarea>
-                        </div>
-                        <div class="campo"><label>Valor Total ($)</label><input type="text" id="v-total" oninput="formatMoni(this)" placeholder="Total"></div>
-                        <div class="campo"><label>Fecha Contrato</label><input type="date" id="v-fecha-registro"></div>
-                        <div class="campo"><label>Fecha Pactada</label><input type="date" id="v-fecha-pactada"></div>
-                        <div class="campo"><label>Medio Pago</label>
-                            <select id="v-medio" onchange="alternarVisibilidadMetodoPagoDividido(this.value)">
-                                <option value="Banco">Banco</option>
-                                <option value="Efectivo">Efectivo</option>
-                                <option value="DIVIDIDO">🔄 Dividido (Banco + Efectivo)</option>
-                            </select>
-                        </div>
-                        <div class="campo" id="box-v-abono"><label>Abono ($)</label><input type="text" id="v-abono" oninput="formatMoni(this)" placeholder="0"></div>
-                        <div class="campo" id="box-v-abono-banco" style="display:none;"><label>Abono por BANCO ($)</label><input type="text" id="v-abono-banco" oninput="formatMoni(this)" placeholder="Monto Banco"></div>
-                        <div class="campo" id="box-v-abono-efectivo" style="display:none;"><label>Abono por EFECTIVO ($)</label><input type="text" id="v-abono-efectivo" oninput="formatMoni(this)" placeholder="Monto Efectivo"></div>
+                    <div style="display:flex; gap:0.5rem;">
+                        <button class="btn btn-verde" onclick="abrirModalAbono()" id="btn-nuevo-abono">💰 Nuevo Abono</button>
+                        <button class="btn btn-azul" onclick="abrirModalVenta()" id="btn-nueva-venta">➕ Nueva Venta</button>
                     </div>
-                    <button class="btn btn-verde" onclick="guardarVenta()" id="btn-guardar-venta-accion">🚀 Guardar</button>
-                    <button class="btn" style="background:#64748b; display:none;" id="btn-cancelar-edicion-venta" onclick="cancelarEdicionVenta()">Cancelar</button>
+                </div>
+                <div class="table-scroll">
+                    <div class="table-responsive">
+                        <table id="t-ventas">
+                            <thead><tr><th>Factura</th><th>F.Registro</th><th>Cliente</th><th>Proyecto</th><th>Total</th><th>Abonado</th><th>Pactada</th><th>Acciones</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -449,11 +610,13 @@
         <div id="mod-entregas" class="seccion-vista">
             <div class="panel" style="border-top:4px solid var(--accent);">
                 <h3>📦 Control de Despachos</h3>
-                <div class="table-responsive">
-                    <table id="t-entregas">
-                        <thead><tr><th>Factura</th><th>F.Compra</th><th>Cliente</th><th>Proyecto</th><th>Dirección</th><th>📆 Límite</th><th>Estado</th><th>Conductor</th><th>Acciones</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="table-scroll">
+                    <div class="table-responsive">
+                        <table id="t-entregas">
+                            <thead><tr><th>Factura</th><th>F.Compra</th><th>Cliente</th><th>Proyecto</th><th>Dirección</th><th>📆 Límite</th><th>Estado</th><th>Conductor</th><th>Acciones</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -462,11 +625,13 @@
         <div id="mod-cobros" class="seccion-vista">
             <div class="panel" style="border-top:4px solid var(--danger);">
                 <h3>🚨 Cuentas por Cobrar</h3>
-                <div class="table-responsive">
-                    <table id="t-cobros">
-                        <thead><tr><th>Factura</th><th>Cliente</th><th>Teléfono</th><th>Proyecto</th><th>Deuda</th><th>Operación</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="table-scroll">
+                    <div class="table-responsive">
+                        <table id="t-cobros">
+                            <thead><tr><th>Factura</th><th>Cliente</th><th>Teléfono</th><th>Proyecto</th><th>Deuda</th><th>Operación</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -479,11 +644,13 @@
                     <button class="btn btn-azul" onclick="toggleFormularioCotizacion()" id="btn-toggle-cotizacion">➕ Nueva Cotización</button>
                 </div>
 
-                <div class="table-responsive">
-                    <table id="t-cotizaciones">
-                        <thead><tr><th>Nº</th><th>Fecha</th><th>Cliente</th><th>Teléfono</th><th>Productos</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="table-scroll">
+                    <div class="table-responsive">
+                        <table id="t-cotizaciones">
+                            <thead><tr><th>Nº</th><th>Fecha</th><th>Cliente</th><th>Teléfono</th><th>Productos</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div id="formulario-cotizacion-container" style="display: none; margin-top: 1.5rem; border-top: 2px dashed var(--border); padding-top: 1rem;">
@@ -547,50 +714,35 @@
             </div>
         </div>
 
-        <!-- MÓDULO PAGO TRABAJADORES -->
+        <!-- MÓDULO NÓMINA (REDISEÑADO) -->
         <div id="mod-nomina" class="seccion-vista">
             <div class="panel">
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:1rem;">
-                    <h3 style="border:none; padding:0; margin:0;">👷 Personal</h3>
-                    <button class="btn btn-azul" onclick="toggleSeccionTrabajador()">➕ Nuevo Trabajador</button>
-                </div>
-                <div id="box-crear-trabajador-rapido" class="seccion-ocultable">
-                    <div class="flex-form">
-                        <div class="campo"><label>Nombre</label><input type="text" id="t-nombre"></div>
-                        <div class="campo"><label>Cédula</label><input type="text" id="t-cedula"></div>
-                        <div class="campo"><label>Teléfono</label><input type="text" id="t-telefono"></div>
-                        <div class="campo"><label>Dirección</label><input type="text" id="t-direccion"></div>
-                        <div class="campo"><label>Correo</label><input type="text" id="t-correo"></div>
-                        <div class="campo"><label>Cargo</label><input type="text" id="t-cargo" placeholder="Maestro carpintero"></div>
+                    <h3 style="border:none; padding:0; margin:0;">👷 Personal y Pagos</h3>
+                    <div class="botones-nomina">
+                        <button class="btn btn-azul" onclick="abrirModalTrabajador()">➕ Nuevo Trabajador</button>
+                        <button class="btn btn-verde" onclick="abrirModalNomina()">💰 Registrar Pago</button>
                     </div>
-                    <button class="btn btn-verde" onclick="guardarTrabajadorRapido()">💾 Guardar</button>
                 </div>
 
-                <h3>💸 Historial de Vales</h3>
-                <div class="table-responsive">
-                    <table id="t-nomina">
-                        <thead><tr><th>Fecha</th><th>Trabajador</th><th>Concepto</th><th>Detalle</th><th>Origen</th><th>Monto</th><th>Acciones</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+                <h4 style="margin: 0.5rem 0 0.25rem 0; color: var(--text-muted); font-size: 0.8rem;">👥 Lista de Trabajadores</h4>
+                <div class="table-scroll-2">
+                    <div class="table-responsive">
+                        <table id="t-trabajadores">
+                            <thead><tr><th>Nombre</th><th>Cédula</th><th>Teléfono</th><th>Cargo</th><th>Cumpleaños</th><th>Acciones</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <div id="formulario-nomina-container" style="margin-top:1rem;">
-                    <h3 style="color:var(--info);" id="lbl-formulario-nomina-modo">💸 Entregar Adelanto o Semanal</h3>
-                    <input type="hidden" id="n-id-edicion" value="">
-                    <div class="flex-form">
-                        <div class="campo"><label>Operario</label><select id="n-select-trabajador"></select></div>
-                        <div class="campo"><label>Detalle</label><input type="text" id="n-detalle" placeholder="Adelanto cocina Pedro"></div>
-                        <div class="campo"><label>Origen</label>
-                            <select id="n-origen">
-                                <option value="Banco">Banco</option>
-                                <option value="Efectivo">Efectivo</option>
-                            </select>
-                        </div>
-                        <div class="campo"><label>Monto ($)</label><input type="text" id="n-monto" oninput="formatMoni(this)"></div>
-                        <div class="campo"><label>Fecha de Pago</label><input type="date" id="n-fecha"></div>
+                <h4 style="margin: 0.5rem 0 0.25rem 0; color: var(--text-muted); font-size: 0.8rem;">💸 Historial de Vales</h4>
+                <div class="table-scroll-2">
+                    <div class="table-responsive">
+                        <table id="t-nomina">
+                            <thead><tr><th>Fecha</th><th>Trabajador</th><th>Detalle</th><th>Origen</th><th>Monto</th><th>Acciones</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
-                    <button class="btn btn-verde" onclick="guardarNomina()" id="btn-guardar-nomina-accion">Registrar Pago</button>
-                    <button class="btn" style="background:#64748b; display:none;" id="btn-cancelar-edicion-nomina" onclick="cancelarEdicionNomina()">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -599,11 +751,13 @@
         <div id="mod-gastos" class="seccion-vista">
             <div class="panel">
                 <h3>💡 Registro de Gastos Generales</h3>
-                <div class="table-responsive">
-                    <table id="t-gastos">
-                        <thead><tr><th>Fecha</th><th>Categoría</th><th>Detalle</th><th>Medio</th><th>Monto</th><th>Acciones</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="table-scroll">
+                    <div class="table-responsive">
+                        <table id="t-gastos">
+                            <thead><tr><th>Fecha</th><th>Categoría</th><th>Producto</th><th>Cantidad</th><th>Detalle</th><th>Medio</th><th>Monto</th><th>Acciones</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div id="formulario-gasto-container">
@@ -623,7 +777,9 @@
                             </select>
                         </div>
                         <div class="campo" id="box-cat-manual" style="display:none;"><label>Escribe categoría</label><input type="text" id="g-cat-manual"></div>
-                        <div class="campo"><label>Concepto</label><input type="text" id="g-concepto"></div>
+                        <div class="campo"><label>Producto / Concepto</label><input type="text" id="g-concepto" placeholder="Ej: Madera MDF"></div>
+                        <div class="campo"><label>Cantidad</label><input type="number" id="g-cantidad" value="1" min="1"></div>
+                        <div class="campo"><label>Detalle / Especificación</label><input type="text" id="g-detalle" placeholder="Ej: 2.4m x 1.2m x 18mm"></div>
                         <div class="campo"><label>Medio</label>
                             <select id="g-medio">
                                 <option value="Banco">Banco</option>
@@ -643,11 +799,13 @@
         <div id="mod-cajamenor" class="seccion-vista">
             <div class="panel">
                 <h3>🪙 Caja Menor Auxiliar del Taller</h3>
-                <div class="table-responsive">
-                    <table id="t-cajamenor">
-                        <thead><tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Monto</th><th>Acciones</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="table-scroll">
+                    <div class="table-responsive">
+                        <table id="t-cajamenor">
+                            <thead><tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Monto</th><th>Acciones</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div id="formulario-caja-container">
@@ -671,8 +829,151 @@
         </div>
     </main>
 
-    <!-- MODALES -->
-    <div id="modal-detalle-cliente" class="modal">
+    <!-- ===== MODALES FLOTANTES ===== -->
+    <!-- MODAL PARA VENTA -->
+    <div class="modal-overlay" id="modal-venta">
+        <div class="modal-flotante">
+            <span class="close-modal-top" onclick="cerrarModalVenta()">&times;</span>
+            <h3 id="lbl-modal-venta-titulo">➕ Nueva Venta</h3>
+            <input type="hidden" id="v-id-edicion" value="">
+            <div class="flex-form">
+                <div class="campo"><label>Factura Nº</label><input type="text" id="v-factura" placeholder="Ej: 0254"></div>
+                <div class="campo"><label>Cliente</label><input type="text" id="v-cliente" placeholder="Cliente"></div>
+                <div class="campo"><label>Cédula/NIT</label><input type="text" id="v-cedula" placeholder="Documento"></div>
+                <div class="campo"><label>Dirección</label><input type="text" id="v-direccion" placeholder="Dirección"></div>
+                <div class="campo"><label>Barrio</label><input type="text" id="v-barrio" placeholder="Barrio"></div>
+                <div class="campo"><label>Teléfono</label><input type="text" id="v-telefono" placeholder="Celular"></div>
+                <div class="campo"><label>Correo</label><input type="email" id="v-correo" placeholder="Correo"></div>
+                <div class="campo"><label>Fecha Contrato</label><input type="date" id="v-fecha-registro"></div>
+                <div class="campo"><label>Fecha Pactada</label><input type="date" id="v-fecha-pactada"></div>
+                <div class="campo"><label>Medio Pago</label>
+                    <select id="v-medio" onchange="alternarVisibilidadMetodoPagoDividido(this.value)">
+                        <option value="Banco">Banco</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="DIVIDIDO">🔄 Dividido (Banco + Efectivo)</option>
+                    </select>
+                </div>
+                <div class="campo" id="box-v-abono"><label>Abono ($)</label><input type="text" id="v-abono" oninput="formatMoni(this)" placeholder="0"></div>
+                <div class="campo" id="box-v-abono-banco" style="display:none;"><label>Abono por BANCO ($)</label><input type="text" id="v-abono-banco" oninput="formatMoni(this)" placeholder="Monto Banco"></div>
+                <div class="campo" id="box-v-abono-efectivo" style="display:none;"><label>Abono por EFECTIVO ($)</label><input type="text" id="v-abono-efectivo" oninput="formatMoni(this)" placeholder="Monto Efectivo"></div>
+            </div>
+
+            <h4 style="margin: 0.5rem 0; color: var(--text-dark);">📦 Productos / Servicios</h4>
+            <div class="producto-row">
+                <div class="campo cantidad"><label>Cantidad</label><input type="number" id="v-prod-cantidad" value="1" min="1"></div>
+                <div class="campo detalle"><label>Detalle del Producto</label><input type="text" id="v-prod-detalle" placeholder="Ej: Cocina integral RH + mesón cuarzo"></div>
+                <div class="campo precio"><label>Precio Unitario ($)</label><input type="text" id="v-prod-precio" oninput="formatMoni(this)" placeholder="0"></div>
+                <button class="btn btn-verde" style="margin-bottom:4px; height:38px; align-self:flex-end;" onclick="agregarProductoVenta()">➕ Agregar</button>
+            </div>
+
+            <div style="margin: 0.5rem 0 1rem 0; overflow-x:auto;">
+                <table class="tabla-productos-temp" id="tabla-productos-venta">
+                    <thead>
+                        <tr><th style="width:80px;">Cantidad</th><th>Detalle</th><th style="width:150px;">Precio Unit.</th><th style="width:150px;">Subtotal</th><th style="width:50px;">X</th></tr>
+                    </thead>
+                    <tbody id="tbody-productos-venta">
+                        <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay productos agregados</td></tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="3" style="text-align:right;">TOTAL VENTA:</td>
+                            <td id="total-productos-venta" style="color:var(--success); font-size:1.1rem;">$0</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
+                <button class="btn btn-verde" onclick="guardarVenta()" id="btn-guardar-venta-accion" style="flex:1;">🚀 Guardar Venta</button>
+                <button class="btn btn-cerrar-modal" onclick="cerrarModalVenta()" style="flex:0.5;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA ABONO SIN VENTA -->
+    <div class="modal-overlay" id="modal-abono-directo">
+        <div class="modal-flotante" style="max-width:550px;">
+            <span class="close-modal-top" onclick="cerrarModalAbonoDirecto()">&times;</span>
+            <h3>💰 Nuevo Abono Directo</h3>
+            <div class="flex-form" style="grid-template-columns:1fr 1fr;">
+                <div class="campo"><label>Nº Recibo</label><input type="text" id="abono-directo-numero" placeholder="Ej: 045"></div>
+                <div class="campo"><label>Monto ($)</label><input type="text" id="abono-directo-monto" oninput="formatMoni(this)" placeholder="0"></div>
+                <div class="campo"><label>Medio de Pago</label>
+                    <select id="abono-directo-medio">
+                        <option value="Banco">Banco</option>
+                        <option value="Efectivo">Efectivo</option>
+                    </select>
+                </div>
+                <div class="campo"><label>Fecha</label><input type="date" id="abono-directo-fecha"></div>
+                <div class="campo" style="grid-column: span 2;"><label>Cliente / Concepto</label><input type="text" id="abono-directo-cliente" placeholder="Nombre del cliente o concepto"></div>
+                <div class="campo" style="grid-column: span 2;"><label>Factura Asociada (opcional)</label><input type="text" id="abono-directo-factura" placeholder="Nº de factura si aplica"></div>
+            </div>
+            <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
+                <button class="btn btn-verde" onclick="guardarAbonoDirecto()" style="flex:1;">💰 Guardar Abono</button>
+                <button class="btn btn-cerrar-modal" onclick="cerrarModalAbonoDirecto()" style="flex:0.5;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA TRABAJADOR -->
+    <div class="modal-overlay" id="modal-trabajador">
+        <div class="modal-flotante" style="max-width:550px;">
+            <span class="close-modal-top" onclick="cerrarModalTrabajador()">&times;</span>
+            <h3 id="lbl-modal-trabajador-titulo">➕ Nuevo Trabajador</h3>
+            <input type="hidden" id="t-id-edicion" value="">
+            <div class="flex-form" style="grid-template-columns:1fr 1fr;">
+                <div class="campo"><label>Nombre Completo</label><input type="text" id="t-nombre" placeholder="Nombre"></div>
+                <div class="campo"><label>Cédula</label><input type="text" id="t-cedula" placeholder="Cédula"></div>
+                <div class="campo"><label>Teléfono</label><input type="text" id="t-telefono" placeholder="Celular"></div>
+                <div class="campo"><label>Dirección</label><input type="text" id="t-direccion" placeholder="Residencia"></div>
+                <div class="campo"><label>Correo</label><input type="text" id="t-correo" placeholder="Opcional"></div>
+                <div class="campo"><label>Cargo</label><input type="text" id="t-cargo" placeholder="Ej: Maestro Carpintero"></div>
+                <div class="campo"><label>Fecha de Cumpleaños</label><input type="date" id="t-cumpleanos"></div>
+            </div>
+            <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
+                <button class="btn btn-verde" onclick="guardarTrabajadorModal()" id="btn-guardar-trabajador-modal" style="flex:1;">💾 Guardar</button>
+                <button class="btn btn-cerrar-modal" onclick="cerrarModalTrabajador()" style="flex:0.5;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA REGISTRAR PAGO -->
+    <div class="modal-overlay" id="modal-nomina">
+        <div class="modal-flotante" style="max-width:550px;">
+            <span class="close-modal-top" onclick="cerrarModalNomina()">&times;</span>
+            <h3 id="lbl-modal-nomina-titulo">💰 Registrar Pago</h3>
+            <input type="hidden" id="n-id-edicion" value="">
+            <div class="flex-form" style="grid-template-columns:1fr 1fr;">
+                <div class="campo"><label>Operario</label><select id="n-select-trabajador"></select></div>
+                <div class="campo"><label>Detalle</label><input type="text" id="n-detalle" placeholder="Adelanto cocina Pedro"></div>
+                <div class="campo"><label>Origen</label>
+                    <select id="n-origen">
+                        <option value="Banco">Banco</option>
+                        <option value="Efectivo">Efectivo</option>
+                    </select>
+                </div>
+                <div class="campo"><label>Monto ($)</label><input type="text" id="n-monto" oninput="formatMoni(this)"></div>
+                <div class="campo"><label>Fecha de Pago</label><input type="date" id="n-fecha"></div>
+            </div>
+            <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
+                <button class="btn btn-verde" onclick="guardarNominaModal()" id="btn-guardar-nomina-modal" style="flex:1;">💰 Guardar Pago</button>
+                <button class="btn btn-cerrar-modal" onclick="cerrarModalNomina()" style="flex:0.5;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA DETALLE GENÉRICO -->
+    <div class="modal-overlay" id="modal-detalle-generico">
+        <div class="modal-flotante" style="max-width:600px;">
+            <span class="close-modal-top" onclick="cerrarModalDetalleGenerico()">&times;</span>
+            <h3 id="lbl-modal-detalle-titulo">📋 Detalle</h3>
+            <div id="contenido-modal-detalle-generico" style="font-size:0.9rem; display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+    </div>
+
+    <!-- MODALES EXISTENTES -->
+    <div id="modal-detalle-cliente" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-modal" onclick="cerrarModalDetalle()">&times;</span>
             <h3 style="color:var(--info);">📋 Ficha del Cliente</h3>
@@ -680,7 +981,7 @@
         </div>
     </div>
 
-    <div id="modal-ver-cotizacion" class="modal">
+    <div id="modal-ver-cotizacion" class="modal" style="display:none;">
         <div class="modal-content" style="max-width:600px;">
             <span class="close-modal" onclick="cerrarModalCotizacion()">&times;</span>
             <h3 style="color:var(--info);">📋 Cotización Completa</h3>
@@ -688,7 +989,7 @@
         </div>
     </div>
 
-    <div id="modal-editar-producto" class="modal">
+    <div id="modal-editar-producto" class="modal" style="display:none;">
         <div class="modal-content" style="max-width:450px;">
             <span class="close-modal" onclick="cerrarModalEditarProducto()">&times;</span>
             <h3 style="color:var(--info);">✏️ Editar Producto</h3>
@@ -702,7 +1003,7 @@
         </div>
     </div>
 
-    <div id="modal-despacho" class="modal">
+    <div id="modal-despacho" class="modal" style="display:none;">
         <div class="modal-content" style="max-width:450px;">
             <span class="close-modal" onclick="cerrarModalDespacho()">&times;</span>
             <h3 style="color:var(--accent);">🚛 Datos del Despacho</h3>
@@ -719,7 +1020,7 @@
         </div>
     </div>
 
-    <div id="modal-editar-despacho" class="modal">
+    <div id="modal-editar-despacho" class="modal" style="display:none;">
         <div class="modal-content" style="max-width:450px;">
             <span class="close-modal" onclick="cerrarModalEditarDespacho()">&times;</span>
             <h3 style="color:var(--accent);">✏️ Editar Despacho</h3>
@@ -743,8 +1044,7 @@
         </div>
     </div>
 
-    <!-- MODAL PARA EDITAR ABONO -->
-    <div id="modal-editar-abono" class="modal">
+    <div id="modal-editar-abono" class="modal" style="display:none;">
         <div class="modal-content abono-editar">
             <span class="close-modal" onclick="cerrarModalEditarAbono()">&times;</span>
             <h3 style="color:var(--info);">✏️ Editar Abono</h3>
@@ -792,6 +1092,7 @@
         let db = { trabajadores: [], ventas: [], ingresosDirectos: [], gastos: [], nomina: [], cajaMenor: [], cotizaciones: [] };
         window.moduloActual = 'dashboard';
         window.productosTemp = [];
+        window.productosVenta = [];
 
         onValue(carmencitaRef, (snapshot) => {
             const data = snapshot.val();
@@ -909,15 +1210,372 @@
             return fecha.toISOString().split('T')[0];
         }
 
-        function toggleSeccionTrabajador() {
-            let box = document.getElementById('box-crear-trabajador-rapido');
-            box.style.display = box.style.display === 'block' ? 'none' : 'block';
+        // ===== MODAL DETALLE GENÉRICO =====
+        function abrirModalDetalle(titulo, contenido) {
+            document.getElementById('lbl-modal-detalle-titulo').innerText = titulo || '📋 Detalle';
+            document.getElementById('contenido-modal-detalle-generico').innerHTML = contenido || '<p>Sin información disponible</p>';
+            document.getElementById('modal-detalle-generico').classList.add('activo');
+        }
+
+        function cerrarModalDetalleGenerico() {
+            document.getElementById('modal-detalle-generico').classList.remove('activo');
+        }
+
+        // ===== MODAL TRABAJADOR =====
+        function abrirModalTrabajador() {
+            document.getElementById('modal-trabajador').classList.add('activo');
+            document.getElementById('t-id-edicion').value = '';
+            document.getElementById('t-nombre').value = '';
+            document.getElementById('t-cedula').value = '';
+            document.getElementById('t-telefono').value = '';
+            document.getElementById('t-direccion').value = '';
+            document.getElementById('t-correo').value = '';
+            document.getElementById('t-cargo').value = '';
+            document.getElementById('t-cumpleanos').value = '';
+            document.getElementById('lbl-modal-trabajador-titulo').innerText = '➕ Nuevo Trabajador';
+            document.getElementById('btn-guardar-trabajador-modal').innerText = '💾 Guardar';
+            setTimeout(() => { document.getElementById('t-nombre').focus(); }, 300);
+        }
+
+        function cerrarModalTrabajador() {
+            document.getElementById('modal-trabajador').classList.remove('activo');
+        }
+
+        function guardarTrabajadorModal() {
             let db = window.getDbData();
+            let idEdicion = document.getElementById('t-id-edicion').value;
+            
+            let nombre = document.getElementById('t-nombre').value.trim();
+            let cedula = document.getElementById('t-cedula').value.trim();
+            let telefono = document.getElementById('t-telefono').value.trim();
+            let direccion = document.getElementById('t-direccion').value.trim();
+            let correo = document.getElementById('t-correo').value.trim();
+            let cargo = document.getElementById('t-cargo').value.trim();
+            let cumpleanos = document.getElementById('t-cumpleanos').value;
+
+            if (!nombre || !cedula || !cargo) return alert('Verifica campos obligatorios (Nombre, Cédula, Cargo).');
+
+            if (idEdicion && idEdicion !== "") {
+                let t = db.trabajadores.find(x => x.id === idEdicion);
+                if (t) {
+                    t.nombre = nombre;
+                    t.cedula = cedula;
+                    t.telefono = telefono;
+                    t.direccion = direccion;
+                    t.correo = correo;
+                    t.cargo = cargo;
+                    t.cumpleanos = cumpleanos;
+                }
+            } else {
+                db.trabajadores.push({ 
+                    id: 't_' + Date.now(), 
+                    nombre, cedula, telefono, direccion, correo, cargo, 
+                    cumpleanos 
+                });
+            }
+            cerrarModalTrabajador();
             const nSelect = document.getElementById('n-select-trabajador');
             if (nSelect) {
                 nSelect.innerHTML = '';
                 db.trabajadores.forEach(t => { nSelect.innerHTML += `<option value="${t.nombre}">${t.nombre} [${t.cargo}]</option>`; });
             }
+            salvar();
+        }
+
+        function iniciarEdicionTrabajador(id) {
+            let db = window.getDbData();
+            let t = db.trabajadores.find(x => x.id === id);
+            if (!t) return;
+
+            abrirModalTrabajador();
+            document.getElementById('t-id-edicion').value = t.id;
+            document.getElementById('t-nombre').value = t.nombre || '';
+            document.getElementById('t-cedula').value = t.cedula || '';
+            document.getElementById('t-telefono').value = t.telefono || '';
+            document.getElementById('t-direccion').value = t.direccion || '';
+            document.getElementById('t-correo').value = t.correo || '';
+            document.getElementById('t-cargo').value = t.cargo || '';
+            document.getElementById('t-cumpleanos').value = t.cumpleanos || '';
+            document.getElementById('lbl-modal-trabajador-titulo').innerText = '✏️ Editar Trabajador';
+            document.getElementById('btn-guardar-trabajador-modal').innerText = '💾 Guardar Cambios';
+        }
+
+        function eliminarTrabajador(id) {
+            let db = window.getDbData();
+            if (confirm('¿Eliminar este trabajador?')) {
+                db.trabajadores = db.trabajadores.filter(x => x.id !== id);
+                salvar();
+            }
+        }
+
+        // ===== MODAL NÓMINA (PAGO) =====
+        function abrirModalNomina() {
+            document.getElementById('modal-nomina').classList.add('activo');
+            document.getElementById('n-id-edicion').value = '';
+            document.getElementById('n-detalle').value = '';
+            document.getElementById('n-monto').value = '';
+            document.getElementById('n-origen').value = 'Banco';
+            document.getElementById('n-fecha').value = new Date().toISOString().split('T')[0];
+            document.getElementById('lbl-modal-nomina-titulo').innerText = '💰 Registrar Pago';
+            document.getElementById('btn-guardar-nomina-modal').innerText = '💰 Guardar Pago';
+            setTimeout(() => { document.getElementById('n-detalle').focus(); }, 300);
+        }
+
+        function cerrarModalNomina() {
+            document.getElementById('modal-nomina').classList.remove('activo');
+        }
+
+        function guardarNominaModal() {
+            let db = window.getDbData();
+            let idEdicion = document.getElementById('n-id-edicion').value;
+            
+            let nombre = document.getElementById('n-select-trabajador').value;
+            let detalle = document.getElementById('n-detalle').value.trim();
+            let origen = document.getElementById('n-origen').value;
+            let monto = cleanNum(document.getElementById('n-monto').value);
+            let fecha = document.getElementById('n-fecha').value || new Date().toISOString().split('T')[0];
+
+            if (!nombre || monto <= 0) return alert('Verifica datos.');
+
+            if (idEdicion && idEdicion !== "") {
+                let n = db.nomina.find(x => x.id === idEdicion);
+                if (n) {
+                    n.nombre = nombre;
+                    n.detalle = detalle;
+                    n.origen = origen;
+                    n.monto = monto;
+                    n.fecha = fecha;
+                }
+            } else {
+                db.nomina.push({ 
+                    id: 'n_' + Date.now(), 
+                    fecha: fecha, 
+                    nombre, 
+                    tipo: 'Pago', 
+                    detalle, 
+                    origen, 
+                    monto 
+                });
+            }
+            cerrarModalNomina();
+            salvar();
+        }
+
+        function iniciarEdicionNomina(id) {
+            let db = window.getDbData();
+            let n = db.nomina.find(x => x.id === id);
+            if (!n) return;
+
+            abrirModalNomina();
+            document.getElementById('n-id-edicion').value = n.id;
+            document.getElementById('n-select-trabajador').value = n.nombre;
+            document.getElementById('n-detalle').value = n.detalle || '';
+            document.getElementById('n-origen').value = n.origen || 'Banco';
+            document.getElementById('n-monto').value = n.monto ? n.monto.toLocaleString('es-CO') : '';
+            document.getElementById('n-fecha').value = n.fecha || new Date().toISOString().split('T')[0];
+            document.getElementById('lbl-modal-nomina-titulo').innerText = '✏️ Editar Pago';
+            document.getElementById('btn-guardar-nomina-modal').innerText = '💾 Guardar Cambios';
+        }
+
+        function eliminarNomina(id) { 
+            let db = window.getDbData(); 
+            if (confirm('¿Eliminar este registro?')) { 
+                db.nomina = db.nomina.filter(x => x.id !== id); 
+                salvar(); 
+            } 
+        }
+
+        // ===== FUNCIONES DETALLE POR TIPO =====
+        function verDetalleIngreso(id) {
+            let db = window.getDbData();
+            let i = db.ingresosDirectos.find(x => x.id === id);
+            if (!i) return;
+            let contenido = `
+                <p><strong>Fecha:</strong> ${i.fecha || 'No especificada'}</p>
+                <p><strong>Origen / Cliente:</strong> ${i.origen || 'No especificado'}</p>
+                <p><strong>Medio:</strong> ${i.medio || 'No especificado'}</p>
+                <p><strong>Monto:</strong> <span style="color:var(--success); font-weight:700;">${m(i.monto)}</span></p>
+                <p><strong>ID:</strong> ${i.id}</p>
+            `;
+            abrirModalDetalle('📥 Detalle del Ingreso', contenido);
+        }
+
+        function verDetalleEgreso(id) {
+            let db = window.getDbData();
+            let g = db.gastos.find(x => x.id === id);
+            if (g) {
+                let contenido = `
+                    <p><strong>Fecha:</strong> ${g.fecha || 'No especificada'}</p>
+                    <p><strong>Categoría:</strong> ${g.cat || 'No especificada'}</p>
+                    <p><strong>Producto:</strong> ${g.concepto || 'No especificado'}</p>
+                    <p><strong>Cantidad:</strong> ${g.cantidad || 1}</p>
+                    <p><strong>Detalle:</strong> ${g.detalle || 'No especificado'}</p>
+                    <p><strong>Medio:</strong> ${g.medio || 'No especificado'}</p>
+                    <p><strong>Monto:</strong> <span style="color:var(--danger); font-weight:700;">${m(g.monto)}</span></p>
+                    <p><strong>ID:</strong> ${g.id}</p>
+                `;
+                abrirModalDetalle('📤 Detalle del Egreso', contenido);
+                return;
+            }
+            let n = db.nomina.find(x => x.id === id);
+            if (n) {
+                let contenido = `
+                    <p><strong>Fecha:</strong> ${n.fecha || 'No especificada'}</p>
+                    <p><strong>Trabajador:</strong> ${n.nombre || 'No especificado'}</p>
+                    <p><strong>Detalle:</strong> ${n.detalle || 'No especificado'}</p>
+                    <p><strong>Origen:</strong> ${n.origen || 'No especificado'}</p>
+                    <p><strong>Monto:</strong> <span style="color:var(--danger); font-weight:700;">${m(n.monto)}</span></p>
+                    <p><strong>ID:</strong> ${n.id}</p>
+                `;
+                abrirModalDetalle('👷 Detalle de Nómina', contenido);
+            }
+        }
+
+        function verDetalleVenta(id) {
+            let db = window.getDbData();
+            let v = db.ventas.find(x => x.id === id);
+            if (!v) return;
+            let fOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
+            let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fOrig);
+            let despachoInfo = '';
+            if (v.despacho) {
+                despachoInfo = `
+                    <hr style="margin:8px 0;">
+                    <p><strong>🚛 DATOS DE DESPACHO:</strong></p>
+                    <p><strong>Placa:</strong> ${v.despacho.placa || 'No registrada'}</p>
+                    <p><strong>Conductor:</strong> ${v.despacho.conductor || 'No registrado'}</p>
+                    <p><strong>Teléfono:</strong> ${v.despacho.telefono || 'No registrado'}</p>
+                    <p><strong>Fecha/Hora:</strong> ${v.despacho.fechaHora || 'No registrada'}</p>
+                `;
+            }
+            let contenido = `
+                <p><strong>Factura:</strong> ${v.factura || 'S/N'}</p>
+                <p><strong>Cliente:</strong> ${v.cliente}</p>
+                <p><strong>Cédula:</strong> ${v.cedula || 'No registrada'}</p>
+                <p><strong>Teléfono:</strong> ${v.telefono || 'No registrado'}</p>
+                <p><strong>Dirección:</strong> ${v.direccion || 'No registrada'}</p>
+                <p><strong>Barrio:</strong> ${v.barrio || 'No registrado'}</p>
+                <p><strong>Proyecto:</strong> ${v.desc || 'No especificado'}</p>
+                <p><strong>F. Contrato:</strong> ${fOrig}</p>
+                <p style="color:var(--accent)"><strong>Entrega pactada:</strong> ${fPactadaFinal}</p>
+                <p><strong>Valor:</strong> ${m(v.total)}</p>
+                <p style="color:var(--success)"><strong>Abonado:</strong> ${m(v.abonado)}</p>
+                <p style="color:var(--danger)"><strong>Saldo:</strong> ${m(v.total - v.abonado)}</p>
+                <p><strong>Estado Entrega:</strong> ${v.estadoEntrega || 'Pendiente'}</p>
+                ${despachoInfo}
+            `;
+            abrirModalDetalle('🛍️ Detalle de la Venta', contenido);
+        }
+
+        function verDetalleEntrega(id) {
+            let db = window.getDbData();
+            let v = db.ventas.find(x => x.id === id);
+            if (!v) return;
+            let fOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
+            let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fOrig);
+            let despachoInfo = '';
+            if (v.despacho) {
+                despachoInfo = `
+                    <p><strong>🚛 DATOS DE DESPACHO:</strong></p>
+                    <p><strong>Placa:</strong> ${v.despacho.placa || 'No registrada'}</p>
+                    <p><strong>Conductor:</strong> ${v.despacho.conductor || 'No registrado'}</p>
+                    <p><strong>Teléfono:</strong> ${v.despacho.telefono || 'No registrado'}</p>
+                    <p><strong>Fecha/Hora:</strong> ${v.despacho.fechaHora || 'No registrada'}</p>
+                `;
+            }
+            let contenido = `
+                <p><strong>Factura:</strong> ${v.factura || 'S/N'}</p>
+                <p><strong>Cliente:</strong> ${v.cliente}</p>
+                <p><strong>Teléfono:</strong> ${v.telefono || 'No registrado'}</p>
+                <p><strong>Dirección:</strong> ${v.direccion || 'Taller'} (${v.barrio || 'S/B'})</p>
+                <p><strong>Proyecto:</strong> ${v.desc || 'No especificado'}</p>
+                <p><strong>F. Compra:</strong> ${fOrig}</p>
+                <p style="color:var(--accent)"><strong>📆 Límite de Entrega:</strong> ${fPactadaFinal}</p>
+                <p><strong>Estado:</strong> ${v.estadoEntrega || 'Pendiente'}</p>
+                ${despachoInfo}
+            `;
+            abrirModalDetalle('📦 Detalle de la Entrega', contenido);
+        }
+
+        function verDetalleCobro(id) {
+            let db = window.getDbData();
+            let v = db.ventas.find(x => x.id === id);
+            if (!v) return;
+            let pendiente = v.total - v.abonado;
+            let fOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
+            let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fOrig);
+            let contenido = `
+                <p><strong>Factura:</strong> ${v.factura || 'S/N'}</p>
+                <p><strong>Cliente:</strong> ${v.cliente}</p>
+                <p><strong>Teléfono:</strong> ${v.telefono || 'No registrado'}</p>
+                <p><strong>Proyecto:</strong> ${v.desc || 'No especificado'}</p>
+                <p><strong>F. Contrato:</strong> ${fOrig}</p>
+                <p style="color:var(--accent)"><strong>Entrega pactada:</strong> ${fPactadaFinal}</p>
+                <p><strong>Valor Total:</strong> ${m(v.total)}</p>
+                <p style="color:var(--success)"><strong>Abonado:</strong> ${m(v.abonado)}</p>
+                <p style="color:var(--danger)"><strong>Deuda Actual:</strong> ${m(pendiente)}</p>
+                <p><strong>Estado Entrega:</strong> ${v.estadoEntrega || 'Pendiente'}</p>
+            `;
+            abrirModalDetalle('🚨 Detalle del Cobro', contenido);
+        }
+
+        function verDetalleCotizacion(id) {
+            let db = window.getDbData();
+            let c = db.cotizaciones.find(x => x.id === id);
+            if (!c) return;
+            let estadoEmoji = { 'Pendiente': '⏳ Pendiente', 'Aprobada': '✅ Aprobada', 'Rechazada': '❌ Rechazada', 'Vencida': '⏰ Vencida' };
+            let productosHtml = c.productosArray && c.productosArray.length > 0 
+                ? c.productosArray.map(p => `• ${p.cantidad}x ${p.detalle} - ${m(p.precio)} c/u = ${m(p.cantidad * p.precio)}`).join('<br>')
+                : c.productos || 'No especificados';
+            let contenido = `
+                <p><strong>Nº Cotización:</strong> ${c.numero || 'S/N'}</p>
+                <p><strong>Fecha:</strong> ${c.fecha || 'No especificada'}</p>
+                <p><strong>Cliente:</strong> ${c.cliente}</p>
+                <p><strong>Teléfono:</strong> ${c.telefono || 'No registrado'}</p>
+                <p><strong>Dirección:</strong> ${c.direccion || 'No registrada'}</p>
+                <hr style="margin:8px 0;">
+                <p><strong>📝 Productos:</strong></p>
+                <div style="background:#f8fafc; padding:10px; border-radius:4px; font-size:0.85rem;">${productosHtml}</div>
+                <hr style="margin:8px 0;">
+                <p><strong>💰 Total:</strong> <span style="color:var(--success); font-weight:700;">${m(c.total)}</span></p>
+                <p><strong>📦 Plazo:</strong> ${c.plazo || 'No especificado'}</p>
+                <p><strong>📅 Válido hasta:</strong> ${c.validoHasta || 'No especificado'}</p>
+                <p><strong>📊 Estado:</strong> ${estadoEmoji[c.estado] || c.estado}</p>
+                ${c.notas ? `<p><strong>📝 Notas:</strong> ${c.notas}</p>` : ''}
+            `;
+            abrirModalDetalle('📋 Detalle de la Cotización', contenido);
+        }
+
+        function verDetalleGasto(id) {
+            let db = window.getDbData();
+            let g = db.gastos.find(x => x.id === id);
+            if (!g) return;
+            let contenido = `
+                <p><strong>Fecha:</strong> ${g.fecha || 'No especificada'}</p>
+                <p><strong>Categoría:</strong> ${g.cat || 'No especificada'}</p>
+                <p><strong>Producto:</strong> ${g.concepto || 'No especificado'}</p>
+                <p><strong>Cantidad:</strong> ${g.cantidad || 1}</p>
+                <p><strong>Detalle:</strong> ${g.detalle || 'No especificado'}</p>
+                <p><strong>Medio:</strong> ${g.medio || 'No especificado'}</p>
+                <p><strong>Monto:</strong> <span style="color:var(--danger); font-weight:700;">${m(g.monto)}</span></p>
+                <p><strong>ID:</strong> ${g.id}</p>
+            `;
+            abrirModalDetalle('💡 Detalle del Gasto', contenido);
+        }
+
+        function verDetalleCajaMenor(id) {
+            let db = window.getDbData();
+            let cm = db.cajaMenor.find(x => x.id === id);
+            if (!cm) return;
+            let col = cm.tipo === 'Reembolso' ? 'color:var(--success);' : 'color:var(--danger);';
+            let contenido = `
+                <p><strong>Fecha:</strong> ${cm.fecha || 'No especificada'}</p>
+                <p><strong>Tipo:</strong> ${cm.tipo || 'No especificado'}</p>
+                <p><strong>Concepto:</strong> ${cm.concepto || 'No especificado'}</p>
+                <p><strong>Monto:</strong> <span style="${col} font-weight:700;">${m(cm.monto)}</span></p>
+                <p><strong>ID:</strong> ${cm.id}</p>
+            `;
+            abrirModalDetalle('🪙 Detalle de Caja Menor', contenido);
         }
 
         // ===== FUNCIONES COTIZACIONES =====
@@ -1121,7 +1779,7 @@
             let db = window.getDbData();
             let c = db.cotizaciones.find(x => x.id === id);
             if (!c) return;
-
+            // Usar el modal de cotización existente
             let estadoEmoji = { 'Pendiente': '⏳ Pendiente', 'Aprobada': '✅ Aprobada', 'Rechazada': '❌ Rechazada', 'Vencida': '⏰ Vencida' };
             let productosHtml = c.productosArray && c.productosArray.length > 0 
                 ? c.productosArray.map(p => `• ${p.cantidad}x ${p.detalle} - ${m(p.precio)} c/u = ${m(p.cantidad * p.precio)}`).join('<br>')
@@ -1187,7 +1845,6 @@
             document.getElementById('lbl-formulario-cotizacion-modo').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // ===== CONVERTIR COTIZACIÓN A VENTA =====
         function aprobarCotizacionYVenta(id) {
             let db = window.getDbData();
             let c = db.cotizaciones.find(x => x.id === id);
@@ -1202,57 +1859,31 @@
             c.estado = 'Aprobada';
             salvar();
 
-            irA('ventas');
+            abrirModalVenta();
 
-            const container = document.getElementById('formulario-venta-container');
-            const btn = document.getElementById('btn-toggle-venta');
-            
-            if (container.style.display === 'none') {
-                container.style.display = 'block';
-                btn.innerText = '❌ Cerrar';
-                btn.style.background = '#dc2626';
-            }
-
-            document.getElementById('v-id-edicion').value = '';
-            document.getElementById('v-factura').value = c.numero || '';
             document.getElementById('v-cliente').value = c.cliente || '';
-            document.getElementById('v-cedula').value = '';
             document.getElementById('v-telefono').value = c.telefono || '';
             document.getElementById('v-correo').value = c.correo || '';
             document.getElementById('v-direccion').value = c.direccion || '';
-            document.getElementById('v-barrio').value = '';
+            document.getElementById('v-factura').value = c.numero || '';
             
-            let descProyecto = '';
-            if (c.productosArray && c.productosArray.length > 0) {
-                descProyecto = c.productosArray.map(p => `${p.cantidad}x ${p.detalle}`).join('\n');
-            } else {
-                descProyecto = c.productos || 'Venta desde cotización';
-            }
-            document.getElementById('v-desc').value = descProyecto;
-            document.getElementById('v-total').value = c.total ? c.total.toLocaleString('es-CO') : '';
-            document.getElementById('v-fecha-registro').value = new Date().toISOString().split('T')[0];
-            document.getElementById('v-fecha-pactada').value = c.validoHasta || '';
+            window.productosVenta = c.productosArray && c.productosArray.length > 0 
+                ? JSON.parse(JSON.stringify(c.productosArray))
+                : [];
+            actualizarTablaProductosVenta();
             
-            document.getElementById('v-abono').value = '';
-            document.getElementById('v-abono-banco').value = '';
-            document.getElementById('v-abono-efectivo').value = '';
-            document.getElementById('v-medio').value = 'Banco';
-            alternarVisibilidadMetodoPagoDividido('Banco');
-
-            document.getElementById('lbl-formulario-modo').innerText = `✏️ Convertir Cotización Nº ${c.numero} en Venta`;
+            let total = window.productosVenta.reduce((sum, p) => sum + (p.cantidad * p.precio), 0);
+            document.getElementById('v-total').value = total ? total.toLocaleString('es-CO') : '';
+            
+            document.getElementById('lbl-modal-venta-titulo').innerText = `✏️ Convertir Cotización Nº ${c.numero} en Venta`;
             document.getElementById('btn-guardar-venta-accion').innerText = '🚀 Guardar Venta';
-            document.getElementById('btn-cancelar-edicion-venta').style.display = 'none';
 
             setTimeout(() => {
                 alert(`✅ Cotización Nº ${c.numero} aprobada. Completa los detalles del pago y guarda la venta.`);
             }, 500);
-
-            setTimeout(() => {
-                document.getElementById('formulario-venta-container').scrollIntoView({ behavior: 'smooth' });
-            }, 300);
         }
 
-        // ===== ENVIAR COTIZACIÓN POR WHATSAPP =====
+        // ===== FUNCIONES WHATSAPP =====
         function enviarCotizacionWhatsApp() {
             let telefono = document.getElementById('c-telefono').value.trim();
             if (!telefono) return alert('Por favor ingresa el número de teléfono del cliente.');
@@ -1383,22 +2014,15 @@
         }
 
         // ===== FUNCIONES VENTAS =====
-        function toggleFormularioVenta() {
-            const container = document.getElementById('formulario-venta-container');
-            const btn = document.getElementById('btn-toggle-venta');
-            if (container.style.display === 'none') {
-                container.style.display = 'block';
-                btn.innerText = '❌ Cerrar';
-                btn.style.background = '#dc2626';
-            } else {
-                container.style.display = 'none';
-                btn.innerText = '➕ Nueva Venta';
-                btn.style.background = '#0284c7';
-                cancelarEdicionVenta();
+        function abrirModalVenta() {
+            if (window.moduloActual !== 'ventas') {
+                irA('ventas');
+                setTimeout(() => {
+                    abrirModalVenta();
+                }, 300);
+                return;
             }
-        }
-
-        function cancelarEdicionVenta() {
+            document.getElementById('modal-venta').classList.add('activo');
             document.getElementById('v-id-edicion').value = '';
             document.getElementById('v-factura').value = '';
             document.getElementById('v-cliente').value = '';
@@ -1407,32 +2031,33 @@
             document.getElementById('v-barrio').value = '';
             document.getElementById('v-telefono').value = '';
             document.getElementById('v-correo').value = '';
-            document.getElementById('v-desc').value = '';
-            document.getElementById('v-total').value = '';
-            document.getElementById('v-fecha-registro').value = '';
+            document.getElementById('v-fecha-registro').value = new Date().toISOString().split('T')[0];
             document.getElementById('v-fecha-pactada').value = '';
             document.getElementById('v-abono').value = '';
             document.getElementById('v-abono-banco').value = '';
             document.getElementById('v-abono-efectivo').value = '';
             document.getElementById('v-medio').value = 'Banco';
             alternarVisibilidadMetodoPagoDividido('Banco');
-            document.getElementById('lbl-formulario-modo').innerText = '➕ Nuevo Contrato';
-            document.getElementById('btn-guardar-venta-accion').innerText = '🚀 Guardar';
-            document.getElementById('btn-cancelar-edicion-venta').style.display = 'none';
+            window.productosVenta = [];
+            actualizarTablaProductosVenta();
+            document.getElementById('lbl-modal-venta-titulo').innerText = '➕ Nueva Venta';
+            document.getElementById('btn-guardar-venta-accion').innerText = '🚀 Guardar Venta';
+            setTimeout(() => {
+                document.getElementById('v-factura').focus();
+            }, 300);
         }
 
-        function iniciarEdicionVenta(id) {
+        function cerrarModalVenta() {
+            document.getElementById('modal-venta').classList.remove('activo');
+            window.productosVenta = [];
+        }
+
+        function abrirModalVentaConDatos(id) {
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === id);
             if (!v) return;
 
-            const container = document.getElementById('formulario-venta-container');
-            const btn = document.getElementById('btn-toggle-venta');
-            if (container.style.display === 'none') {
-                container.style.display = 'block';
-                btn.innerText = '❌ Cerrar';
-                btn.style.background = '#dc2626';
-            }
+            abrirModalVenta();
 
             document.getElementById('v-id-edicion').value = v.id;
             document.getElementById('v-factura').value = v.factura || '';
@@ -1442,21 +2067,75 @@
             document.getElementById('v-barrio').value = v.barrio || '';
             document.getElementById('v-telefono').value = v.telefono || '';
             document.getElementById('v-correo').value = v.correo || '';
-            document.getElementById('v-desc').value = v.desc || '';
-            document.getElementById('v-total').value = v.total ? v.total.toLocaleString('es-CO') : '';
             document.getElementById('v-fecha-registro').value = v.fechaRegistro || '';
             document.getElementById('v-fecha-pactada').value = v.fechaPactada || '';
             
-            document.getElementById('box-v-abono').style.display = 'none';
-            document.getElementById('box-v-abono-banco').style.display = 'none';
-            document.getElementById('box-v-abono-efectivo').style.display = 'none';
-            document.getElementById('v-medio').value = 'Banco';
+            // Cargar productos si están en el formato de texto
+            if (v.desc) {
+                // Intentar parsear productos desde la descripción
+                let lineas = v.desc.split('\n');
+                let productos = [];
+                lineas.forEach(linea => {
+                    let match = linea.match(/^(\d+)x\s+(.+)$/);
+                    if (match) {
+                        productos.push({ cantidad: parseInt(match[1]), detalle: match[2], precio: 0 });
+                    }
+                });
+                if (productos.length > 0) {
+                    window.productosVenta = productos;
+                    actualizarTablaProductosVenta();
+                }
+            }
             
-            document.getElementById('lbl-formulario-modo').innerText = '✏️ Modificar Contrato';
-            document.getElementById('btn-guardar-venta-accion').innerText = '💾 Aplicar Cambios';
-            document.getElementById('btn-cancelar-edicion-venta').style.display = 'inline-flex';
+            document.getElementById('lbl-modal-venta-titulo').innerText = '✏️ Editar Venta';
+            document.getElementById('btn-guardar-venta-accion').innerText = '💾 Guardar Cambios';
+        }
+
+        function agregarProductoVenta() {
+            let detalle = document.getElementById('v-prod-detalle').value.trim();
+            let precio = cleanNum(document.getElementById('v-prod-precio').value);
+            let cantidad = parseInt(document.getElementById('v-prod-cantidad').value) || 1;
+
+            if (!detalle) return alert('Por favor ingresa el detalle del producto.');
+            if (precio <= 0) return alert('Por favor ingresa un precio válido.');
+
+            window.productosVenta.push({ cantidad, detalle, precio });
+            document.getElementById('v-prod-detalle').value = '';
+            document.getElementById('v-prod-precio').value = '';
+            document.getElementById('v-prod-cantidad').value = 1;
+            actualizarTablaProductosVenta();
+        }
+
+        function eliminarProductoVenta(index) {
+            window.productosVenta.splice(index, 1);
+            actualizarTablaProductosVenta();
+        }
+
+        function actualizarTablaProductosVenta() {
+            const tbody = document.getElementById('tbody-productos-venta');
+            const totalSpan = document.getElementById('total-productos-venta');
             
-            document.getElementById('lbl-formulario-modo').scrollIntoView({ behavior: 'smooth' });
+            if (window.productosVenta.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay productos agregados</td></tr>';
+                totalSpan.textContent = '$0';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            window.productosVenta.forEach((p, i) => {
+                let subtotal = p.cantidad * p.precio;
+                total += subtotal;
+                html += `<tr>
+                    <td>${p.cantidad}</td>
+                    <td>${p.detalle}</td>
+                    <td>${m(p.precio)}</td>
+                    <td>${m(subtotal)}</td>
+                    <td><button class="btn-accion btn-eliminar" onclick="eliminarProductoVenta(${i})" style="padding:2px 4px;">x</button></td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+            totalSpan.textContent = m(total);
         }
 
         function guardarVenta() {
@@ -1470,8 +2149,15 @@
             let barrio = document.getElementById('v-barrio').value.trim();
             let telefono = document.getElementById('v-telefono').value.trim();
             let correo = document.getElementById('v-correo').value.trim();
-            let desc = document.getElementById('v-desc').value.trim();
-            let total = cleanNum(document.getElementById('v-total').value);
+            
+            let desc = window.productosVenta.map(p => `${p.cantidad}x ${p.detalle}`).join('\n');
+            if (!desc) desc = 'Sin productos';
+            
+            let total = window.productosVenta.reduce((sum, p) => sum + (p.cantidad * p.precio), 0);
+            if (total <= 0) {
+                total = cleanNum(document.getElementById('v-total').value);
+            }
+            
             let fechaSeleccionada = document.getElementById('v-fecha-registro').value;
             let fechaFinal = fechaSeleccionada || new Date().toISOString().split('T')[0];
             let fechaPactada = document.getElementById('v-fecha-pactada').value;
@@ -1494,7 +2180,7 @@
                     v.fechaRegistro = fechaFinal; 
                     v.fechaPactada = fechaPactada;
                 }
-                cancelarEdicionVenta();
+                cerrarModalVenta();
             } else {
                 let medioSeleccionado = document.getElementById('v-medio').value;
                 let abonoCalculadoTotal = 0;
@@ -1554,7 +2240,7 @@
                     estadoEntrega: 'Pendiente' 
                 });
                 
-                cancelarEdicionVenta();
+                cerrarModalVenta();
             }
             salvar();
         }
@@ -1568,102 +2254,54 @@
             }
         }
 
-        // ===== FUNCIONES PARA EDITAR ABONOS =====
-        function abrirModalEditarAbono(idIngreso) {
-            let db = window.getDbData();
-            let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
-            if (!ingreso) return alert('Abono no encontrado.');
-            
-            let ventaId = '';
-            let match = ingreso.origen.match(/\(([^)]+)\)/);
-            if (match) ventaId = match[1];
-            
-            let numeroRecibo = '';
-            let reciboMatch = ingreso.origen.match(/\[Recibo #([^\]]+)\]/);
-            if (reciboMatch) numeroRecibo = reciboMatch[1];
-            
-            document.getElementById('edit-abono-id').value = idIngreso;
-            document.getElementById('edit-abono-venta-id').value = ventaId;
-            document.getElementById('edit-abono-numero').value = numeroRecibo || '';
-            document.getElementById('edit-abono-monto').value = ingreso.monto ? ingreso.monto.toLocaleString('es-CO') : '';
-            document.getElementById('edit-abono-medio').value = ingreso.medio || 'Banco';
-            document.getElementById('edit-abono-fecha').value = ingreso.fecha || new Date().toISOString().split('T')[0];
-            
-            document.getElementById('modal-editar-abono').style.display = 'flex';
+        // ===== MODAL ABONO DIRECTO =====
+        function abrirModalAbono() {
+            if (window.moduloActual !== 'ventas') {
+                irA('ventas');
+                setTimeout(() => {
+                    abrirModalAbono();
+                }, 300);
+                return;
+            }
+            document.getElementById('modal-abono-directo').classList.add('activo');
+            document.getElementById('abono-directo-numero').value = '';
+            document.getElementById('abono-directo-monto').value = '';
+            document.getElementById('abono-directo-medio').value = 'Banco';
+            document.getElementById('abono-directo-fecha').value = new Date().toISOString().split('T')[0];
+            document.getElementById('abono-directo-cliente').value = '';
+            document.getElementById('abono-directo-factura').value = '';
+            setTimeout(() => {
+                document.getElementById('abono-directo-numero').focus();
+            }, 300);
         }
 
-        function cerrarModalEditarAbono() {
-            document.getElementById('modal-editar-abono').style.display = 'none';
-            document.getElementById('edit-abono-id').value = '';
-            document.getElementById('edit-abono-venta-id').value = '';
+        function cerrarModalAbonoDirecto() {
+            document.getElementById('modal-abono-directo').classList.remove('activo');
         }
 
-        function guardarEdicionAbono() {
-            let idIngreso = document.getElementById('edit-abono-id').value;
-            let ventaId = document.getElementById('edit-abono-venta-id').value;
-            let numeroRecibo = document.getElementById('edit-abono-numero').value.trim();
-            let monto = cleanNum(document.getElementById('edit-abono-monto').value);
-            let medio = document.getElementById('edit-abono-medio').value;
-            let fecha = document.getElementById('edit-abono-fecha').value;
-
-            if (monto <= 0) return alert('Monto inválido.');
-            if (!fecha) return alert('Selecciona una fecha válida.');
-
+        function guardarAbonoDirecto() {
             let db = window.getDbData();
-            
-            let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
-            if (!ingreso) return alert('Abono no encontrado.');
-            
-            let venta = db.ventas.find(x => x.id === ventaId);
-            
-            let diferencia = monto - ingreso.monto;
-            
-            let nuevoOrigen = ingreso.origen;
-            if (numeroRecibo) {
-                nuevoOrigen = nuevoOrigen.replace(/\[Recibo #[^\]]*\]/, `[Recibo #${numeroRecibo}]`);
-                if (!nuevoOrigen.includes('[Recibo #')) {
-                    nuevoOrigen = nuevoOrigen + ` [Recibo #${numeroRecibo}]`;
-                }
-            } else {
-                nuevoOrigen = nuevoOrigen.replace(/\[Recibo #[^\]]*\]/, '');
-            }
-            
-            ingreso.monto = monto;
-            ingreso.medio = medio;
-            ingreso.fecha = fecha;
-            ingreso.origen = nuevoOrigen;
-            
-            if (venta) {
-                venta.abonado = Math.max(0, venta.abonado + diferencia);
-            }
-            
-            cerrarModalEditarAbono();
+            let numero = document.getElementById('abono-directo-numero').value.trim();
+            let monto = cleanNum(document.getElementById('abono-directo-monto').value);
+            let medio = document.getElementById('abono-directo-medio').value;
+            let fecha = document.getElementById('abono-directo-fecha').value || new Date().toISOString().split('T')[0];
+            let cliente = document.getElementById('abono-directo-cliente').value.trim() || 'Cliente sin registrar';
+            let factura = document.getElementById('abono-directo-factura').value.trim() || 'S/N';
+
+            if (!numero) return alert('Ingresa el número de recibo de abono.');
+            if (monto <= 0) return alert('Ingresa un monto válido.');
+
+            db.ingresosDirectos.push({
+                id: 'i_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                fecha: fecha,
+                origen: `Abono Directo (Factura #${factura}) - ${cliente} [Recibo #${numero}]`,
+                medio: medio,
+                monto: monto
+            });
+
+            cerrarModalAbonoDirecto();
             salvar();
-            alert('✅ Abono actualizado correctamente.');
-        }
-
-        function eliminarAbono() {
-            let idIngreso = document.getElementById('edit-abono-id').value;
-            let ventaId = document.getElementById('edit-abono-venta-id').value;
-            
-            if (!confirm('¿Estás seguro de eliminar este abono?')) return;
-            
-            let db = window.getDbData();
-            
-            let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
-            if (!ingreso) return alert('Abono no encontrado.');
-            
-            let venta = db.ventas.find(x => x.id === ventaId);
-            
-            if (venta) {
-                venta.abonado = Math.max(0, venta.abonado - ingreso.monto);
-            }
-            
-            db.ingresosDirectos = db.ingresosDirectos.filter(x => x.id !== idIngreso);
-            
-            cerrarModalEditarAbono();
-            salvar();
-            alert('🗑️ Abono eliminado correctamente.');
+            alert(`💰 Abono guardado correctamente.\n📄 Recibo #${numero}\n💰 ${m(monto)}`);
         }
 
         // ===== FUNCIONES DE DESPACHO =====
@@ -1768,90 +2406,201 @@
             }
         }
 
-        // ===== FUNCIONES NÓMINA (CON FECHA) =====
-        function cancelarEdicionNomina() {
-            document.getElementById('n-id-edicion').value = '';
-            document.getElementById('n-detalle').value = '';
-            document.getElementById('n-monto').value = '';
-            document.getElementById('n-origen').value = 'Banco';
-            document.getElementById('n-fecha').value = new Date().toISOString().split('T')[0];
-            document.getElementById('lbl-formulario-nomina-modo').innerText = '💸 Entregar Adelanto o Semanal';
-            document.getElementById('btn-guardar-nomina-accion').innerText = 'Registrar Pago';
-            document.getElementById('btn-cancelar-edicion-nomina').style.display = 'none';
+        // ===== FUNCIONES DE ABONOS EN CARTERA =====
+        function abrirCajaAbono(id, cliente) {
+            document.getElementById('box-abono-practico').style.display = 'block';
+            document.getElementById('lbl-abono-cliente').innerText = cliente;
+            document.getElementById('abono-id-cliente').value = id;
+            document.getElementById('abono-monto-input').value = '';
+            document.getElementById('abono-numero').value = '';
+            document.getElementById('abono-fecha-input').value = new Date().toISOString().split('T')[0];
+            document.getElementById('abono-medio-input').value = 'Banco';
+            document.getElementById('abono-banco-input').value = '';
+            document.getElementById('abono-efectivo-input').value = '';
+            document.getElementById('box-abono-banco').style.display = 'none';
+            document.getElementById('box-abono-efectivo').style.display = 'none';
+            document.getElementById('box-abono-practico').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function iniciarEdicionNomina(id) {
+        function cerrarBoxAbono() { document.getElementById('box-abono-practico').style.display = 'none'; }
+
+        function procesarAbonoEstructurado() {
             let db = window.getDbData();
-            let n = db.nomina.find(x => x.id === id);
-            if (!n) return;
-
-            document.getElementById('n-id-edicion').value = n.id;
-            document.getElementById('n-select-trabajador').value = n.nombre;
-            document.getElementById('n-detalle').value = n.detalle || '';
-            document.getElementById('n-origen').value = n.origen || 'Banco';
-            document.getElementById('n-monto').value = n.monto ? n.monto.toLocaleString('es-CO') : '';
-            document.getElementById('n-fecha').value = n.fecha || new Date().toISOString().split('T')[0];
+            let id = document.getElementById('abono-id-cliente').value;
+            let numeroAbono = document.getElementById('abono-numero').value.trim();
+            let medio = document.getElementById('abono-medio-input').value;
+            let fechaAbono = document.getElementById('abono-fecha-input').value || new Date().toISOString().split('T')[0];
             
-            document.getElementById('lbl-formulario-nomina-modo').innerText = '✏️ Editar Vale';
-            document.getElementById('btn-guardar-nomina-accion').innerText = '💾 Guardar Cambios';
-            document.getElementById('btn-cancelar-edicion-nomina').style.display = 'inline-flex';
-            
-            document.getElementById('lbl-formulario-nomina-modo').scrollIntoView({ behavior: 'smooth' });
-        }
+            let montoTotal = 0;
+            let abonos = [];
 
-        function guardarNomina() {
-            let db = window.getDbData();
-            let idEdicion = document.getElementById('n-id-edicion').value;
-            
-            let nombre = document.getElementById('n-select-trabajador').value;
-            let detalle = document.getElementById('n-detalle').value.trim();
-            let origen = document.getElementById('n-origen').value;
-            let monto = cleanNum(document.getElementById('n-monto').value);
-            let fecha = document.getElementById('n-fecha').value || new Date().toISOString().split('T')[0];
-
-            if (!nombre || monto <= 0) return alert('Verifica datos.');
-
-            if (idEdicion && idEdicion !== "") {
-                let n = db.nomina.find(x => x.id === idEdicion);
-                if (n) {
-                    n.nombre = nombre;
-                    n.detalle = detalle;
-                    n.origen = origen;
-                    n.monto = monto;
-                    n.fecha = fecha;
+            if (medio === 'DIVIDIDO') {
+                let montoBanco = cleanNum(document.getElementById('abono-banco-input').value);
+                let montoEfectivo = cleanNum(document.getElementById('abono-efectivo-input').value);
+                montoTotal = montoBanco + montoEfectivo;
+                
+                if (montoBanco > 0) {
+                    abonos.push({ medio: 'Banco', monto: montoBanco });
                 }
-                cancelarEdicionNomina();
+                if (montoEfectivo > 0) {
+                    abonos.push({ medio: 'Efectivo', monto: montoEfectivo });
+                }
+                if (montoTotal <= 0) return alert('Ingresa al menos un monto válido.');
             } else {
-                db.nomina.push({ 
-                    id: 'n_' + Date.now(), 
-                    fecha: fecha, 
-                    nombre, 
-                    tipo: 'Pago', 
-                    detalle, 
-                    origen, 
-                    monto 
-                });
-                document.getElementById('n-detalle').value = '';
-                document.getElementById('n-monto').value = '';
-                document.getElementById('n-fecha').value = new Date().toISOString().split('T')[0];
+                let monto = cleanNum(document.getElementById('abono-monto-input').value);
+                if (monto <= 0) return alert('Monto inválido.');
+                montoTotal = monto;
+                abonos.push({ medio: medio, monto: monto });
             }
+
+            if (!numeroAbono) return alert('Ingresa el número de recibo de abono.');
+            
+            let v = db.ventas.find(x => x.id === id);
+            if (v) {
+                v.abonado += montoTotal;
+                
+                abonos.forEach(a => {
+                    db.ingresosDirectos.push({ 
+                        id: 'i_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                        fecha: fechaAbono, 
+                        origen: `Abono Cartera ${a.medio} (Factura #${v.factura || 'S/N'}) - ${v.cliente} (${id}) [Recibo #${numeroAbono}]`, 
+                        medio: a.medio, 
+                        monto: a.monto 
+                    });
+                });
+            }
+            cerrarBoxAbono();
             salvar();
         }
 
-        function eliminarNomina(id) { 
-            let db = window.getDbData(); 
-            if (confirm('¿Eliminar este registro?')) { 
-                db.nomina = db.nomina.filter(x => x.id !== id); 
-                salvar(); 
-            } 
+        // ===== FUNCIONES DE EDITAR ABONO =====
+        function abrirModalEditarAbono(idIngreso) {
+            let db = window.getDbData();
+            let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
+            if (!ingreso) return alert('Abono no encontrado.');
+            
+            let ventaId = '';
+            let match = ingreso.origen.match(/\(([^)]+)\)/);
+            if (match) ventaId = match[1];
+            
+            let numeroRecibo = '';
+            let reciboMatch = ingreso.origen.match(/\[Recibo #([^\]]+)\]/);
+            if (reciboMatch) numeroRecibo = reciboMatch[1];
+            
+            document.getElementById('edit-abono-id').value = idIngreso;
+            document.getElementById('edit-abono-venta-id').value = ventaId;
+            document.getElementById('edit-abono-numero').value = numeroRecibo || '';
+            document.getElementById('edit-abono-monto').value = ingreso.monto ? ingreso.monto.toLocaleString('es-CO') : '';
+            document.getElementById('edit-abono-medio').value = ingreso.medio || 'Banco';
+            document.getElementById('edit-abono-fecha').value = ingreso.fecha || new Date().toISOString().split('T')[0];
+            
+            document.getElementById('modal-editar-abono').style.display = 'flex';
         }
 
-        // ===== FUNCIONES GASTOS (CON FECHA) =====
+        function cerrarModalEditarAbono() {
+            document.getElementById('modal-editar-abono').style.display = 'none';
+            document.getElementById('edit-abono-id').value = '';
+            document.getElementById('edit-abono-venta-id').value = '';
+        }
+
+        function guardarEdicionAbono() {
+            let idIngreso = document.getElementById('edit-abono-id').value;
+            let ventaId = document.getElementById('edit-abono-venta-id').value;
+            let numeroRecibo = document.getElementById('edit-abono-numero').value.trim();
+            let monto = cleanNum(document.getElementById('edit-abono-monto').value);
+            let medio = document.getElementById('edit-abono-medio').value;
+            let fecha = document.getElementById('edit-abono-fecha').value;
+
+            if (monto <= 0) return alert('Monto inválido.');
+            if (!fecha) return alert('Selecciona una fecha válida.');
+
+            let db = window.getDbData();
+            
+            let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
+            if (!ingreso) return alert('Abono no encontrado.');
+            
+            let venta = db.ventas.find(x => x.id === ventaId);
+            
+            let diferencia = monto - ingreso.monto;
+            
+            let nuevoOrigen = ingreso.origen;
+            if (numeroRecibo) {
+                nuevoOrigen = nuevoOrigen.replace(/\[Recibo #[^\]]*\]/, `[Recibo #${numeroRecibo}]`);
+                if (!nuevoOrigen.includes('[Recibo #')) {
+                    nuevoOrigen = nuevoOrigen + ` [Recibo #${numeroRecibo}]`;
+                }
+            } else {
+                nuevoOrigen = nuevoOrigen.replace(/\[Recibo #[^\]]*\]/, '');
+            }
+            
+            ingreso.monto = monto;
+            ingreso.medio = medio;
+            ingreso.fecha = fecha;
+            ingreso.origen = nuevoOrigen;
+            
+            if (venta) {
+                venta.abonado = Math.max(0, venta.abonado + diferencia);
+            }
+            
+            cerrarModalEditarAbono();
+            salvar();
+            alert('✅ Abono actualizado correctamente.');
+        }
+
+        function eliminarAbono() {
+            let idIngreso = document.getElementById('edit-abono-id').value;
+            let ventaId = document.getElementById('edit-abono-venta-id').value;
+            
+            if (!confirm('¿Estás seguro de eliminar este abono?')) return;
+            
+            let db = window.getDbData();
+            
+            let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
+            if (!ingreso) return alert('Abono no encontrado.');
+            
+            let venta = db.ventas.find(x => x.id === ventaId);
+            
+            if (venta) {
+                venta.abonado = Math.max(0, venta.abonado - ingreso.monto);
+            }
+            
+            db.ingresosDirectos = db.ingresosDirectos.filter(x => x.id !== idIngreso);
+            
+            cerrarModalEditarAbono();
+            salvar();
+            alert('🗑️ Abono eliminado correctamente.');
+        }
+
+        function eliminarIngresoDirecto(id) {
+            let db = window.getDbData();
+            if (confirm('¿Eliminar este ingreso?')) {
+                let ingreso = db.ingresosDirectos.find(x => x.id === id);
+                if (ingreso && ingreso.origen.includes('(')) {
+                    let vId = ingreso.origen.split('(').pop().replace(')', '').trim();
+                    let v = db.ventas.find(x => x.id === vId);
+                    if (v) v.abonado = Math.max(0, v.abonado - ingreso.monto);
+                }
+                db.ingresosDirectos = db.ingresosDirectos.filter(x => x.id !== id);
+                salvar();
+            }
+        }
+
+        function eliminarGastoDirecto(id) {
+            let db = window.getDbData();
+            if (confirm('¿Eliminar este egreso?')) {
+                db.gastos = db.gastos.filter(x => x.id !== id);
+                salvar();
+            }
+        }
+
+        // ===== FUNCIONES GASTOS =====
         function cancelarEdicionGasto() {
             document.getElementById('g-id-edicion').value = '';
             document.getElementById('g-cat').value = 'Servicios Publicos';
             document.getElementById('g-cat-manual').value = '';
             document.getElementById('g-concepto').value = '';
+            document.getElementById('g-cantidad').value = 1;
+            document.getElementById('g-detalle').value = '';
             document.getElementById('g-medio').value = 'Banco';
             document.getElementById('g-monto').value = '';
             document.getElementById('g-fecha').value = new Date().toISOString().split('T')[0];
@@ -1875,6 +2624,8 @@
                 document.getElementById('g-cat-manual').value = g.cat;
             }
             document.getElementById('g-concepto').value = g.concepto || '';
+            document.getElementById('g-cantidad').value = g.cantidad || 1;
+            document.getElementById('g-detalle').value = g.detalle || '';
             document.getElementById('g-medio').value = g.medio || 'Banco';
             document.getElementById('g-monto').value = g.monto ? g.monto.toLocaleString('es-CO') : '';
             document.getElementById('g-fecha').value = g.fecha || new Date().toISOString().split('T')[0];
@@ -1894,17 +2645,25 @@
             let catManual = document.getElementById('g-cat-manual').value.trim();
             let catFinal = catSelect === 'MANUAL' ? catManual : catSelect;
             let concepto = document.getElementById('g-concepto').value.trim();
+            let cantidad = parseInt(document.getElementById('g-cantidad').value) || 1;
+            let detalle = document.getElementById('g-detalle').value.trim();
             let medio = document.getElementById('g-medio').value;
             let monto = cleanNum(document.getElementById('g-monto').value);
             let fecha = document.getElementById('g-fecha').value || new Date().toISOString().split('T')[0];
 
             if (!catFinal || monto <= 0) return alert('Verifica datos.');
 
+            let descripcion = concepto;
+            if (cantidad > 1) descripcion += ` (${cantidad} und)`;
+            if (detalle) descripcion += ` - ${detalle}`;
+
             if (idEdicion && idEdicion !== "") {
                 let g = db.gastos.find(x => x.id === idEdicion);
                 if (g) {
                     g.cat = catFinal;
-                    g.concepto = concepto;
+                    g.concepto = descripcion;
+                    g.cantidad = cantidad;
+                    g.detalle = detalle;
                     g.medio = medio;
                     g.monto = monto;
                     g.fecha = fecha;
@@ -1915,11 +2674,15 @@
                     id: 'g_' + Date.now(), 
                     fecha: fecha, 
                     cat: catFinal, 
-                    concepto, 
+                    concepto: descripcion, 
+                    cantidad: cantidad,
+                    detalle: detalle,
                     medio, 
                     monto 
                 });
                 document.getElementById('g-concepto').value = '';
+                document.getElementById('g-cantidad').value = 1;
+                document.getElementById('g-detalle').value = '';
                 document.getElementById('g-monto').value = '';
                 document.getElementById('g-fecha').value = new Date().toISOString().split('T')[0];
             }
@@ -1934,7 +2697,7 @@
             } 
         }
 
-        // ===== FUNCIONES CAJA MENOR (CON FECHA) =====
+        // ===== FUNCIONES CAJA MENOR =====
         function cancelarEdicionCaja() {
             document.getElementById('cm-id-edicion').value = '';
             document.getElementById('cm-tipo').value = 'Gasto Menor';
@@ -2010,94 +2773,7 @@
             }
         }
 
-        function abrirCajaAbono(id, cliente) {
-            document.getElementById('box-abono-practico').style.display = 'block';
-            document.getElementById('lbl-abono-cliente').innerText = cliente;
-            document.getElementById('abono-id-cliente').value = id;
-            document.getElementById('abono-monto-input').value = '';
-            document.getElementById('abono-numero').value = '';
-            document.getElementById('abono-fecha-input').value = new Date().toISOString().split('T')[0];
-            document.getElementById('abono-medio-input').value = 'Banco';
-            document.getElementById('abono-banco-input').value = '';
-            document.getElementById('abono-efectivo-input').value = '';
-            document.getElementById('box-abono-banco').style.display = 'none';
-            document.getElementById('box-abono-efectivo').style.display = 'none';
-            document.getElementById('box-abono-practico').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function cerrarBoxAbono() { document.getElementById('box-abono-practico').style.display = 'none'; }
-
-        function procesarAbonoEstructurado() {
-            let db = window.getDbData();
-            let id = document.getElementById('abono-id-cliente').value;
-            let numeroAbono = document.getElementById('abono-numero').value.trim();
-            let medio = document.getElementById('abono-medio-input').value;
-            let fechaAbono = document.getElementById('abono-fecha-input').value || new Date().toISOString().split('T')[0];
-            
-            let montoTotal = 0;
-            let abonos = [];
-
-            if (medio === 'DIVIDIDO') {
-                let montoBanco = cleanNum(document.getElementById('abono-banco-input').value);
-                let montoEfectivo = cleanNum(document.getElementById('abono-efectivo-input').value);
-                montoTotal = montoBanco + montoEfectivo;
-                
-                if (montoBanco > 0) {
-                    abonos.push({ medio: 'Banco', monto: montoBanco });
-                }
-                if (montoEfectivo > 0) {
-                    abonos.push({ medio: 'Efectivo', monto: montoEfectivo });
-                }
-                if (montoTotal <= 0) return alert('Ingresa al menos un monto válido.');
-            } else {
-                let monto = cleanNum(document.getElementById('abono-monto-input').value);
-                if (monto <= 0) return alert('Monto inválido.');
-                montoTotal = monto;
-                abonos.push({ medio: medio, monto: monto });
-            }
-
-            if (!numeroAbono) return alert('Ingresa el número de recibo de abono.');
-            
-            let v = db.ventas.find(x => x.id === id);
-            if (v) {
-                v.abonado += montoTotal;
-                
-                abonos.forEach(a => {
-                    db.ingresosDirectos.push({ 
-                        id: 'i_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-                        fecha: fechaAbono, 
-                        origen: `Abono Cartera ${a.medio} (Factura #${v.factura || 'S/N'}) - ${v.cliente} (${id}) [Recibo #${numeroAbono}]`, 
-                        medio: a.medio, 
-                        monto: a.monto 
-                    });
-                });
-            }
-            cerrarBoxAbono();
-            salvar();
-        }
-
-        function eliminarIngresoDirecto(id) {
-            let db = window.getDbData();
-            if (confirm('¿Eliminar este ingreso?')) {
-                let ingreso = db.ingresosDirectos.find(x => x.id === id);
-                if (ingreso && ingreso.origen.includes('(')) {
-                    let vId = ingreso.origen.split('(').pop().replace(')', '').trim();
-                    let v = db.ventas.find(x => x.id === vId);
-                    if (v) v.abonado = Math.max(0, v.abonado - ingreso.monto);
-                }
-                db.ingresosDirectos = db.ingresosDirectos.filter(x => x.id !== id);
-                salvar();
-            }
-        }
-
-        function eliminarGastoDirecto(id) {
-            let db = window.getDbData();
-            if (confirm('¿Eliminar este egreso?')) {
-                db.gastos = db.gastos.filter(x => x.id !== id);
-                salvar();
-            }
-        }
-
+        // ===== FUNCIONES DE DETALLE CLIENTE =====
         function verDetalleCliente(id) {
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === id);
@@ -2134,33 +2810,44 @@
             document.getElementById('modal-detalle-cliente').style.display = 'flex';
         }
 
-        function guardarTrabajadorRapido() {
-            let db = window.getDbData();
-            let nombre = document.getElementById('t-nombre').value.trim();
-            let cedula = document.getElementById('t-cedula').value.trim();
-            let telefono = document.getElementById('t-telefono').value.trim();
-            let direccion = document.getElementById('t-direccion').value.trim();
-            let correo = document.getElementById('t-correo').value.trim();
-            let cargo = document.getElementById('t-cargo').value.trim();
+        // ===== ALERTAS =====
+        function evaluarAlertasCumpleanos(trabajadores) {
+            const pAlertas = document.getElementById('panel-alertas-automaticas');
+            if (!trabajadores || trabajadores.length === 0) return;
+            let hoy = new Date();
+            let hoyStr = hoy.toISOString().split('T')[0];
+            let manana = new Date();
+            manana.setDate(manana.getDate() + 1);
+            let mananaStr = manana.toISOString().split('T')[0];
+            let pasadoManana = new Date();
+            pasadoManana.setDate(pasadoManana.getDate() + 2);
+            let pasadoMananaStr = pasadoManana.toISOString().split('T')[0];
 
-            if (!nombre || !cedula || !cargo) return alert('Verifica campos obligatorios.');
-            db.trabajadores.push({ id: 't_' + Date.now(), nombre, cedula, telefono, direccion, correo, cargo });
-            document.getElementById('t-nombre').value = '';
-            document.getElementById('t-cedula').value = '';
-            document.getElementById('t-cargo').value = '';
-            document.getElementById('t-telefono').value = '';
-            document.getElementById('t-direccion').value = '';
-            document.getElementById('t-correo').value = '';
-            toggleSeccionTrabajador();
-            salvar();
+            trabajadores.forEach(t => {
+                if (!t.cumpleanos) return;
+                let cumple = new Date(t.cumpleanos);
+                let mes = cumple.getMonth() + 1;
+                let dia = cumple.getDate();
+                let cumpleEsteAnio = new Date(hoy.getFullYear(), mes - 1, dia);
+                let cumpleStr = cumpleEsteAnio.toISOString().split('T')[0];
+                let cumpleManana = new Date(hoy.getFullYear(), mes - 1, dia - 1);
+                let cumpleMananaStr = cumpleManana.toISOString().split('T')[0];
+                let cumplePasadoManana = new Date(hoy.getFullYear(), mes - 1, dia - 2);
+                let cumplePasadoMananaStr = cumplePasadoManana.toISOString().split('T')[0];
+
+                if (cumpleStr === hoyStr) {
+                    pAlertas.innerHTML += `<div class="alert-item alert-cumple">🎂 <strong>¡FELIZ CUMPLEAÑOS!</strong> Hoy es el cumpleaños de <strong>${t.nombre}</strong> 🎉</div>`;
+                } else if (cumpleMananaStr === hoyStr) {
+                    pAlertas.innerHTML += `<div class="alert-item alert-manana">🎂 <strong>¡MAÑANA ES EL CUMPLEAÑOS!</strong> De <strong>${t.nombre}</strong> 🎈</div>`;
+                } else if (cumplePasadoMananaStr === hoyStr) {
+                    pAlertas.innerHTML += `<div class="alert-item alert-manana">🎂 <strong>¡PASADO MAÑANA ES EL CUMPLEAÑOS!</strong> De <strong>${t.nombre}</strong> 🎁</div>`;
+                }
+            });
         }
 
-        // ===== EVALUAR ALERTAS DE ENTREGA =====
         function evaluarYMostrarAlertasLogistica(ventas) {
             const pAlertas = document.getElementById('panel-alertas-automaticas');
-            pAlertas.innerHTML = '';
             if (!ventas || ventas.length === 0) return;
-
             let hoyStr = new Date().toISOString().split('T')[0];
             let manana = new Date();
             manana.setDate(manana.getDate() + 1);
@@ -2212,7 +2899,8 @@
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dataIngresos), "Ingresos");
 
             let dataGastos = db.gastos.map(g => ({
-                "Fecha": g.fecha, "Categoría": g.cat, "Concepto": g.concepto, "Medio": g.medio, "Monto": g.monto
+                "Fecha": g.fecha, "Categoría": g.cat, "Producto": g.concepto, "Cantidad": g.cantidad || 1,
+                "Detalle": g.detalle || '', "Medio": g.medio, "Monto": g.monto
             }));
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dataGastos), "Gastos");
 
@@ -2235,7 +2923,11 @@
             if (!window.getDbData) return;
             let db = window.getDbData();
 
+            const pAlertas = document.getElementById('panel-alertas-automaticas');
+            pAlertas.innerHTML = '';
+            
             evaluarYMostrarAlertasLogistica(db.ventas);
+            evaluarAlertasCumpleanos(db.trabajadores);
 
             let txtFiltro = document.getElementById('f-buscar').value.toLowerCase();
             let fDesde = document.getElementById('f-desde').value;
@@ -2342,10 +3034,15 @@
                         badgeColor = 'badge-abono';
                         let cleanMatch = i.origen.match(/Abono Cartera.*?-\s*([^(]+)/);
                         if (cleanMatch) clienteNombre = cleanMatch[1].trim();
+                    } else if (i.origen.includes('Abono Directo')) {
+                        tipoLabel = 'ABONO DIRECTO';
+                        badgeColor = 'badge-caja';
+                        let cleanMatch = i.origen.match(/Abono Directo.*?-\s*([^\[]+)/);
+                        if (cleanMatch) clienteNombre = cleanMatch[1].trim();
                     }
 
                     let facturaDisplay = `<span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${facturaNum}</span>`;
-                    if (reciboNum && tipoLabel === 'FACTURA ABONADO') {
+                    if (reciboNum && (tipoLabel === 'FACTURA ABONADO' || tipoLabel === 'ABONO DIRECTO')) {
                         facturaDisplay += ` → <span class="badge" style="background:#fce7f3; color:#9d174d; font-weight:700;">Recibo #${reciboNum}</span>`;
                     }
 
@@ -2356,6 +3053,7 @@
                         <td><span class="badge ${badgeColor}">${tipoLabel}</span></td>
                         <td style="color:var(--success); font-weight:600;">${m(i.monto)}</td>
                         <td>
+                            <button class="btn-accion btn-ojito" onclick="verDetalleIngreso('${i.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
                             <button class="btn-accion btn-editar" onclick="abrirModalEditarAbono('${i.id}')" style="padding:2px 4px;">✏️</button>
                             <button class="btn-accion btn-eliminar" onclick="eliminarIngresoDirecto('${i.id}')" style="padding:2px 4px;">x</button>
                         </td>
@@ -2371,9 +3069,12 @@
                     bSalidas.innerHTML += `<tr>
                         <td>${g.fecha}</td>
                         <td>🏠 ${g.cat}</td>
-                        <td>${g.concepto} [${g.medio}]</td>
+                        <td>${g.concepto}</td>
                         <td style="color:var(--danger);">${m(g.monto)}</td>
-                        <td><button class="btn-accion btn-eliminar" onclick="eliminarGastoDirecto('${g.id}')">x</button></td>
+                        <td>
+                            <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${g.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                            <button class="btn-accion btn-eliminar" onclick="eliminarGastoDirecto('${g.id}')" style="padding:2px 4px;">x</button>
+                        </td>
                     </tr>`;
                 }
             });
@@ -2382,9 +3083,12 @@
                     bSalidas.innerHTML += `<tr>
                         <td>${n.fecha}</td>
                         <td>👷 Nómina: ${n.nombre}</td>
-                        <td>${n.detalle} [${n.origen}]</td>
+                        <td>${n.detalle}</td>
                         <td style="color:var(--danger);">${m(n.monto)}</td>
-                        <td><button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')">x</button></td>
+                        <td>
+                            <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${n.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                            <button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')" style="padding:2px 4px;">x</button>
+                        </td>
                     </tr>`;
                 }
             });
@@ -2407,10 +3111,10 @@
                             <td style="color:var(--accent); font-weight:600;">📅 ${fPactadaFinal}</td>
                             <td>
                                 <div style="display:flex; gap:3px;">
-                                    <button class="btn-accion btn-azul" style="padding:4px 6px;" onclick="verDetalleCliente('${v.id}')">👁️</button>
-                                    <button class="btn-accion" style="background:#cbd5e1; color:#0f172a; padding:4px 6px;" onclick="iniciarEdicionVenta('${v.id}')">✏️</button>
-                                    <button class="btn-accion btn-verde" style="padding:4px 6px;" onclick="abrirCajaAbono('${v.id}', '${v.cliente}')">💵 +</button>
-                                    <button class="btn-accion btn-eliminar" style="padding:4px 6px;" onclick="eliminarVenta('${v.id}')">x</button>
+                                    <button class="btn-accion btn-ojito" onclick="verDetalleVenta('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                    <button class="btn-accion btn-editar" onclick="abrirModalVentaConDatos('${v.id}')" style="padding:2px 4px;">✏️</button>
+                                    <button class="btn-accion btn-verde" onclick="abrirCajaAbono('${v.id}', '${v.cliente}')" style="padding:2px 4px;">💵 +</button>
+                                    <button class="btn-accion btn-eliminar" onclick="eliminarVenta('${v.id}')" style="padding:2px 4px;">x</button>
                                 </div>
                             </td>
                         </tr>`;
@@ -2451,9 +3155,10 @@
                             <td>${infoConductor}</td>
                             <td>
                                 <div style="display:flex; gap:3px; flex-wrap:wrap;">
-                                    <button class="btn-accion btn-azul" style="padding:4px 6px;" onclick="cambiarEstadoEntrega('${v.id}')">${txtBoton}</button>
-                                    <button class="btn-accion btn-editar" style="padding:4px 6px;" onclick="abrirModalEditarDespacho('${v.id}')">✏️</button>
-                                    <button class="btn-accion btn-whatsapp" style="padding:4px 6px; color:white;" onclick="enviarWhatsAppEntrega('${v.id}')">💬</button>
+                                    <button class="btn-accion btn-ojito" onclick="verDetalleEntrega('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                    <button class="btn-accion btn-azul" onclick="cambiarEstadoEntrega('${v.id}')" style="padding:2px 4px;">${txtBoton}</button>
+                                    <button class="btn-accion btn-editar" onclick="abrirModalEditarDespacho('${v.id}')" style="padding:2px 4px;">✏️</button>
+                                    <button class="btn-accion btn-whatsapp" onclick="enviarWhatsAppEntrega('${v.id}')" style="padding:2px 4px; color:white;">💬</button>
                                 </div>
                             </td>
                         </tr>`;
@@ -2476,7 +3181,12 @@
                             <td>${v.telefono}</td>
                             <td style="max-width:120px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
                             <td style="color:var(--danger); font-weight:700;">${m(pendiente)}</td>
-                            <td><a href="${uri}" target="_blank" class="btn btn-verde" style="padding:4px 8px; font-size:0.75rem;">💬 Cobrar</a></td>
+                            <td>
+                                <div style="display:flex; gap:3px;">
+                                    <button class="btn-accion btn-ojito" onclick="verDetalleCobro('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                    <a href="${uri}" target="_blank" class="btn btn-verde" style="padding:4px 8px; font-size:0.75rem;">💬 Cobrar</a>
+                                </div>
+                            </td>
                         </tr>`;
                 }
             });
@@ -2492,7 +3202,7 @@
                     
                     let botonAprobar = '';
                     if (c.estado === 'Pendiente') {
-                        botonAprobar = `<button class="btn-accion btn-verde" style="padding:4px 6px;" onclick="aprobarCotizacionYVenta('${c.id}')">✅ Aprobar</button>`;
+                        botonAprobar = `<button class="btn-accion btn-verde" onclick="aprobarCotizacionYVenta('${c.id}')" style="padding:2px 4px;">✅ Aprobar</button>`;
                     }
 
                     bCotizaciones.innerHTML += `
@@ -2506,16 +3216,37 @@
                             <td><span class="badge ${estadoBadge}">${estadoEmoji[c.estado] || c.estado}</span></td>
                             <td>
                                 <div style="display:flex; gap:3px; flex-wrap:wrap;">
-                                    <button class="btn-accion btn-azul" style="padding:4px 6px;" onclick="verCotizacionCompleta('${c.id}')">👁️</button>
+                                    <button class="btn-accion btn-ojito" onclick="verDetalleCotizacion('${c.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
                                     ${botonAprobar}
-                                    <button class="btn-accion btn-whatsapp" style="padding:4px 6px; color:white;" onclick="enviarWhatsAppCotizacion('${c.id}')">💬</button>
-                                    <button class="btn-accion" style="background:#25D366; color:white; padding:4px 6px;" onclick="enviarCotizacionExistenteWhatsApp('${c.id}')">📋</button>
-                                    <button class="btn-accion" style="background:#cbd5e1; color:#0f172a; padding:4px 6px;" onclick="iniciarEdicionCotizacion('${c.id}')">✏️</button>
-                                    <button class="btn-accion btn-eliminar" style="padding:4px 6px;" onclick="eliminarCotizacion('${c.id}')">x</button>
+                                    <button class="btn-accion btn-whatsapp" onclick="enviarWhatsAppCotizacion('${c.id}')" style="padding:2px 4px; color:white;">💬</button>
+                                    <button class="btn-accion" style="background:#25D366; color:white; padding:2px 4px;" onclick="enviarCotizacionExistenteWhatsApp('${c.id}')">📋</button>
+                                    <button class="btn-accion btn-editar" onclick="iniciarEdicionCotizacion('${c.id}')" style="padding:2px 4px;">✏️</button>
+                                    <button class="btn-accion btn-eliminar" onclick="eliminarCotizacion('${c.id}')" style="padding:2px 4px;">x</button>
                                 </div>
                             </td>
                         </tr>`;
                 }
+            });
+
+            // Trabajadores
+            const bTrabajadores = document.querySelector('#t-trabajadores tbody');
+            bTrabajadores.innerHTML = '';
+            db.trabajadores.forEach(t => {
+                let cumpleMostrar = t.cumpleanos ? t.cumpleanos : 'No registrado';
+                bTrabajadores.innerHTML += `
+                    <tr>
+                        <td><strong>${t.nombre}</strong></td>
+                        <td>${t.cedula || ''}</td>
+                        <td>${t.telefono || ''}</td>
+                        <td>${t.cargo || ''}</td>
+                        <td>${cumpleMostrar}</td>
+                        <td>
+                            <button class="btn-accion btn-ojito" onclick="abrirModalDetalle('👤 Detalle del Trabajador', '<p><strong>Nombre:</strong> ${t.nombre}</p><p><strong>Cédula:</strong> ${t.cedula || 'No registrada'}</p><p><strong>Teléfono:</strong> ${t.telefono || 'No registrado'}</p><p><strong>Dirección:</strong> ${t.direccion || 'No registrada'}</p><p><strong>Cargo:</strong> ${t.cargo || 'No especificado'}</p><p><strong>Cumpleaños:</strong> ${cumpleMostrar}</p><p><strong>ID:</strong> ${t.id}</p>')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                            <button class="btn-accion btn-editar" onclick="iniciarEdicionTrabajador('${t.id}')" style="padding:2px 4px;">✏️</button>
+                            <button class="btn-accion btn-eliminar" onclick="eliminarTrabajador('${t.id}')" style="padding:2px 4px;">x</button>
+                        </td>
+                    </tr>
+                `;
             });
 
             // Nómina
@@ -2526,13 +3257,13 @@
                     bNomina.innerHTML += `<tr>
                         <td>${n.fecha}</td>
                         <td><strong>${n.nombre}</strong></td>
-                        <td><span class="badge bg-efectivo">VALE</span></td>
                         <td>${n.detalle}</td>
                         <td>${n.origen}</td>
                         <td style="color:var(--danger); font-weight:600;">${m(n.monto)}</td>
                         <td>
-                            <button class="btn-accion btn-editar" onclick="iniciarEdicionNomina('${n.id}')">✏️</button>
-                            <button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')">x</button>
+                            <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${n.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                            <button class="btn-accion btn-editar" onclick="iniciarEdicionNomina('${n.id}')" style="padding:2px 4px;">✏️</button>
+                            <button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')" style="padding:2px 4px;">x</button>
                         </td>
                     </tr>`;
                 }
@@ -2546,12 +3277,15 @@
                     bGastos.innerHTML += `<tr>
                         <td>${g.fecha}</td>
                         <td><span class="badge bg-efectivo" style="background:#e2e8f0; color:#334155;">${g.cat}</span></td>
-                        <td>${g.concepto}</td>
+                        <td>${g.concepto || ''}</td>
+                        <td>${g.cantidad || 1}</td>
+                        <td>${g.detalle || ''}</td>
                         <td>${g.medio}</td>
                         <td style="color:var(--danger); font-weight:600;">${m(g.monto)}</td>
                         <td>
-                            <button class="btn-accion btn-editar" onclick="iniciarEdicionGasto('${g.id}')">✏️</button>
-                            <button class="btn-accion btn-eliminar" onclick="eliminarGasto('${g.id}')">x</button>
+                            <button class="btn-accion btn-ojito" onclick="verDetalleGasto('${g.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                            <button class="btn-accion btn-editar" onclick="iniciarEdicionGasto('${g.id}')" style="padding:2px 4px;">✏️</button>
+                            <button class="btn-accion btn-eliminar" onclick="eliminarGasto('${g.id}')" style="padding:2px 4px;">x</button>
                         </td>
                     </tr>`;
                 }
@@ -2570,8 +3304,9 @@
                         <td>${cm.concepto}</td>
                         <td style="${col}">${m(cm.monto)}</td>
                         <td>
-                            <button class="btn-accion btn-editar" onclick="iniciarEdicionCaja('${cm.id}')">✏️</button>
-                            <button class="btn-accion btn-eliminar" onclick="eliminarCM('${cm.id}')">x</button>
+                            <button class="btn-accion btn-ojito" onclick="verDetalleCajaMenor('${cm.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                            <button class="btn-accion btn-editar" onclick="iniciarEdicionCaja('${cm.id}')" style="padding:2px 4px;">✏️</button>
+                            <button class="btn-accion btn-eliminar" onclick="eliminarCM('${cm.id}')" style="padding:2px 4px;">x</button>
                         </td>
                     </tr>`;
                 }
