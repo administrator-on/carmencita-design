@@ -102,7 +102,9 @@
         .explicacion-tag { font-size: 0.68rem; color: var(--text-muted); display: block; margin-top: 2px; line-height: 1.2; }
 
         .alerts-container { width: 100%; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        .alert-item { padding: 0.85rem 1.25rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; justify-content: space-between; border-left: 5px solid transparent; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .alert-item { padding: 0.85rem 1.25rem; border-radius: 0.5rem; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; justify-content: space-between; border-left: 5px solid transparent; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: relative; }
+        .alert-item .alert-close { cursor: pointer; font-size: 1.2rem; color: var(--text-muted); padding: 0 0 0 12px; font-weight: 700; transition: color 0.2s; background: none; border: none; }
+        .alert-item .alert-close:hover { color: var(--danger); }
         .alert-hoy { background-color: #fef2f2; border-left-color: var(--danger); color: #991b1b; }
         .alert-manana { background-color: #fffbeb; border-left-color: var(--warning); color: #92400e; }
         .alert-cumple { background-color: #dbeafe; border-left-color: var(--info); color: #1e40af; }
@@ -115,7 +117,6 @@
         .panel { background-color: var(--white); border-radius: 0.5rem; border: 1px solid var(--border); padding: 1.25rem; margin-bottom: 1.5rem; width: 100%; overflow: hidden; }
         .panel h3 { font-size: 1rem; margin-bottom: 1rem; font-weight: 700; color: var(--text-dark); border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
 
-        /* ===== CONTENEDORES CON SCROLL INDEPENDIENTE ===== */
         .table-scroll {
             max-height: 320px;
             overflow-y: auto;
@@ -123,9 +124,7 @@
             border-radius: 0.25rem;
             margin-bottom: 0.5rem;
         }
-        .table-scroll table {
-            min-width: 700px;
-        }
+        .table-scroll table { min-width: 700px; }
         .table-scroll thead th {
             position: sticky;
             top: 0;
@@ -133,21 +132,10 @@
             background: #f8fafc;
             border-bottom: 2px solid var(--border);
         }
-        .table-scroll::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        .table-scroll::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 3px;
-        }
-        .table-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
-        }
-        .table-scroll::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
+        .table-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+        .table-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+        .table-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .table-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
         .table-scroll-2 {
             max-height: 200px;
@@ -156,9 +144,7 @@
             border-radius: 0.25rem;
             margin-bottom: 0.5rem;
         }
-        .table-scroll-2 table {
-            min-width: 700px;
-        }
+        .table-scroll-2 table { min-width: 700px; }
         .table-scroll-2 thead th {
             position: sticky;
             top: 0;
@@ -166,21 +152,10 @@
             background: #f8fafc;
             border-bottom: 2px solid var(--border);
         }
-        .table-scroll-2::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        .table-scroll-2::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 3px;
-        }
-        .table-scroll-2::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
-        }
-        .table-scroll-2::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
+        .table-scroll-2::-webkit-scrollbar { width: 6px; height: 6px; }
+        .table-scroll-2::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+        .table-scroll-2::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .table-scroll-2::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 0; border: none; background: transparent; }
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; min-width: 700px; }
@@ -217,7 +192,6 @@
         .badge-aprobada { background-color: #dcfce7; color: #15803d; }
         .badge-caja { background-color: #fef3c7; color: #92400e; }
 
-        /* ===== MODALES FLOTANTES ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -231,9 +205,7 @@
             align-items: center;
             padding: 1rem;
         }
-        .modal-overlay.activo {
-            display: flex;
-        }
+        .modal-overlay.activo { display: flex; }
         .modal-flotante {
             background: var(--white);
             border-radius: 0.5rem;
@@ -257,9 +229,7 @@
             padding: 0 0 0 10px;
             z-index: 5;
         }
-        .modal-flotante .close-modal-top:hover {
-            color: var(--danger);
-        }
+        .modal-flotante .close-modal-top:hover { color: var(--danger); }
         .modal-flotante h3 {
             font-size: 1.1rem;
             color: var(--text-dark);
@@ -267,12 +237,10 @@
             padding-bottom: 0.5rem;
             margin-bottom: 1rem;
         }
-
         @keyframes modalFadeIn {
             from { opacity: 0; transform: scale(0.95) translateY(-20px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
-
         .modal-flotante .flex-form {
             background: #f8fafc;
             padding: 1rem;
@@ -295,7 +263,6 @@
         .modal-flotante .producto-row .campo.cantidad { flex: 0.5; min-width: 60px; }
         .modal-flotante .producto-row .campo.precio { flex: 0.7; min-width: 80px; }
         .modal-flotante .producto-row .campo.detalle { flex: 2; min-width: 150px; }
-
         .modal-flotante .tabla-productos-temp {
             width: 100%;
             font-size: 0.85rem;
@@ -372,9 +339,7 @@
             font-size: 0.8rem;
             border-left: 3px solid var(--accent);
         }
-        .despacho-info strong {
-            color: var(--text-dark);
-        }
+        .despacho-info strong { color: var(--text-dark); }
 
         .conductor-cell {
             font-size: 0.8rem;
@@ -398,33 +363,52 @@
             flex-wrap: wrap;
         }
 
+        .config-empresa {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .config-empresa .flex-form {
+            background: white;
+            border: 1px dashed var(--border);
+        }
+
+        /* Estilos para el modal de gastos y cotizaciones */
+        .modal-flotante .productos-section {
+            margin: 0.5rem 0 1rem 0;
+        }
+        .modal-flotante .productos-section h4 {
+            margin: 0.5rem 0;
+            color: var(--text-dark);
+        }
+
+        .alert-dismissed {
+            display: none !important;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 2rem; }
+            .no-print { display: none !important; }
+            .print-btn { display: none !important; }
+        }
+
         @media(max-width: 768px) {
-            .table-scroll {
-                max-height: 220px;
-            }
-            .table-scroll-2 {
-                max-height: 150px;
-            }
+            .table-scroll { max-height: 220px; }
+            .table-scroll-2 { max-height: 150px; }
             .modal-flotante {
                 max-width: 100%;
                 padding: 1rem;
                 margin: 0.5rem;
                 max-height: 95vh;
             }
-            .modal-flotante .producto-row {
-                flex-direction: column;
-            }
-            .modal-flotante .producto-row .campo {
-                min-width: 100%;
-            }
-            .botones-nomina {
-                flex-direction: column;
-                width: 100%;
-            }
-            .botones-nomina .btn {
-                width: 100%;
-                justify-content: center;
-            }
+            .modal-flotante .producto-row { flex-direction: column; }
+            .modal-flotante .producto-row .campo { min-width: 100%; }
+            .botones-nomina { flex-direction: column; width: 100%; }
+            .botones-nomina .btn { width: 100%; justify-content: center; }
         }
 
         @media(max-width: 1024px) {
@@ -490,6 +474,7 @@
             <button id="btn-nomina" onclick="irA('nomina')">👷 Pago Trabajadores</button>
             <button id="btn-gastos" onclick="irA('gastos')">💡 Gastos Empresa</button>
             <button id="btn-cajamenor" onclick="irA('cajamenor')">🪙 Caja Menor</button>
+            <button id="btn-config" onclick="irA('config')">⚙️ Configuración</button>
         </nav>
         <div class="status-firebase">
             <span id="sync-dot" class="dot"></span>
@@ -591,7 +576,7 @@
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:1rem;">
                     <h3 style="border:none; padding:0; margin:0;">🛍️ Contratos y Clientes</h3>
                     <div style="display:flex; gap:0.5rem;">
-                        <button class="btn btn-verde" onclick="abrirModalAbono()" id="btn-nuevo-abono">💰 Nuevo Abono</button>
+                        <button class="btn btn-verde" onclick="abrirModalAbonoDirectoDesdeVentas()" id="btn-nuevo-abono">💰 Nuevo Abono</button>
                         <button class="btn btn-azul" onclick="abrirModalVenta()" id="btn-nueva-venta">➕ Nueva Venta</button>
                     </div>
                 </div>
@@ -641,7 +626,7 @@
             <div class="panel" style="border-top: 4px solid #3730a3;">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; margin-bottom: 1rem;">
                     <h3 style="border:none; padding:0; margin:0;">📋 Cotizaciones</h3>
-                    <button class="btn btn-azul" onclick="toggleFormularioCotizacion()" id="btn-toggle-cotizacion">➕ Nueva Cotización</button>
+                    <button class="btn btn-azul" onclick="abrirModalCotizacion()" id="btn-nueva-cotizacion">➕ Nueva Cotización</button>
                 </div>
 
                 <div class="table-scroll">
@@ -652,69 +637,10 @@
                         </table>
                     </div>
                 </div>
-
-                <div id="formulario-cotizacion-container" style="display: none; margin-top: 1.5rem; border-top: 2px dashed var(--border); padding-top: 1rem;">
-                    <h3 style="color:var(--info);" id="lbl-formulario-cotizacion-modo">➕ Nueva Cotización</h3>
-                    <input type="hidden" id="c-id-edicion">
-                    
-                    <div class="flex-form">
-                        <div class="campo"><label>Nº Cotización</label><input type="text" id="c-numero" placeholder="Ej: 001"></div>
-                        <div class="campo"><label>Cliente</label><input type="text" id="c-cliente" placeholder="Nombre completo"></div>
-                        <div class="campo"><label>Teléfono / WhatsApp</label><input type="text" id="c-telefono" placeholder="Celular"></div>
-                        <div class="campo"><label>Correo</label><input type="email" id="c-correo" placeholder="Correo"></div>
-                        <div class="campo"><label>Dirección</label><input type="text" id="c-direccion" placeholder="Dirección"></div>
-                        <div class="campo"><label>Fecha Cotización</label><input type="date" id="c-fecha"></div>
-                        <div class="campo"><label>Válido hasta</label><input type="date" id="c-valido-hasta"></div>
-                        <div class="campo"><label>Plazo Entrega</label><input type="text" id="c-plazo" placeholder="Ej: 15 días hábiles"></div>
-                        <div class="campo"><label>Estado</label>
-                            <select id="c-estado">
-                                <option value="Pendiente">⏳ Pendiente</option>
-                                <option value="Aprobada">✅ Aprobada</option>
-                                <option value="Rechazada">❌ Rechazada</option>
-                                <option value="Vencida">⏰ Vencida</option>
-                            </select>
-                        </div>
-                        <div class="campo"><label>Notas (opcional)</label>
-                            <textarea id="c-notas" placeholder="Garantía, instalación incluida, etc." rows="2"></textarea>
-                        </div>
-                    </div>
-
-                    <h4 style="margin: 0.5rem 0; color: var(--text-dark);">📦 Productos / Servicios</h4>
-                    <div class="producto-row" id="producto-row-template">
-                        <div class="campo cantidad"><label>Cantidad</label><input type="number" id="prod-cantidad" value="1" min="1"></div>
-                        <div class="campo detalle"><label>Detalle del Producto</label><input type="text" id="prod-detalle" placeholder="Ej: Cocina integral RH + mesón cuarzo"></div>
-                        <div class="campo precio"><label>Precio Unitario ($)</label><input type="text" id="prod-precio" oninput="formatMoni(this)" placeholder="0"></div>
-                        <button class="btn btn-verde" style="margin-bottom:4px; height:38px; align-self:flex-end;" onclick="agregarProducto()">➕ Agregar</button>
-                    </div>
-
-                    <div style="margin: 0.5rem 0 1rem 0; overflow-x:auto;">
-                        <table class="tabla-productos-cotizacion" id="tabla-productos-temporal">
-                            <thead>
-                                <tr><th style="width:80px;">Cantidad</th><th>Detalle</th><th style="width:150px;">Precio Unit.</th><th style="width:150px;">Subtotal</th><th style="width:90px;">Acciones</th></tr>
-                            </thead>
-                            <tbody id="tbody-productos-temp">
-                                <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay productos agregados</td></tr>
-                            </tbody>
-                            <tfoot>
-                                <tr class="total-row">
-                                    <td colspan="3" style="text-align:right;">TOTAL COTIZACIÓN:</td>
-                                    <td id="total-productos-temp" style="color:var(--success); font-size:1.1rem;">$0</td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-
-                    <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
-                        <button class="btn btn-verde" onclick="guardarCotizacionConProductos()" id="btn-guardar-cotizacion-accion">🚀 Guardar Cotización</button>
-                        <button class="btn" style="background:#25D366; color:white;" onclick="enviarCotizacionWhatsApp()" id="btn-whatsapp-cotizacion">💬 Enviar WhatsApp</button>
-                        <button class="btn" style="background:#64748b; display:none;" id="btn-cancelar-edicion-cotizacion" onclick="cancelarEdicionCotizacion()">Cancelar</button>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <!-- MÓDULO NÓMINA (REDISEÑADO) -->
+        <!-- MÓDULO NÓMINA -->
         <div id="mod-nomina" class="seccion-vista">
             <div class="panel">
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:1rem;">
@@ -747,10 +673,13 @@
             </div>
         </div>
 
-        <!-- MÓDULO GASTOS EMPRESA -->
+        <!-- MÓDULO GASTOS -->
         <div id="mod-gastos" class="seccion-vista">
             <div class="panel">
-                <h3>💡 Registro de Gastos Generales</h3>
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:1rem;">
+                    <h3 style="border:none; padding:0; margin:0;">💡 Registro de Gastos Generales</h3>
+                    <button class="btn btn-azul" onclick="abrirModalGasto()">➕ Nuevo Gasto</button>
+                </div>
                 <div class="table-scroll">
                     <div class="table-responsive">
                         <table id="t-gastos">
@@ -758,39 +687,6 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                </div>
-
-                <div id="formulario-gasto-container">
-                    <h3 style="color:var(--info);" id="lbl-formulario-gasto-modo">➕ Registrar Nuevo Gasto</h3>
-                    <input type="hidden" id="g-id-edicion" value="">
-                    <div class="flex-form">
-                        <div class="campo">
-                            <label>Categoría</label>
-                            <select id="g-cat" onchange="verificarCategoriaManual(this)">
-                                <option value="Servicios Publicos">💡 Servicios Públicos</option>
-                                <option value="Arriendo Taller">🏠 Arriendo</option>
-                                <option value="Compra Materiales">🪵 Materiales</option>
-                                <option value="Compra Colchones">🛏️ Colchones</option>
-                                <option value="Papeleria">📋 Papelería</option>
-                                <option value="Mantenimiento">🔧 Mantenimiento</option>
-                                <option value="MANUAL">✍️ Otra</option>
-                            </select>
-                        </div>
-                        <div class="campo" id="box-cat-manual" style="display:none;"><label>Escribe categoría</label><input type="text" id="g-cat-manual"></div>
-                        <div class="campo"><label>Producto / Concepto</label><input type="text" id="g-concepto" placeholder="Ej: Madera MDF"></div>
-                        <div class="campo"><label>Cantidad</label><input type="number" id="g-cantidad" value="1" min="1"></div>
-                        <div class="campo"><label>Detalle / Especificación</label><input type="text" id="g-detalle" placeholder="Ej: 2.4m x 1.2m x 18mm"></div>
-                        <div class="campo"><label>Medio</label>
-                            <select id="g-medio">
-                                <option value="Banco">Banco</option>
-                                <option value="Efectivo">Efectivo</option>
-                            </select>
-                        </div>
-                        <div class="campo"><label>Monto ($)</label><input type="text" id="g-monto" oninput="formatMoni(this)"></div>
-                        <div class="campo"><label>Fecha del Gasto</label><input type="date" id="g-fecha"></div>
-                    </div>
-                    <button class="btn btn-verde" onclick="guardarGasto()" id="btn-guardar-gasto-accion">Guardar Gasto</button>
-                    <button class="btn" style="background:#64748b; display:none;" id="btn-cancelar-edicion-gasto" onclick="cancelarEdicionGasto()">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -827,13 +723,32 @@
                 </div>
             </div>
         </div>
+
+        <!-- MÓDULO CONFIGURACIÓN -->
+        <div id="mod-config" class="seccion-vista">
+            <div class="panel">
+                <h3>⚙️ Configuración de la Empresa</h3>
+                <div class="config-empresa">
+                    <div class="flex-form">
+                        <div class="campo"><label>Razón Social</label><input type="text" id="emp-razon" placeholder="Nombre de la empresa"></div>
+                        <div class="campo"><label>NIT</label><input type="text" id="emp-nit" placeholder="NIT"></div>
+                        <div class="campo"><label>Dirección</label><input type="text" id="emp-direccion" placeholder="Dirección"></div>
+                        <div class="campo"><label>Teléfono</label><input type="text" id="emp-telefono" placeholder="Teléfono"></div>
+                        <div class="campo"><label>Correo</label><input type="email" id="emp-correo" placeholder="Correo"></div>
+                        <div class="campo"><label>Consecutivo Facturas</label><input type="number" id="emp-consecutivo-factura" value="1" min="1"></div>
+                        <div class="campo"><label>Consecutivo Abonos</label><input type="number" id="emp-consecutivo-abono" value="1" min="1"></div>
+                    </div>
+                    <button class="btn btn-verde" onclick="guardarConfiguracion()">💾 Guardar Configuración</button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- ===== MODALES FLOTANTES ===== -->
-    <!-- MODAL PARA VENTA -->
+    <!-- MODAL VENTA -->
     <div class="modal-overlay" id="modal-venta">
         <div class="modal-flotante">
-            <span class="close-modal-top" onclick="cerrarModalVenta()">&times;</span>
+            <span class="close-modal-top" onclick="cerrarModalVenta(true)">&times;</span>
             <h3 id="lbl-modal-venta-titulo">➕ Nueva Venta</h3>
             <input type="hidden" id="v-id-edicion" value="">
             <div class="flex-form">
@@ -886,16 +801,18 @@
 
             <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
                 <button class="btn btn-verde" onclick="guardarVenta()" id="btn-guardar-venta-accion" style="flex:1;">🚀 Guardar Venta</button>
-                <button class="btn btn-cerrar-modal" onclick="cerrarModalVenta()" style="flex:0.5;">Cancelar</button>
+                <button class="btn btn-cerrar-modal" onclick="cerrarModalVenta(true)" style="flex:0.5;">Cancelar</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL PARA ABONO SIN VENTA -->
+    <!-- MODAL ABONO DIRECTO -->
     <div class="modal-overlay" id="modal-abono-directo">
         <div class="modal-flotante" style="max-width:550px;">
-            <span class="close-modal-top" onclick="cerrarModalAbonoDirecto()">&times;</span>
-            <h3>💰 Nuevo Abono Directo</h3>
+            <span class="close-modal-top" onclick="cerrarModalAbonoDirecto(true)">&times;</span>
+            <h3 id="lbl-modal-abono-directo-titulo">💰 Nuevo Abono Directo</h3>
+            <input type="hidden" id="abono-directo-id" value="">
+            <input type="hidden" id="abono-directo-factura-precargada" value="">
             <div class="flex-form" style="grid-template-columns:1fr 1fr;">
                 <div class="campo"><label>Nº Recibo</label><input type="text" id="abono-directo-numero" placeholder="Ej: 045"></div>
                 <div class="campo"><label>Monto ($)</label><input type="text" id="abono-directo-monto" oninput="formatMoni(this)" placeholder="0"></div>
@@ -907,16 +824,16 @@
                 </div>
                 <div class="campo"><label>Fecha</label><input type="date" id="abono-directo-fecha"></div>
                 <div class="campo" style="grid-column: span 2;"><label>Cliente / Concepto</label><input type="text" id="abono-directo-cliente" placeholder="Nombre del cliente o concepto"></div>
-                <div class="campo" style="grid-column: span 2;"><label>Factura Asociada (opcional)</label><input type="text" id="abono-directo-factura" placeholder="Nº de factura si aplica"></div>
+                <div class="campo" style="grid-column: span 2;"><label>Factura Asociada</label><input type="text" id="abono-directo-factura" placeholder="Nº de factura si aplica"></div>
             </div>
             <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
-                <button class="btn btn-verde" onclick="guardarAbonoDirecto()" style="flex:1;">💰 Guardar Abono</button>
-                <button class="btn btn-cerrar-modal" onclick="cerrarModalAbonoDirecto()" style="flex:0.5;">Cancelar</button>
+                <button class="btn btn-verde" onclick="guardarAbonoDirecto()" id="btn-guardar-abono-directo" style="flex:1;">💰 Guardar Abono</button>
+                <button class="btn btn-cerrar-modal" onclick="cerrarModalAbonoDirecto(true)" style="flex:0.5;">Cancelar</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL PARA TRABAJADOR -->
+    <!-- MODAL TRABAJADOR -->
     <div class="modal-overlay" id="modal-trabajador">
         <div class="modal-flotante" style="max-width:550px;">
             <span class="close-modal-top" onclick="cerrarModalTrabajador()">&times;</span>
@@ -938,7 +855,7 @@
         </div>
     </div>
 
-    <!-- MODAL PARA REGISTRAR PAGO -->
+    <!-- MODAL NÓMINA -->
     <div class="modal-overlay" id="modal-nomina">
         <div class="modal-flotante" style="max-width:550px;">
             <span class="close-modal-top" onclick="cerrarModalNomina()">&times;</span>
@@ -963,7 +880,7 @@
         </div>
     </div>
 
-    <!-- MODAL PARA DETALLE GENÉRICO -->
+    <!-- MODAL DETALLE GENÉRICO -->
     <div class="modal-overlay" id="modal-detalle-generico">
         <div class="modal-flotante" style="max-width:600px;">
             <span class="close-modal-top" onclick="cerrarModalDetalleGenerico()">&times;</span>
@@ -972,7 +889,165 @@
         </div>
     </div>
 
-    <!-- MODALES EXISTENTES -->
+    <!-- MODAL EDITAR ABONO -->
+    <div class="modal-overlay" id="modal-editar-abono">
+        <div class="modal-flotante" style="max-width:550px;">
+            <span class="close-modal-top" onclick="cerrarModalEditarAbono(true)">&times;</span>
+            <h3 style="color:var(--info);">✏️ Editar Abono</h3>
+            <input type="hidden" id="edit-abono-id">
+            <input type="hidden" id="edit-abono-venta-id">
+            <div class="flex-form" style="grid-template-columns:1fr 1fr;">
+                <div class="campo"><label>Número de Recibo</label><input type="text" id="edit-abono-numero" placeholder="Ej: 045"></div>
+                <div class="campo"><label>Monto ($)</label><input type="text" id="edit-abono-monto" oninput="formatMoni(this)" placeholder="Monto"></div>
+                <div class="campo"><label>Medio de Pago</label>
+                    <select id="edit-abono-medio">
+                        <option value="Banco">Banco</option>
+                        <option value="Efectivo">Efectivo</option>
+                    </select>
+                </div>
+                <div class="campo"><label>Fecha</label><input type="date" id="edit-abono-fecha"></div>
+                <div class="campo" style="grid-column: span 2;"><label>Factura Asociada</label><input type="text" id="edit-abono-factura-asociada" placeholder="Nº de factura"></div>
+            </div>
+            <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
+                <button class="btn btn-verde" onclick="guardarEdicionAbono()" style="flex:1;">💾 Guardar Cambios</button>
+                <button class="btn btn-rojo" onclick="eliminarAbono()" style="flex:0.5;">🗑️ Eliminar</button>
+                <button class="btn btn-cerrar-modal" onclick="cerrarModalEditarAbono(true)" style="flex:0.5;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL COTIZACIÓN -->
+    <div class="modal-overlay" id="modal-cotizacion">
+        <div class="modal-flotante" style="max-width:750px;">
+            <span class="close-modal-top" onclick="cerrarModalCotizacionFlotante(true)">&times;</span>
+            <h3 id="lbl-modal-cotizacion-titulo">➕ Nueva Cotización</h3>
+            <input type="hidden" id="c-id-edicion" value="">
+            <div class="flex-form">
+                <div class="campo"><label>Nº Cotización</label><input type="text" id="c-numero" placeholder="Ej: 001"></div>
+                <div class="campo"><label>Cliente</label><input type="text" id="c-cliente" placeholder="Nombre completo"></div>
+                <div class="campo"><label>Teléfono / WhatsApp</label><input type="text" id="c-telefono" placeholder="Celular"></div>
+                <div class="campo"><label>Correo</label><input type="email" id="c-correo" placeholder="Correo"></div>
+                <div class="campo"><label>Dirección</label><input type="text" id="c-direccion" placeholder="Dirección"></div>
+                <div class="campo"><label>Fecha Cotización</label><input type="date" id="c-fecha"></div>
+                <div class="campo"><label>Válido hasta</label><input type="date" id="c-valido-hasta"></div>
+                <div class="campo"><label>Plazo Entrega</label><input type="text" id="c-plazo" placeholder="Ej: 15 días hábiles"></div>
+                <div class="campo"><label>Estado</label>
+                    <select id="c-estado">
+                        <option value="Pendiente">⏳ Pendiente</option>
+                        <option value="Aprobada">✅ Aprobada</option>
+                        <option value="Rechazada">❌ Rechazada</option>
+                        <option value="Vencida">⏰ Vencida</option>
+                    </select>
+                </div>
+                <div class="campo"><label>Notas (opcional)</label>
+                    <textarea id="c-notas" placeholder="Garantía, instalación incluida, etc." rows="2"></textarea>
+                </div>
+            </div>
+
+            <h4 style="margin: 0.5rem 0; color: var(--text-dark);">📦 Productos / Servicios</h4>
+            <div class="producto-row">
+                <div class="campo cantidad"><label>Cantidad</label><input type="number" id="prod-cantidad" value="1" min="1"></div>
+                <div class="campo detalle"><label>Detalle del Producto</label><input type="text" id="prod-detalle" placeholder="Ej: Cocina integral RH + mesón cuarzo"></div>
+                <div class="campo precio"><label>Precio Unitario ($)</label><input type="text" id="prod-precio" oninput="formatMoni(this)" placeholder="0"></div>
+                <button class="btn btn-verde" style="margin-bottom:4px; height:38px; align-self:flex-end;" onclick="agregarProductoCotizacion()">➕ Agregar</button>
+            </div>
+
+            <div style="margin: 0.5rem 0 1rem 0; overflow-x:auto;">
+                <table class="tabla-productos-cotizacion" id="tabla-productos-cotizacion-modal">
+                    <thead>
+                        <tr><th style="width:80px;">Cantidad</th><th>Detalle</th><th style="width:150px;">Precio Unit.</th><th style="width:150px;">Subtotal</th><th style="width:90px;">Acciones</th></tr>
+                    </thead>
+                    <tbody id="tbody-productos-cotizacion-modal">
+                        <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay productos agregados</td></tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="3" style="text-align:right;">TOTAL COTIZACIÓN:</td>
+                            <td id="total-productos-cotizacion-modal" style="color:var(--success); font-size:1.1rem;">$0</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
+                <button class="btn btn-verde" onclick="guardarCotizacionModal()" id="btn-guardar-cotizacion-modal" style="flex:1;">🚀 Guardar Cotización</button>
+                <button class="btn" style="background:#25D366; color:white;" onclick="enviarCotizacionWhatsAppModal()" id="btn-whatsapp-cotizacion-modal">💬 Enviar WhatsApp</button>
+                <button class="btn btn-cerrar-modal" onclick="cerrarModalCotizacionFlotante(true)" style="flex:0.5;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GASTO -->
+    <div class="modal-overlay" id="modal-gasto">
+        <div class="modal-flotante" style="max-width:750px;">
+            <span class="close-modal-top" onclick="cerrarModalGasto(true)">&times;</span>
+            <h3 id="lbl-modal-gasto-titulo">➕ Registrar Nuevo Gasto</h3>
+            <input type="hidden" id="g-id-edicion" value="">
+            <div class="flex-form">
+                <div class="campo">
+                    <label>Categoría</label>
+                    <select id="g-cat" onchange="verificarCategoriaManualModal(this)">
+                        <option value="Servicios Publicos">💡 Servicios Públicos</option>
+                        <option value="Arriendo Taller">🏠 Arriendo</option>
+                        <option value="Compra Materiales">🪵 Materiales</option>
+                        <option value="Compra Colchones">🛏️ Colchones</option>
+                        <option value="Papeleria">📋 Papelería</option>
+                        <option value="Mantenimiento">🔧 Mantenimiento</option>
+                        <option value="MANUAL">✍️ Otra</option>
+                    </select>
+                </div>
+                <div class="campo" id="box-cat-manual-modal" style="display:none;"><label>Escribe categoría</label><input type="text" id="g-cat-manual"></div>
+                <div class="campo"><label>Producto / Concepto</label><input type="text" id="g-concepto" placeholder="Ej: Madera MDF"></div>
+                <div class="campo"><label>Cantidad</label><input type="number" id="g-cantidad" value="1" min="1"></div>
+                <div class="campo"><label>Detalle / Especificación</label><input type="text" id="g-detalle" placeholder="Ej: 2.4m x 1.2m x 18mm"></div>
+                <div class="campo"><label>Medio</label>
+                    <select id="g-medio">
+                        <option value="Banco">Banco</option>
+                        <option value="Efectivo">Efectivo</option>
+                    </select>
+                </div>
+                <div class="campo"><label>Monto ($)</label><input type="text" id="g-monto" oninput="formatMoni(this)"></div>
+                <div class="campo"><label>Fecha del Gasto</label><input type="date" id="g-fecha"></div>
+            </div>
+            <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
+                <button class="btn btn-verde" onclick="guardarGastoModal()" id="btn-guardar-gasto-modal" style="flex:1;">Guardar Gasto</button>
+                <button class="btn btn-cerrar-modal" onclick="cerrarModalGasto(true)" style="flex:0.5;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR DESPACHO -->
+    <div class="modal-overlay" id="modal-editar-despacho">
+        <div class="modal-flotante" style="max-width:450px;">
+            <span class="close-modal-top" onclick="cerrarModalEditarDespacho()">&times;</span>
+            <h3 style="color:var(--accent);">✏️ Editar Despacho</h3>
+            <input type="hidden" id="editar-despacho-venta-id">
+            <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.5rem;">
+                <div class="campo"><label>Estado de Entrega</label>
+                    <select id="editar-despacho-estado">
+                        <option value="Pendiente">⏳ Pendiente</option>
+                        <option value="En Camino">🚛 En Camino</option>
+                        <option value="Entregado">✅ Entregado</option>
+                    </select>
+                </div>
+                <div class="campo"><label>Placa del Vehículo</label><input type="text" id="editar-despacho-placa" placeholder="Ej: ABC-123"></div>
+                <div class="campo"><label>Nombre del Conductor</label><input type="text" id="editar-despacho-conductor" placeholder="Nombre completo"></div>
+                <div class="campo"><label>Teléfono del Conductor</label><input type="text" id="editar-despacho-telefono" placeholder="Celular"></div>
+                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                    <button class="btn btn-verde" onclick="guardarEdicionDespachoModal()" style="flex:1;">💾 Guardar Cambios</button>
+                    <button class="btn btn-cerrar-modal" onclick="cerrarModalEditarDespacho()" style="flex:0.5;">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ÁREA DE IMPRESIÓN (oculta) -->
+    <div id="print-area" style="display: none; background: white; padding: 2rem; max-width: 800px; margin: 0 auto; font-family: 'Inter', sans-serif;">
+        <div id="print-content"></div>
+    </div>
+
+    <!-- MODALES ANTIGUOS (mantenidos por compatibilidad) -->
     <div id="modal-detalle-cliente" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close-modal" onclick="cerrarModalDetalle()">&times;</span>
@@ -1014,56 +1089,7 @@
                 <div class="campo"><label>Teléfono del Conductor</label><input type="text" id="despacho-telefono" placeholder="Celular"></div>
                 <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
                     <button class="btn btn-verde" onclick="confirmarDespacho()" style="flex:1;">✅ Confirmar Despacho</button>
-                    <button class="btn" style="background:#64748b;" onclick="cerrarModalDespacho()">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-editar-despacho" class="modal" style="display:none;">
-        <div class="modal-content" style="max-width:450px;">
-            <span class="close-modal" onclick="cerrarModalEditarDespacho()">&times;</span>
-            <h3 style="color:var(--accent);">✏️ Editar Despacho</h3>
-            <input type="hidden" id="editar-despacho-venta-id">
-            <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.5rem;">
-                <div class="campo"><label>Estado de Entrega</label>
-                    <select id="editar-despacho-estado">
-                        <option value="Pendiente">⏳ Pendiente</option>
-                        <option value="En Camino">🚛 En Camino</option>
-                        <option value="Entregado">✅ Entregado</option>
-                    </select>
-                </div>
-                <div class="campo"><label>Placa del Vehículo</label><input type="text" id="editar-despacho-placa" placeholder="Ej: ABC-123"></div>
-                <div class="campo"><label>Nombre del Conductor</label><input type="text" id="editar-despacho-conductor" placeholder="Nombre completo"></div>
-                <div class="campo"><label>Teléfono del Conductor</label><input type="text" id="editar-despacho-telefono" placeholder="Celular"></div>
-                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-                    <button class="btn btn-verde" onclick="guardarEdicionDespacho()" style="flex:1;">💾 Guardar Cambios</button>
-                    <button class="btn" style="background:#64748b;" onclick="cerrarModalEditarDespacho()">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-editar-abono" class="modal" style="display:none;">
-        <div class="modal-content abono-editar">
-            <span class="close-modal" onclick="cerrarModalEditarAbono()">&times;</span>
-            <h3 style="color:var(--info);">✏️ Editar Abono</h3>
-            <input type="hidden" id="edit-abono-id">
-            <input type="hidden" id="edit-abono-venta-id">
-            <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.5rem;">
-                <div class="campo"><label>Número de Recibo</label><input type="text" id="edit-abono-numero" placeholder="Ej: 045"></div>
-                <div class="campo"><label>Monto ($)</label><input type="text" id="edit-abono-monto" oninput="formatMoni(this)" placeholder="Monto"></div>
-                <div class="campo"><label>Medio de Pago</label>
-                    <select id="edit-abono-medio">
-                        <option value="Banco">Banco</option>
-                        <option value="Efectivo">Efectivo</option>
-                    </select>
-                </div>
-                <div class="campo"><label>Fecha</label><input type="date" id="edit-abono-fecha"></div>
-                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-                    <button class="btn btn-verde" onclick="guardarEdicionAbono()" style="flex:1;">💾 Guardar Cambios</button>
-                    <button class="btn btn-rojo" onclick="eliminarAbono()" style="flex:0.5;">🗑️ Eliminar</button>
-                    <button class="btn" style="background:#64748b;" onclick="cerrarModalEditarAbono()">Cancelar</button>
+                    <button class="btn btn-cerrar-modal" onclick="cerrarModalDespacho()">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -1089,10 +1115,12 @@
         const firebaseDb = getDatabase(app);
         const carmencitaRef = ref(firebaseDb, 'carmencita_data');
 
-        let db = { trabajadores: [], ventas: [], ingresosDirectos: [], gastos: [], nomina: [], cajaMenor: [], cotizaciones: [] };
+        let db = { trabajadores: [], ventas: [], ingresosDirectos: [], gastos: [], nomina: [], cajaMenor: [], cotizaciones: [], config: {} };
         window.moduloActual = 'dashboard';
         window.productosTemp = [];
         window.productosVenta = [];
+        window.productosCotizacion = [];
+        window.alertasMostradas = {};
 
         onValue(carmencitaRef, (snapshot) => {
             const data = snapshot.val();
@@ -1104,12 +1132,14 @@
                     gastos: data.gastos || [],
                     nomina: data.nomina || [],
                     cajaMenor: data.cajaMenor || [],
-                    cotizaciones: data.cotizaciones || []
+                    cotizaciones: data.cotizaciones || [],
+                    config: data.config || {}
                 };
             }
             document.getElementById('sync-dot').classList.add('online');
             document.getElementById('sync-txt').innerText = "Nube Conectada";
             window.render();
+            cargarConfiguracion();
         });
 
         window.salvar = function() {
@@ -1127,6 +1157,12 @@
         window.addEventListener('DOMContentLoaded', () => {
             establecerRangoMesActual();
             render();
+            setupModalCierre();
+            cargarConfiguracion();
+            // Re-evaluar alertas cada hora
+            setInterval(() => {
+                render();
+            }, 3600000);
         });
     </script>
 
@@ -1170,6 +1206,10 @@
             document.getElementById('box-cat-manual').style.display = select.value === 'MANUAL' ? 'flex' : 'none';
         }
 
+        function verificarCategoriaManualModal(select) {
+            document.getElementById('box-cat-manual-modal').style.display = select.value === 'MANUAL' ? 'flex' : 'none';
+        }
+
         function alternarVisibilidadMetodoPagoDividido(valor) {
             const abonoDiv = document.getElementById('box-v-abono');
             const bancoDiv = document.getElementById('box-v-abono-banco');
@@ -1186,19 +1226,6 @@
             }
         }
 
-        function alternarVisibilidadAbonoDividido(valor) {
-            const bancoDiv = document.getElementById('box-abono-banco');
-            const efectivoDiv = document.getElementById('box-abono-efectivo');
-            
-            if (valor === 'DIVIDIDO') {
-                bancoDiv.style.display = 'flex';
-                efectivoDiv.style.display = 'flex';
-            } else {
-                bancoDiv.style.display = 'none';
-                efectivoDiv.style.display = 'none';
-            }
-        }
-
         function calcularDiasHabilesPorDefecto(fechaInicialStr) {
             if(!fechaInicialStr) return '';
             let fecha = new Date(fechaInicialStr + 'T12:00:00');
@@ -1208,6 +1235,124 @@
                 if (fecha.getDay() !== 0 && fecha.getDay() !== 6) diasSuma++;
             }
             return fecha.toISOString().split('T')[0];
+        }
+
+        // ===== CONFIGURACIÓN =====
+        function cargarConfiguracion() {
+            let db = window.getDbData();
+            if (db.config) {
+                document.getElementById('emp-razon').value = db.config.razonSocial || '';
+                document.getElementById('emp-nit').value = db.config.nit || '';
+                document.getElementById('emp-direccion').value = db.config.direccion || '';
+                document.getElementById('emp-telefono').value = db.config.telefono || '';
+                document.getElementById('emp-correo').value = db.config.correo || '';
+                document.getElementById('emp-consecutivo-factura').value = db.config.consecutivoFactura || 1;
+                document.getElementById('emp-consecutivo-abono').value = db.config.consecutivoAbono || 1;
+            }
+        }
+
+        function guardarConfiguracion() {
+            let db = window.getDbData();
+            db.config = {
+                razonSocial: document.getElementById('emp-razon').value.trim(),
+                nit: document.getElementById('emp-nit').value.trim(),
+                direccion: document.getElementById('emp-direccion').value.trim(),
+                telefono: document.getElementById('emp-telefono').value.trim(),
+                correo: document.getElementById('emp-correo').value.trim(),
+                consecutivoFactura: parseInt(document.getElementById('emp-consecutivo-factura').value) || 1,
+                consecutivoAbono: parseInt(document.getElementById('emp-consecutivo-abono').value) || 1
+            };
+            salvar();
+            alert('✅ Configuración guardada correctamente.');
+        }
+
+        function obtenerConsecutivo(tipo) {
+            let db = window.getDbData();
+            if (!db.config) db.config = {};
+            let key = tipo === 'factura' ? 'consecutivoFactura' : 'consecutivoAbono';
+            let valor = db.config[key] || 1;
+            let padded = String(valor).padStart(4, '0');
+            db.config[key] = valor + 1;
+            return padded;
+        }
+
+        // ===== CIERRE DE MODALES CON ESC Y CLIC FUERA =====
+        let modalDataBackup = {};
+
+        function guardarBackupModal(id) {
+            const modal = document.getElementById(id);
+            if (!modal) return;
+            const inputs = modal.querySelectorAll('input, select, textarea');
+            modalDataBackup[id] = {};
+            inputs.forEach(inp => {
+                modalDataBackup[id][inp.id] = inp.value;
+            });
+        }
+
+        function restaurarBackupModal(id) {
+            const modal = document.getElementById(id);
+            if (!modal || !modalDataBackup[id]) return;
+            const inputs = modal.querySelectorAll('input, select, textarea');
+            inputs.forEach(inp => {
+                if (modalDataBackup[id][inp.id] !== undefined) {
+                    inp.value = modalDataBackup[id][inp.id];
+                }
+            });
+        }
+
+        function limpiarBackupModal(id) {
+            delete modalDataBackup[id];
+        }
+
+        function setupModalCierre() {
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const modalesActivos = document.querySelectorAll('.modal-overlay.activo');
+                    modalesActivos.forEach(modal => {
+                        const id = modal.id;
+                        guardarBackupModal(id);
+                        modal.classList.remove('activo');
+                    });
+                    const modalesAntiguos = document.querySelectorAll('.modal[style*="display: flex"]');
+                    modalesAntiguos.forEach(modal => {
+                        modal.style.display = 'none';
+                    });
+                }
+            });
+
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        const id = this.id;
+                        guardarBackupModal(id);
+                        this.classList.remove('activo');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // ===== FUNCIONES PARA ALERTAS CON X =====
+        function cerrarAlerta(element) {
+            const alertItem = element.closest('.alert-item');
+            if (alertItem) {
+                alertItem.classList.add('alert-dismissed');
+                // Guardar en localStorage para no mostrar de nuevo hasta que se recargue la página o pase 1 hora
+                const alertId = alertItem.dataset.alertId || 'alert_' + Date.now();
+                localStorage.setItem('alert_dismissed_' + alertId, 'true');
+            }
+        }
+
+        function generarIdAlerta(texto) {
+            // Generar un ID único basado en el texto de la alerta
+            return 'alert_' + texto.replace(/\s+/g, '_').substring(0, 50) + '_' + Date.now();
         }
 
         // ===== MODAL DETALLE GENÉRICO =====
@@ -1223,22 +1368,27 @@
 
         // ===== MODAL TRABAJADOR =====
         function abrirModalTrabajador() {
-            document.getElementById('modal-trabajador').classList.add('activo');
-            document.getElementById('t-id-edicion').value = '';
-            document.getElementById('t-nombre').value = '';
-            document.getElementById('t-cedula').value = '';
-            document.getElementById('t-telefono').value = '';
-            document.getElementById('t-direccion').value = '';
-            document.getElementById('t-correo').value = '';
-            document.getElementById('t-cargo').value = '';
-            document.getElementById('t-cumpleanos').value = '';
-            document.getElementById('lbl-modal-trabajador-titulo').innerText = '➕ Nuevo Trabajador';
-            document.getElementById('btn-guardar-trabajador-modal').innerText = '💾 Guardar';
+            const modal = document.getElementById('modal-trabajador');
+            restaurarBackupModal('modal-trabajador');
+            modal.classList.add('activo');
+            if (!document.getElementById('t-id-edicion').value) {
+                document.getElementById('t-nombre').value = '';
+                document.getElementById('t-cedula').value = '';
+                document.getElementById('t-telefono').value = '';
+                document.getElementById('t-direccion').value = '';
+                document.getElementById('t-correo').value = '';
+                document.getElementById('t-cargo').value = '';
+                document.getElementById('t-cumpleanos').value = '';
+                document.getElementById('lbl-modal-trabajador-titulo').innerText = '➕ Nuevo Trabajador';
+                document.getElementById('btn-guardar-trabajador-modal').innerText = '💾 Guardar';
+            }
+            guardarBackupModal('modal-trabajador');
             setTimeout(() => { document.getElementById('t-nombre').focus(); }, 300);
         }
 
-        function cerrarModalTrabajador() {
+        function cerrarModalTrabajador(borrarDatos = false) {
             document.getElementById('modal-trabajador').classList.remove('activo');
+            if (borrarDatos) limpiarBackupModal('modal-trabajador');
         }
 
         function guardarTrabajadorModal() {
@@ -1273,7 +1423,7 @@
                     cumpleanos 
                 });
             }
-            cerrarModalTrabajador();
+            cerrarModalTrabajador(true);
             const nSelect = document.getElementById('n-select-trabajador');
             if (nSelect) {
                 nSelect.innerHTML = '';
@@ -1298,6 +1448,7 @@
             document.getElementById('t-cumpleanos').value = t.cumpleanos || '';
             document.getElementById('lbl-modal-trabajador-titulo').innerText = '✏️ Editar Trabajador';
             document.getElementById('btn-guardar-trabajador-modal').innerText = '💾 Guardar Cambios';
+            guardarBackupModal('modal-trabajador');
         }
 
         function eliminarTrabajador(id) {
@@ -1308,21 +1459,26 @@
             }
         }
 
-        // ===== MODAL NÓMINA (PAGO) =====
+        // ===== MODAL NÓMINA =====
         function abrirModalNomina() {
-            document.getElementById('modal-nomina').classList.add('activo');
-            document.getElementById('n-id-edicion').value = '';
-            document.getElementById('n-detalle').value = '';
-            document.getElementById('n-monto').value = '';
-            document.getElementById('n-origen').value = 'Banco';
-            document.getElementById('n-fecha').value = new Date().toISOString().split('T')[0];
-            document.getElementById('lbl-modal-nomina-titulo').innerText = '💰 Registrar Pago';
-            document.getElementById('btn-guardar-nomina-modal').innerText = '💰 Guardar Pago';
+            const modal = document.getElementById('modal-nomina');
+            restaurarBackupModal('modal-nomina');
+            modal.classList.add('activo');
+            if (!document.getElementById('n-id-edicion').value) {
+                document.getElementById('n-detalle').value = '';
+                document.getElementById('n-monto').value = '';
+                document.getElementById('n-origen').value = 'Banco';
+                document.getElementById('n-fecha').value = new Date().toISOString().split('T')[0];
+                document.getElementById('lbl-modal-nomina-titulo').innerText = '💰 Registrar Pago';
+                document.getElementById('btn-guardar-nomina-modal').innerText = '💰 Guardar Pago';
+            }
+            guardarBackupModal('modal-nomina');
             setTimeout(() => { document.getElementById('n-detalle').focus(); }, 300);
         }
 
-        function cerrarModalNomina() {
+        function cerrarModalNomina(borrarDatos = false) {
             document.getElementById('modal-nomina').classList.remove('activo');
+            if (borrarDatos) limpiarBackupModal('modal-nomina');
         }
 
         function guardarNominaModal() {
@@ -1357,7 +1513,7 @@
                     monto 
                 });
             }
-            cerrarModalNomina();
+            cerrarModalNomina(true);
             salvar();
         }
 
@@ -1375,6 +1531,7 @@
             document.getElementById('n-fecha').value = n.fecha || new Date().toISOString().split('T')[0];
             document.getElementById('lbl-modal-nomina-titulo').innerText = '✏️ Editar Pago';
             document.getElementById('btn-guardar-nomina-modal').innerText = '💾 Guardar Cambios';
+            guardarBackupModal('modal-nomina');
         }
 
         function eliminarNomina(id) { 
@@ -1385,7 +1542,170 @@
             } 
         }
 
-        // ===== FUNCIONES DETALLE POR TIPO =====
+        // ===== MODAL ABONO DIRECTO =====
+        function abrirModalAbonoDirectoDesdeVentas() {
+            if (window.moduloActual !== 'ventas') {
+                irA('ventas');
+                setTimeout(() => {
+                    abrirModalAbonoDirectoDesdeVentas();
+                }, 300);
+                return;
+            }
+            abrirModalAbonoDirecto();
+        }
+
+        function abrirModalAbonoDirecto(facturaPrecargada = '', clientePrecargado = '') {
+            const modal = document.getElementById('modal-abono-directo');
+            restaurarBackupModal('modal-abono-directo');
+            modal.classList.add('activo');
+            if (!document.getElementById('abono-directo-id').value) {
+                document.getElementById('abono-directo-numero').value = '';
+                document.getElementById('abono-directo-monto').value = '';
+                document.getElementById('abono-directo-medio').value = 'Banco';
+                document.getElementById('abono-directo-fecha').value = new Date().toISOString().split('T')[0];
+                document.getElementById('abono-directo-cliente').value = clientePrecargado || '';
+                document.getElementById('abono-directo-factura').value = facturaPrecargada || '';
+                document.getElementById('abono-directo-factura-precargada').value = facturaPrecargada || '';
+                document.getElementById('lbl-modal-abono-directo-titulo').innerText = '💰 Nuevo Abono Directo';
+                document.getElementById('btn-guardar-abono-directo').innerText = '💰 Guardar Abono';
+            }
+            guardarBackupModal('modal-abono-directo');
+            setTimeout(() => {
+                document.getElementById('abono-directo-numero').focus();
+            }, 300);
+        }
+
+        function cerrarModalAbonoDirecto(borrarDatos = false) {
+            document.getElementById('modal-abono-directo').classList.remove('activo');
+            if (borrarDatos) {
+                limpiarBackupModal('modal-abono-directo');
+                document.getElementById('abono-directo-factura-precargada').value = '';
+            }
+        }
+
+        function guardarAbonoDirecto() {
+            let db = window.getDbData();
+            let idEdicion = document.getElementById('abono-directo-id').value;
+            let numero = document.getElementById('abono-directo-numero').value.trim();
+            let monto = cleanNum(document.getElementById('abono-directo-monto').value);
+            let medio = document.getElementById('abono-directo-medio').value;
+            let fecha = document.getElementById('abono-directo-fecha').value || new Date().toISOString().split('T')[0];
+            let cliente = document.getElementById('abono-directo-cliente').value.trim() || 'Cliente sin registrar';
+            let factura = document.getElementById('abono-directo-factura').value.trim() || 'S/N';
+
+            if (!numero) return alert('Ingresa el número de recibo de abono.');
+            if (monto <= 0) return alert('Ingresa un monto válido.');
+
+            if (idEdicion && idEdicion !== "") {
+                let ingreso = db.ingresosDirectos.find(x => x.id === idEdicion);
+                if (ingreso) {
+                    let nuevoOrigen = `Abono Directo (Factura #${factura}) - ${cliente} [Recibo #${numero}]`;
+                    ingreso.fecha = fecha;
+                    ingreso.origen = nuevoOrigen;
+                    ingreso.medio = medio;
+                    ingreso.monto = monto;
+                }
+            } else {
+                db.ingresosDirectos.push({
+                    id: 'i_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                    fecha: fecha,
+                    origen: `Abono Directo (Factura #${factura}) - ${cliente} [Recibo #${numero}]`,
+                    medio: medio,
+                    monto: monto
+                });
+            }
+
+            cerrarModalAbonoDirecto(true);
+            salvar();
+            alert(`💰 Abono guardado correctamente.\n📄 Recibo #${numero}\n💰 ${m(monto)}`);
+        }
+
+        function iniciarEdicionAbonoDirecto(id) {
+            let db = window.getDbData();
+            let ingreso = db.ingresosDirectos.find(x => x.id === id);
+            if (!ingreso) return alert('Abono no encontrado.');
+            
+            let cliente = 'Cliente sin registrar';
+            let factura = 'S/N';
+            let numeroRecibo = '';
+            
+            let reciboMatch = ingreso.origen.match(/\[Recibo #([^\]]+)\]/);
+            if (reciboMatch) numeroRecibo = reciboMatch[1];
+            
+            let clienteMatch = ingreso.origen.match(/-\s*([^\[]+)/);
+            if (clienteMatch) cliente = clienteMatch[1].trim();
+            
+            let facturaMatch = ingreso.origen.match(/Factura #([^\s)]+)/);
+            if (facturaMatch) factura = facturaMatch[1];
+
+            abrirModalAbonoDirecto(factura, cliente);
+            document.getElementById('abono-directo-id').value = id;
+            document.getElementById('abono-directo-numero').value = numeroRecibo || '';
+            document.getElementById('abono-directo-monto').value = ingreso.monto ? ingreso.monto.toLocaleString('es-CO') : '';
+            document.getElementById('abono-directo-medio').value = ingreso.medio || 'Banco';
+            document.getElementById('abono-directo-fecha').value = ingreso.fecha || new Date().toISOString().split('T')[0];
+            document.getElementById('lbl-modal-abono-directo-titulo').innerText = '✏️ Editar Abono Directo';
+            document.getElementById('btn-guardar-abono-directo').innerText = '💾 Guardar Cambios';
+            guardarBackupModal('modal-abono-directo');
+        }
+
+        // ===== ALERTAS DE CUMPLEAÑOS (CORREGIDAS) =====
+        function evaluarAlertasCumpleanos(trabajadores) {
+            const pAlertas = document.getElementById('panel-alertas-automaticas');
+            if (!trabajadores || trabajadores.length === 0) return;
+            
+            let hoy = new Date();
+            let hoyStr = hoy.toISOString().split('T')[0];
+            let manana = new Date();
+            manana.setDate(manana.getDate() + 1);
+            let mananaStr = manana.toISOString().split('T')[0];
+            let pasadoManana = new Date();
+            pasadoManana.setDate(pasadoManana.getDate() + 2);
+            let pasadoMananaStr = pasadoManana.toISOString().split('T')[0];
+
+            trabajadores.forEach(t => {
+                if (!t.cumpleanos) return;
+                let cumple = new Date(t.cumpleanos);
+                let mes = cumple.getMonth() + 1;
+                let dia = cumple.getDate();
+                
+                let cumpleEsteAnio = new Date(hoy.getFullYear(), mes - 1, dia);
+                let cumpleStr = cumpleEsteAnio.toISOString().split('T')[0];
+                
+                let cumpleManana = new Date(hoy.getFullYear(), mes - 1, dia);
+                cumpleManana.setDate(cumpleManana.getDate() - 1);
+                let cumpleMananaStr = cumpleManana.toISOString().split('T')[0];
+                
+                let cumplePasadoManana = new Date(hoy.getFullYear(), mes - 1, dia);
+                cumplePasadoManana.setDate(cumplePasadoManana.getDate() - 2);
+                let cumplePasadoMananaStr = cumplePasadoManana.toISOString().split('T')[0];
+
+                let alertId = 'cumple_' + t.id + '_' + cumpleStr;
+                
+                if (cumpleStr === hoyStr) {
+                    // Verificar si ya fue descartada
+                    if (localStorage.getItem('alert_dismissed_' + alertId)) return;
+                    pAlertas.innerHTML += `<div class="alert-item alert-cumple" data-alert-id="${alertId}">
+                        🎂 <strong>¡FELIZ CUMPLEAÑOS!</strong> Hoy es el cumpleaños de <strong>${t.nombre}</strong> 🎉
+                        <button class="alert-close" onclick="cerrarAlerta(this)">✕</button>
+                    </div>`;
+                } else if (cumpleMananaStr === hoyStr) {
+                    if (localStorage.getItem('alert_dismissed_' + alertId)) return;
+                    pAlertas.innerHTML += `<div class="alert-item alert-manana" data-alert-id="${alertId}">
+                        🎂 <strong>¡MAÑANA ES EL CUMPLEAÑOS!</strong> De <strong>${t.nombre}</strong> 🎈
+                        <button class="alert-close" onclick="cerrarAlerta(this)">✕</button>
+                    </div>`;
+                } else if (cumplePasadoMananaStr === hoyStr) {
+                    if (localStorage.getItem('alert_dismissed_' + alertId)) return;
+                    pAlertas.innerHTML += `<div class="alert-item alert-manana" data-alert-id="${alertId}">
+                        🎂 <strong>¡PASADO MAÑANA ES EL CUMPLEAÑOS!</strong> De <strong>${t.nombre}</strong> 🎁
+                        <button class="alert-close" onclick="cerrarAlerta(this)">✕</button>
+                    </div>`;
+                }
+            });
+        }
+
+        // ===== FUNCIONES DE DETALLE =====
         function verDetalleIngreso(id) {
             let db = window.getDbData();
             let i = db.ingresosDirectos.find(x => x.id === id);
@@ -1527,7 +1847,8 @@
             let productosHtml = c.productosArray && c.productosArray.length > 0 
                 ? c.productosArray.map(p => `• ${p.cantidad}x ${p.detalle} - ${m(p.precio)} c/u = ${m(p.cantidad * p.precio)}`).join('<br>')
                 : c.productos || 'No especificados';
-            let contenido = `
+
+            let h = `
                 <p><strong>Nº Cotización:</strong> ${c.numero || 'S/N'}</p>
                 <p><strong>Fecha:</strong> ${c.fecha || 'No especificada'}</p>
                 <p><strong>Cliente:</strong> ${c.cliente}</p>
@@ -1540,11 +1861,15 @@
                 <p><strong>💰 Total:</strong> <span style="color:var(--success); font-weight:700;">${m(c.total)}</span></p>
                 <p><strong>📦 Plazo:</strong> ${c.plazo || 'No especificado'}</p>
                 <p><strong>📅 Válido hasta:</strong> ${c.validoHasta || 'No especificado'}</p>
-                <p><strong>📊 Estado:</strong> ${estadoEmoji[c.estado] || c.estado}</p>
+                <p><strong>📊 Estado:</strong> <span class="badge badge-cotizacion">${estadoEmoji[c.estado] || c.estado}</span></p>
                 ${c.notas ? `<p><strong>📝 Notas:</strong> ${c.notas}</p>` : ''}
             `;
-            abrirModalDetalle('📋 Detalle de la Cotización', contenido);
+            document.getElementById('contenido-modal-cotizacion').innerHTML = h;
+            document.getElementById('modal-ver-cotizacion').style.display = 'flex';
         }
+
+        function cerrarModalCotizacion() { document.getElementById('modal-ver-cotizacion').style.display = 'none'; }
+        function cerrarModalDetalle() { document.getElementById('modal-detalle-cliente').style.display = 'none'; }
 
         function verDetalleGasto(id) {
             let db = window.getDbData();
@@ -1578,53 +1903,48 @@
             abrirModalDetalle('🪙 Detalle de Caja Menor', contenido);
         }
 
-        // ===== FUNCIONES COTIZACIONES =====
-        function toggleFormularioCotizacion() {
-            const container = document.getElementById('formulario-cotizacion-container');
-            const btn = document.getElementById('btn-toggle-cotizacion');
-            if (container.style.display === 'none') {
-                container.style.display = 'block';
-                btn.innerText = '❌ Cerrar';
-                btn.style.background = '#dc2626';
+        // ===== FUNCIONES COTIZACIONES (MODAL) =====
+        function abrirModalCotizacion() {
+            const modal = document.getElementById('modal-cotizacion');
+            restaurarBackupModal('modal-cotizacion');
+            modal.classList.add('activo');
+            if (!document.getElementById('c-id-edicion').value) {
+                document.getElementById('c-numero').value = '';
+                document.getElementById('c-cliente').value = '';
+                document.getElementById('c-telefono').value = '';
+                document.getElementById('c-correo').value = '';
+                document.getElementById('c-direccion').value = '';
+                document.getElementById('c-plazo').value = '';
                 document.getElementById('c-fecha').value = new Date().toISOString().split('T')[0];
                 let fechaValida = new Date();
                 fechaValida.setDate(fechaValida.getDate() + 15);
                 document.getElementById('c-valido-hasta').value = fechaValida.toISOString().split('T')[0];
-                window.productosTemp = [];
-                actualizarTablaProductosTemp();
-            } else {
-                container.style.display = 'none';
-                btn.innerText = '➕ Nueva Cotización';
-                btn.style.background = '#0284c7';
-                cancelarEdicionCotizacion();
-                window.productosTemp = [];
-                actualizarTablaProductosTemp();
+                document.getElementById('c-estado').value = 'Pendiente';
+                document.getElementById('c-notas').value = '';
+                document.getElementById('prod-detalle').value = '';
+                document.getElementById('prod-precio').value = '';
+                document.getElementById('prod-cantidad').value = 1;
+                window.productosCotizacion = [];
+                actualizarTablaProductosCotizacion();
+                document.getElementById('lbl-modal-cotizacion-titulo').innerText = '➕ Nueva Cotización';
+                document.getElementById('btn-guardar-cotizacion-modal').innerText = '🚀 Guardar Cotización';
+            }
+            guardarBackupModal('modal-cotizacion');
+            setTimeout(() => {
+                document.getElementById('c-numero').focus();
+            }, 300);
+        }
+
+        function cerrarModalCotizacionFlotante(borrarDatos = false) {
+            document.getElementById('modal-cotizacion').classList.remove('activo');
+            if (borrarDatos) {
+                limpiarBackupModal('modal-cotizacion');
+                window.productosCotizacion = [];
+                actualizarTablaProductosCotizacion();
             }
         }
 
-        function cancelarEdicionCotizacion() {
-            document.getElementById('c-id-edicion').value = '';
-            document.getElementById('c-numero').value = '';
-            document.getElementById('c-cliente').value = '';
-            document.getElementById('c-telefono').value = '';
-            document.getElementById('c-correo').value = '';
-            document.getElementById('c-direccion').value = '';
-            document.getElementById('c-plazo').value = '';
-            document.getElementById('c-fecha').value = '';
-            document.getElementById('c-valido-hasta').value = '';
-            document.getElementById('c-estado').value = 'Pendiente';
-            document.getElementById('c-notas').value = '';
-            document.getElementById('prod-detalle').value = '';
-            document.getElementById('prod-precio').value = '';
-            document.getElementById('prod-cantidad').value = 1;
-            window.productosTemp = [];
-            actualizarTablaProductosTemp();
-            document.getElementById('lbl-formulario-cotizacion-modo').innerText = '➕ Nueva Cotización';
-            document.getElementById('btn-guardar-cotizacion-accion').innerText = '🚀 Guardar Cotización';
-            document.getElementById('btn-cancelar-edicion-cotizacion').style.display = 'none';
-        }
-
-        function agregarProducto() {
+        function agregarProductoCotizacion() {
             let detalle = document.getElementById('prod-detalle').value.trim();
             let precio = cleanNum(document.getElementById('prod-precio').value);
             let cantidad = parseInt(document.getElementById('prod-cantidad').value) || 1;
@@ -1632,20 +1952,20 @@
             if (!detalle) return alert('Por favor ingresa el detalle del producto.');
             if (precio <= 0) return alert('Por favor ingresa un precio válido.');
 
-            window.productosTemp.push({ cantidad, detalle, precio });
+            window.productosCotizacion.push({ cantidad, detalle, precio });
             document.getElementById('prod-detalle').value = '';
             document.getElementById('prod-precio').value = '';
             document.getElementById('prod-cantidad').value = 1;
-            actualizarTablaProductosTemp();
+            actualizarTablaProductosCotizacion();
         }
 
-        function eliminarProductoTemp(index) {
-            window.productosTemp.splice(index, 1);
-            actualizarTablaProductosTemp();
+        function eliminarProductoCotizacion(index) {
+            window.productosCotizacion.splice(index, 1);
+            actualizarTablaProductosCotizacion();
         }
 
-        function editarProductoTemp(index) {
-            let producto = window.productosTemp[index];
+        function editarProductoCotizacion(index) {
+            let producto = window.productosCotizacion[index];
             if (!producto) return;
 
             document.getElementById('edit-producto-index').value = index;
@@ -1655,34 +1975,11 @@
             document.getElementById('modal-editar-producto').style.display = 'flex';
         }
 
-        function cerrarModalEditarProducto() {
-            document.getElementById('modal-editar-producto').style.display = 'none';
-            document.getElementById('edit-producto-index').value = '';
-        }
-
-        function guardarEdicionProducto() {
-            let index = parseInt(document.getElementById('edit-producto-index').value);
-            if (isNaN(index) || index < 0 || index >= window.productosTemp.length) {
-                return alert('Error: producto no encontrado.');
-            }
-
-            let cantidad = parseInt(document.getElementById('edit-producto-cantidad').value) || 1;
-            let detalle = document.getElementById('edit-producto-detalle').value.trim();
-            let precio = cleanNum(document.getElementById('edit-producto-precio').value);
-
-            if (!detalle) return alert('Por favor ingresa el detalle del producto.');
-            if (precio <= 0) return alert('Por favor ingresa un precio válido.');
-
-            window.productosTemp[index] = { cantidad, detalle, precio };
-            cerrarModalEditarProducto();
-            actualizarTablaProductosTemp();
-        }
-
-        function actualizarTablaProductosTemp() {
-            const tbody = document.getElementById('tbody-productos-temp');
-            const totalSpan = document.getElementById('total-productos-temp');
+        function actualizarTablaProductosCotizacion() {
+            const tbody = document.getElementById('tbody-productos-cotizacion-modal');
+            const totalSpan = document.getElementById('total-productos-cotizacion-modal');
             
-            if (window.productosTemp.length === 0) {
+            if (window.productosCotizacion.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay productos agregados</td></tr>';
                 totalSpan.textContent = '$0';
                 return;
@@ -1690,7 +1987,7 @@
 
             let html = '';
             let total = 0;
-            window.productosTemp.forEach((p, i) => {
+            window.productosCotizacion.forEach((p, i) => {
                 let subtotal = p.cantidad * p.precio;
                 total += subtotal;
                 html += `<tr>
@@ -1699,8 +1996,8 @@
                     <td>${m(p.precio)}</td>
                     <td>${m(subtotal)}</td>
                     <td>
-                        <button class="btn-accion btn-editar" onclick="editarProductoTemp(${i})" style="padding:2px 6px;">✏️</button>
-                        <button class="btn-accion btn-eliminar" onclick="eliminarProductoTemp(${i})" style="padding:2px 6px;">x</button>
+                        <button class="btn-accion btn-editar" onclick="editarProductoCotizacion(${i})" style="padding:2px 6px;">✏️</button>
+                        <button class="btn-accion btn-eliminar" onclick="eliminarProductoCotizacion(${i})" style="padding:2px 6px;">x</button>
                     </td>
                 </tr>`;
             });
@@ -1708,7 +2005,7 @@
             totalSpan.textContent = m(total);
         }
 
-        function guardarCotizacionConProductos() {
+        function guardarCotizacionModal() {
             let db = window.getDbData();
             let idEdicion = document.getElementById('c-id-edicion').value;
             
@@ -1725,10 +2022,10 @@
 
             if (!numero) return alert('Por favor ingresa el número de cotización.');
             if (!cliente) return alert('Por favor ingresa el nombre del cliente.');
-            if (window.productosTemp.length === 0) return alert('Por favor agrega al menos un producto.');
+            if (window.productosCotizacion.length === 0) return alert('Por favor agrega al menos un producto.');
 
-            let total = window.productosTemp.reduce((sum, p) => sum + (p.cantidad * p.precio), 0);
-            let productosTexto = window.productosTemp.map(p => `${p.cantidad}x ${p.detalle} (${m(p.precio)})`).join('\n');
+            let total = window.productosCotizacion.reduce((sum, p) => sum + (p.cantidad * p.precio), 0);
+            let productosTexto = window.productosCotizacion.map(p => `${p.cantidad}x ${p.detalle} (${m(p.precio)})`).join('\n');
 
             if (idEdicion && idEdicion !== "") {
                 let c = db.cotizaciones.find(x => x.id === idEdicion);
@@ -1737,9 +2034,8 @@
                     c.direccion = direccion; c.plazo = plazo; c.fecha = fecha; c.validoHasta = validoHasta;
                     c.estado = estado; c.notas = notas; c.total = total;
                     c.productos = productosTexto;
-                    c.productosArray = JSON.parse(JSON.stringify(window.productosTemp));
+                    c.productosArray = JSON.parse(JSON.stringify(window.productosCotizacion));
                 }
-                cancelarEdicionCotizacion();
             } else {
                 db.cotizaciones.push({
                     id: 'c_' + Date.now(),
@@ -1747,80 +2043,19 @@
                     plazo, fecha, validoHasta, estado, notas,
                     total: total,
                     productos: productosTexto,
-                    productosArray: JSON.parse(JSON.stringify(window.productosTemp))
+                    productosArray: JSON.parse(JSON.stringify(window.productosCotizacion))
                 });
-                
-                document.getElementById('c-numero').value = '';
-                document.getElementById('c-cliente').value = '';
-                document.getElementById('c-telefono').value = '';
-                document.getElementById('c-correo').value = '';
-                document.getElementById('c-direccion').value = '';
-                document.getElementById('c-plazo').value = '';
-                document.getElementById('c-notas').value = '';
-                document.getElementById('c-estado').value = 'Pendiente';
-                window.productosTemp = [];
-                actualizarTablaProductosTemp();
-                let fechaValida = new Date();
-                fechaValida.setDate(fechaValida.getDate() + 15);
-                document.getElementById('c-valido-hasta').value = fechaValida.toISOString().split('T')[0];
             }
+            cerrarModalCotizacionFlotante(true);
             salvar();
         }
 
-        function eliminarCotizacion(id) {
-            let db = window.getDbData();
-            if (confirm('¿Eliminar esta cotización?')) {
-                db.cotizaciones = db.cotizaciones.filter(x => x.id !== id);
-                salvar();
-            }
-        }
-
-        function verCotizacionCompleta(id) {
-            let db = window.getDbData();
-            let c = db.cotizaciones.find(x => x.id === id);
-            if (!c) return;
-            // Usar el modal de cotización existente
-            let estadoEmoji = { 'Pendiente': '⏳ Pendiente', 'Aprobada': '✅ Aprobada', 'Rechazada': '❌ Rechazada', 'Vencida': '⏰ Vencida' };
-            let productosHtml = c.productosArray && c.productosArray.length > 0 
-                ? c.productosArray.map(p => `• ${p.cantidad}x ${p.detalle} - ${m(p.precio)} c/u = ${m(p.cantidad * p.precio)}`).join('<br>')
-                : c.productos || 'No especificados';
-
-            let h = `
-                <p><strong>Nº Cotización:</strong> ${c.numero || 'S/N'}</p>
-                <p><strong>Fecha:</strong> ${c.fecha || 'No especificada'}</p>
-                <p><strong>Cliente:</strong> ${c.cliente}</p>
-                <p><strong>Teléfono:</strong> ${c.telefono || 'No registrado'}</p>
-                <p><strong>Dirección:</strong> ${c.direccion || 'No registrada'}</p>
-                <hr style="margin:8px 0;">
-                <p><strong>📝 Productos:</strong></p>
-                <div style="background:#f8fafc; padding:10px; border-radius:4px; font-size:0.85rem;">${productosHtml}</div>
-                <hr style="margin:8px 0;">
-                <p><strong>💰 Total:</strong> <span style="color:var(--success); font-weight:700;">${m(c.total)}</span></p>
-                <p><strong>📦 Plazo:</strong> ${c.plazo || 'No especificado'}</p>
-                <p><strong>📅 Válido hasta:</strong> ${c.validoHasta || 'No especificado'}</p>
-                <p><strong>📊 Estado:</strong> <span class="badge badge-cotizacion">${estadoEmoji[c.estado] || c.estado}</span></p>
-                ${c.notas ? `<p><strong>📝 Notas:</strong> ${c.notas}</p>` : ''}
-            `;
-            document.getElementById('contenido-modal-cotizacion').innerHTML = h;
-            document.getElementById('modal-ver-cotizacion').style.display = 'flex';
-        }
-
-        function cerrarModalCotizacion() { document.getElementById('modal-ver-cotizacion').style.display = 'none'; }
-        function cerrarModalDetalle() { document.getElementById('modal-detalle-cliente').style.display = 'none'; }
-
-        function iniciarEdicionCotizacion(id) {
+        function iniciarEdicionCotizacionModal(id) {
             let db = window.getDbData();
             let c = db.cotizaciones.find(x => x.id === id);
             if (!c) return;
 
-            const container = document.getElementById('formulario-cotizacion-container');
-            const btn = document.getElementById('btn-toggle-cotizacion');
-            if (container.style.display === 'none') {
-                container.style.display = 'block';
-                btn.innerText = '❌ Cerrar';
-                btn.style.background = '#dc2626';
-            }
-
+            abrirModalCotizacion();
             document.getElementById('c-id-edicion').value = c.id;
             document.getElementById('c-numero').value = c.numero || '';
             document.getElementById('c-cliente').value = c.cliente || '';
@@ -1833,16 +2068,22 @@
             document.getElementById('c-estado').value = c.estado || 'Pendiente';
             document.getElementById('c-notas').value = c.notas || '';
 
-            window.productosTemp = c.productosArray && c.productosArray.length > 0 
+            window.productosCotizacion = c.productosArray && c.productosArray.length > 0 
                 ? JSON.parse(JSON.stringify(c.productosArray))
                 : [];
-            actualizarTablaProductosTemp();
+            actualizarTablaProductosCotizacion();
 
-            document.getElementById('lbl-formulario-cotizacion-modo').innerText = '✏️ Modificar Cotización';
-            document.getElementById('btn-guardar-cotizacion-accion').innerText = '💾 Aplicar Cambios';
-            document.getElementById('btn-cancelar-edicion-cotizacion').style.display = 'inline-flex';
-            
-            document.getElementById('lbl-formulario-cotizacion-modo').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('lbl-modal-cotizacion-titulo').innerText = '✏️ Modificar Cotización';
+            document.getElementById('btn-guardar-cotizacion-modal').innerText = '💾 Aplicar Cambios';
+            guardarBackupModal('modal-cotizacion');
+        }
+
+        function eliminarCotizacion(id) {
+            let db = window.getDbData();
+            if (confirm('¿Eliminar esta cotización?')) {
+                db.cotizaciones = db.cotizaciones.filter(x => x.id !== id);
+                salvar();
+            }
         }
 
         function aprobarCotizacionYVenta(id) {
@@ -1884,7 +2125,7 @@
         }
 
         // ===== FUNCIONES WHATSAPP =====
-        function enviarCotizacionWhatsApp() {
+        function enviarCotizacionWhatsAppModal() {
             let telefono = document.getElementById('c-telefono').value.trim();
             if (!telefono) return alert('Por favor ingresa el número de teléfono del cliente.');
             
@@ -1900,9 +2141,9 @@
             let direccion = document.getElementById('c-direccion').value.trim() || 'No registrada';
 
             if (!cliente) return alert('Por favor ingresa el nombre del cliente.');
-            if (window.productosTemp.length === 0) return alert('Por favor agrega productos para enviar la cotización.');
+            if (window.productosCotizacion.length === 0) return alert('Por favor agrega productos para enviar la cotización.');
 
-            let total = window.productosTemp.reduce((sum, p) => sum + (p.cantidad * p.precio), 0);
+            let total = window.productosCotizacion.reduce((sum, p) => sum + (p.cantidad * p.precio), 0);
 
             let msg = '🏢 CARMENCITA DESIGN - Muebles y Rústicos\n\n';
             msg += `📋 COTIZACIÓN N° ${numero || 'S/N'}\n`;
@@ -1912,7 +2153,7 @@
             msg += `📍 Dirección: ${direccion}\n\n`;
             msg += `📝 DETALLE DE PRODUCTOS/SERVICIOS:\n`;
             
-            window.productosTemp.forEach(p => {
+            window.productosCotizacion.forEach(p => {
                 let subtotal = p.cantidad * p.precio;
                 msg += `- ${p.cantidad}x ${p.detalle} - ${m(p.precio)} c/u = ${m(subtotal)}\n`;
             });
@@ -2022,34 +2263,41 @@
                 }, 300);
                 return;
             }
-            document.getElementById('modal-venta').classList.add('activo');
-            document.getElementById('v-id-edicion').value = '';
-            document.getElementById('v-factura').value = '';
-            document.getElementById('v-cliente').value = '';
-            document.getElementById('v-cedula').value = '';
-            document.getElementById('v-direccion').value = '';
-            document.getElementById('v-barrio').value = '';
-            document.getElementById('v-telefono').value = '';
-            document.getElementById('v-correo').value = '';
-            document.getElementById('v-fecha-registro').value = new Date().toISOString().split('T')[0];
-            document.getElementById('v-fecha-pactada').value = '';
-            document.getElementById('v-abono').value = '';
-            document.getElementById('v-abono-banco').value = '';
-            document.getElementById('v-abono-efectivo').value = '';
-            document.getElementById('v-medio').value = 'Banco';
-            alternarVisibilidadMetodoPagoDividido('Banco');
-            window.productosVenta = [];
-            actualizarTablaProductosVenta();
-            document.getElementById('lbl-modal-venta-titulo').innerText = '➕ Nueva Venta';
-            document.getElementById('btn-guardar-venta-accion').innerText = '🚀 Guardar Venta';
+            const modal = document.getElementById('modal-venta');
+            restaurarBackupModal('modal-venta');
+            modal.classList.add('activo');
+            if (!document.getElementById('v-id-edicion').value) {
+                document.getElementById('v-factura').value = '';
+                document.getElementById('v-cliente').value = '';
+                document.getElementById('v-cedula').value = '';
+                document.getElementById('v-direccion').value = '';
+                document.getElementById('v-barrio').value = '';
+                document.getElementById('v-telefono').value = '';
+                document.getElementById('v-correo').value = '';
+                document.getElementById('v-fecha-registro').value = new Date().toISOString().split('T')[0];
+                document.getElementById('v-fecha-pactada').value = '';
+                document.getElementById('v-abono').value = '';
+                document.getElementById('v-abono-banco').value = '';
+                document.getElementById('v-abono-efectivo').value = '';
+                document.getElementById('v-medio').value = 'Banco';
+                alternarVisibilidadMetodoPagoDividido('Banco');
+                window.productosVenta = [];
+                actualizarTablaProductosVenta();
+                document.getElementById('lbl-modal-venta-titulo').innerText = '➕ Nueva Venta';
+                document.getElementById('btn-guardar-venta-accion').innerText = '🚀 Guardar Venta';
+            }
+            guardarBackupModal('modal-venta');
             setTimeout(() => {
                 document.getElementById('v-factura').focus();
             }, 300);
         }
 
-        function cerrarModalVenta() {
+        function cerrarModalVenta(borrarDatos = false) {
             document.getElementById('modal-venta').classList.remove('activo');
-            window.productosVenta = [];
+            if (borrarDatos) {
+                limpiarBackupModal('modal-venta');
+                window.productosVenta = [];
+            }
         }
 
         function abrirModalVentaConDatos(id) {
@@ -2070,25 +2318,9 @@
             document.getElementById('v-fecha-registro').value = v.fechaRegistro || '';
             document.getElementById('v-fecha-pactada').value = v.fechaPactada || '';
             
-            // Cargar productos si están en el formato de texto
-            if (v.desc) {
-                // Intentar parsear productos desde la descripción
-                let lineas = v.desc.split('\n');
-                let productos = [];
-                lineas.forEach(linea => {
-                    let match = linea.match(/^(\d+)x\s+(.+)$/);
-                    if (match) {
-                        productos.push({ cantidad: parseInt(match[1]), detalle: match[2], precio: 0 });
-                    }
-                });
-                if (productos.length > 0) {
-                    window.productosVenta = productos;
-                    actualizarTablaProductosVenta();
-                }
-            }
-            
             document.getElementById('lbl-modal-venta-titulo').innerText = '✏️ Editar Venta';
             document.getElementById('btn-guardar-venta-accion').innerText = '💾 Guardar Cambios';
+            guardarBackupModal('modal-venta');
         }
 
         function agregarProductoVenta() {
@@ -2180,7 +2412,7 @@
                     v.fechaRegistro = fechaFinal; 
                     v.fechaPactada = fechaPactada;
                 }
-                cerrarModalVenta();
+                cerrarModalVenta(true);
             } else {
                 let medioSeleccionado = document.getElementById('v-medio').value;
                 let abonoCalculadoTotal = 0;
@@ -2240,7 +2472,7 @@
                     estadoEntrega: 'Pendiente' 
                 });
                 
-                cerrarModalVenta();
+                cerrarModalVenta(true);
             }
             salvar();
         }
@@ -2254,223 +2486,16 @@
             }
         }
 
-        // ===== MODAL ABONO DIRECTO =====
-        function abrirModalAbono() {
-            if (window.moduloActual !== 'ventas') {
-                irA('ventas');
-                setTimeout(() => {
-                    abrirModalAbono();
-                }, 300);
-                return;
-            }
-            document.getElementById('modal-abono-directo').classList.add('activo');
-            document.getElementById('abono-directo-numero').value = '';
-            document.getElementById('abono-directo-monto').value = '';
-            document.getElementById('abono-directo-medio').value = 'Banco';
-            document.getElementById('abono-directo-fecha').value = new Date().toISOString().split('T')[0];
-            document.getElementById('abono-directo-cliente').value = '';
-            document.getElementById('abono-directo-factura').value = '';
-            setTimeout(() => {
-                document.getElementById('abono-directo-numero').focus();
-            }, 300);
-        }
-
-        function cerrarModalAbonoDirecto() {
-            document.getElementById('modal-abono-directo').classList.remove('activo');
-        }
-
-        function guardarAbonoDirecto() {
-            let db = window.getDbData();
-            let numero = document.getElementById('abono-directo-numero').value.trim();
-            let monto = cleanNum(document.getElementById('abono-directo-monto').value);
-            let medio = document.getElementById('abono-directo-medio').value;
-            let fecha = document.getElementById('abono-directo-fecha').value || new Date().toISOString().split('T')[0];
-            let cliente = document.getElementById('abono-directo-cliente').value.trim() || 'Cliente sin registrar';
-            let factura = document.getElementById('abono-directo-factura').value.trim() || 'S/N';
-
-            if (!numero) return alert('Ingresa el número de recibo de abono.');
-            if (monto <= 0) return alert('Ingresa un monto válido.');
-
-            db.ingresosDirectos.push({
-                id: 'i_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-                fecha: fecha,
-                origen: `Abono Directo (Factura #${factura}) - ${cliente} [Recibo #${numero}]`,
-                medio: medio,
-                monto: monto
-            });
-
-            cerrarModalAbonoDirecto();
-            salvar();
-            alert(`💰 Abono guardado correctamente.\n📄 Recibo #${numero}\n💰 ${m(monto)}`);
-        }
-
-        // ===== FUNCIONES DE DESPACHO =====
-        function abrirModalDespacho(idVenta) {
-            document.getElementById('despacho-venta-id').value = idVenta;
-            document.getElementById('despacho-placa').value = '';
-            document.getElementById('despacho-conductor').value = '';
-            document.getElementById('despacho-telefono').value = '';
-            document.getElementById('modal-despacho').style.display = 'flex';
-        }
-
-        function cerrarModalDespacho() {
-            document.getElementById('modal-despacho').style.display = 'none';
-            document.getElementById('despacho-venta-id').value = '';
-        }
-
-        function confirmarDespacho() {
-            let idVenta = document.getElementById('despacho-venta-id').value;
-            let placa = document.getElementById('despacho-placa').value.trim();
-            let conductor = document.getElementById('despacho-conductor').value.trim();
-            let telefono = document.getElementById('despacho-telefono').value.trim();
-
-            let db = window.getDbData();
-            let v = db.ventas.find(x => x.id === idVenta);
-            if (!v) return alert('Venta no encontrada.');
-
-            v.estadoEntrega = 'En Camino';
-            v.despacho = {
-                placa: placa || 'No registrada',
-                conductor: conductor || 'No registrado',
-                telefono: telefono || 'No registrado',
-                fechaHora: new Date().toISOString().replace('T', ' ').substring(0, 16)
-            };
-
-            salvar();
-            cerrarModalDespacho();
-            alert(`✅ Despacho confirmado para la factura Nº ${v.factura || 'S/N'}\n🚛 Conductor: ${conductor || 'No registrado'}\n📅 ${v.despacho.fechaHora}`);
-        }
-
-        function abrirModalEditarDespacho(idVenta) {
-            let db = window.getDbData();
-            let v = db.ventas.find(x => x.id === idVenta);
-            if (!v) return alert('Venta no encontrada.');
-
-            document.getElementById('editar-despacho-venta-id').value = idVenta;
-            document.getElementById('editar-despacho-estado').value = v.estadoEntrega || 'Pendiente';
-            document.getElementById('editar-despacho-placa').value = v.despacho?.placa || '';
-            document.getElementById('editar-despacho-conductor').value = v.despacho?.conductor || '';
-            document.getElementById('editar-despacho-telefono').value = v.despacho?.telefono || '';
-            document.getElementById('modal-editar-despacho').style.display = 'flex';
-        }
-
-        function cerrarModalEditarDespacho() {
-            document.getElementById('modal-editar-despacho').style.display = 'none';
-            document.getElementById('editar-despacho-venta-id').value = '';
-        }
-
-        function guardarEdicionDespacho() {
-            let idVenta = document.getElementById('editar-despacho-venta-id').value;
-            let estado = document.getElementById('editar-despacho-estado').value;
-            let placa = document.getElementById('editar-despacho-placa').value.trim();
-            let conductor = document.getElementById('editar-despacho-conductor').value.trim();
-            let telefono = document.getElementById('editar-despacho-telefono').value.trim();
-
-            let db = window.getDbData();
-            let v = db.ventas.find(x => x.id === idVenta);
-            if (!v) return alert('Venta no encontrada.');
-
-            v.estadoEntrega = estado;
-            if (!v.despacho) {
-                v.despacho = {};
-            }
-            v.despacho.placa = placa || 'No registrada';
-            v.despacho.conductor = conductor || 'No registrado';
-            v.despacho.telefono = telefono || 'No registrado';
-            if (!v.despacho.fechaHora) {
-                v.despacho.fechaHora = new Date().toISOString().replace('T', ' ').substring(0, 16);
-            }
-
-            salvar();
-            cerrarModalEditarDespacho();
-            alert(`✅ Datos de despacho actualizados para la factura Nº ${v.factura || 'S/N'}`);
-        }
-
-        function cambiarEstadoEntrega(idVenta) {
-            let db = window.getDbData();
-            let v = db.ventas.find(x => x.id === idVenta);
-            if (!v) return;
-
-            let est = v.estadoEntrega || 'Pendiente';
-            
-            if (est === 'Pendiente') {
-                abrirModalDespacho(idVenta);
-            } else if (est === 'En Camino') {
-                v.estadoEntrega = 'Entregado';
-                salvar();
-                alert(`✅ Entrega confirmada para la factura Nº ${v.factura || 'S/N'}`);
-            } else if (est === 'Entregado') {
-                v.estadoEntrega = 'Pendiente';
-                salvar();
-                alert(`↩️ Despacho reajustado a Pendiente`);
-            }
-        }
-
         // ===== FUNCIONES DE ABONOS EN CARTERA =====
-        function abrirCajaAbono(id, cliente) {
-            document.getElementById('box-abono-practico').style.display = 'block';
-            document.getElementById('lbl-abono-cliente').innerText = cliente;
-            document.getElementById('abono-id-cliente').value = id;
-            document.getElementById('abono-monto-input').value = '';
-            document.getElementById('abono-numero').value = '';
-            document.getElementById('abono-fecha-input').value = new Date().toISOString().split('T')[0];
-            document.getElementById('abono-medio-input').value = 'Banco';
-            document.getElementById('abono-banco-input').value = '';
-            document.getElementById('abono-efectivo-input').value = '';
-            document.getElementById('box-abono-banco').style.display = 'none';
-            document.getElementById('box-abono-efectivo').style.display = 'none';
-            document.getElementById('box-abono-practico').scrollIntoView({ behavior: 'smooth' });
+        function abrirCajaAbono(id, cliente, factura) {
+            abrirModalAbonoDirecto(factura || '', cliente);
         }
 
         function cerrarBoxAbono() { document.getElementById('box-abono-practico').style.display = 'none'; }
 
         function procesarAbonoEstructurado() {
-            let db = window.getDbData();
-            let id = document.getElementById('abono-id-cliente').value;
-            let numeroAbono = document.getElementById('abono-numero').value.trim();
-            let medio = document.getElementById('abono-medio-input').value;
-            let fechaAbono = document.getElementById('abono-fecha-input').value || new Date().toISOString().split('T')[0];
-            
-            let montoTotal = 0;
-            let abonos = [];
-
-            if (medio === 'DIVIDIDO') {
-                let montoBanco = cleanNum(document.getElementById('abono-banco-input').value);
-                let montoEfectivo = cleanNum(document.getElementById('abono-efectivo-input').value);
-                montoTotal = montoBanco + montoEfectivo;
-                
-                if (montoBanco > 0) {
-                    abonos.push({ medio: 'Banco', monto: montoBanco });
-                }
-                if (montoEfectivo > 0) {
-                    abonos.push({ medio: 'Efectivo', monto: montoEfectivo });
-                }
-                if (montoTotal <= 0) return alert('Ingresa al menos un monto válido.');
-            } else {
-                let monto = cleanNum(document.getElementById('abono-monto-input').value);
-                if (monto <= 0) return alert('Monto inválido.');
-                montoTotal = monto;
-                abonos.push({ medio: medio, monto: monto });
-            }
-
-            if (!numeroAbono) return alert('Ingresa el número de recibo de abono.');
-            
-            let v = db.ventas.find(x => x.id === id);
-            if (v) {
-                v.abonado += montoTotal;
-                
-                abonos.forEach(a => {
-                    db.ingresosDirectos.push({ 
-                        id: 'i_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-                        fecha: fechaAbono, 
-                        origen: `Abono Cartera ${a.medio} (Factura #${v.factura || 'S/N'}) - ${v.cliente} (${id}) [Recibo #${numeroAbono}]`, 
-                        medio: a.medio, 
-                        monto: a.monto 
-                    });
-                });
-            }
-            cerrarBoxAbono();
-            salvar();
+            // Esta función ya no se usa con el nuevo modal, pero se mantiene por compatibilidad
+            alert('Usa el botón "💰 Nuevo Abono" desde la pestaña de Ventas.');
         }
 
         // ===== FUNCIONES DE EDITAR ABONO =====
@@ -2487,20 +2512,32 @@
             let reciboMatch = ingreso.origen.match(/\[Recibo #([^\]]+)\]/);
             if (reciboMatch) numeroRecibo = reciboMatch[1];
             
+            let facturaAsociada = '';
+            let facturaMatch = ingreso.origen.match(/Factura #([^\s)]+)/);
+            if (facturaMatch) facturaAsociada = facturaMatch[1];
+
+            const modal = document.getElementById('modal-editar-abono');
+            restaurarBackupModal('modal-editar-abono');
+            modal.classList.add('activo');
+            
             document.getElementById('edit-abono-id').value = idIngreso;
             document.getElementById('edit-abono-venta-id').value = ventaId;
             document.getElementById('edit-abono-numero').value = numeroRecibo || '';
             document.getElementById('edit-abono-monto').value = ingreso.monto ? ingreso.monto.toLocaleString('es-CO') : '';
             document.getElementById('edit-abono-medio').value = ingreso.medio || 'Banco';
             document.getElementById('edit-abono-fecha').value = ingreso.fecha || new Date().toISOString().split('T')[0];
+            document.getElementById('edit-abono-factura-asociada').value = facturaAsociada || '';
             
-            document.getElementById('modal-editar-abono').style.display = 'flex';
+            guardarBackupModal('modal-editar-abono');
         }
 
-        function cerrarModalEditarAbono() {
-            document.getElementById('modal-editar-abono').style.display = 'none';
-            document.getElementById('edit-abono-id').value = '';
-            document.getElementById('edit-abono-venta-id').value = '';
+        function cerrarModalEditarAbono(borrarDatos = false) {
+            document.getElementById('modal-editar-abono').classList.remove('activo');
+            if (borrarDatos) {
+                limpiarBackupModal('modal-editar-abono');
+                document.getElementById('edit-abono-id').value = '';
+                document.getElementById('edit-abono-venta-id').value = '';
+            }
         }
 
         function guardarEdicionAbono() {
@@ -2510,6 +2547,7 @@
             let monto = cleanNum(document.getElementById('edit-abono-monto').value);
             let medio = document.getElementById('edit-abono-medio').value;
             let fecha = document.getElementById('edit-abono-fecha').value;
+            let facturaAsociada = document.getElementById('edit-abono-factura-asociada').value.trim() || 'S/N';
 
             if (monto <= 0) return alert('Monto inválido.');
             if (!fecha) return alert('Selecciona una fecha válida.');
@@ -2532,6 +2570,12 @@
             } else {
                 nuevoOrigen = nuevoOrigen.replace(/\[Recibo #[^\]]*\]/, '');
             }
+            if (facturaAsociada && facturaAsociada !== 'S/N') {
+                nuevoOrigen = nuevoOrigen.replace(/Factura #[^\s)]+/, `Factura #${facturaAsociada}`);
+                if (!nuevoOrigen.includes('Factura #')) {
+                    nuevoOrigen = nuevoOrigen.replace(/\(([^)]+)\)/, `(Factura #${facturaAsociada})`);
+                }
+            }
             
             ingreso.monto = monto;
             ingreso.medio = medio;
@@ -2542,7 +2586,7 @@
                 venta.abonado = Math.max(0, venta.abonado + diferencia);
             }
             
-            cerrarModalEditarAbono();
+            cerrarModalEditarAbono(true);
             salvar();
             alert('✅ Abono actualizado correctamente.');
         }
@@ -2566,7 +2610,7 @@
             
             db.ingresosDirectos = db.ingresosDirectos.filter(x => x.id !== idIngreso);
             
-            cerrarModalEditarAbono();
+            cerrarModalEditarAbono(true);
             salvar();
             alert('🗑️ Abono eliminado correctamente.');
         }
@@ -2593,51 +2637,38 @@
             }
         }
 
-        // ===== FUNCIONES GASTOS =====
-        function cancelarEdicionGasto() {
-            document.getElementById('g-id-edicion').value = '';
-            document.getElementById('g-cat').value = 'Servicios Publicos';
-            document.getElementById('g-cat-manual').value = '';
-            document.getElementById('g-concepto').value = '';
-            document.getElementById('g-cantidad').value = 1;
-            document.getElementById('g-detalle').value = '';
-            document.getElementById('g-medio').value = 'Banco';
-            document.getElementById('g-monto').value = '';
-            document.getElementById('g-fecha').value = new Date().toISOString().split('T')[0];
-            document.getElementById('box-cat-manual').style.display = 'none';
-            document.getElementById('lbl-formulario-gasto-modo').innerText = '➕ Registrar Nuevo Gasto';
-            document.getElementById('btn-guardar-gasto-accion').innerText = 'Guardar Gasto';
-            document.getElementById('btn-cancelar-edicion-gasto').style.display = 'none';
-        }
-
-        function iniciarEdicionGasto(id) {
-            let db = window.getDbData();
-            let g = db.gastos.find(x => x.id === id);
-            if (!g) return;
-
-            document.getElementById('g-id-edicion').value = g.id;
-            document.getElementById('g-cat').value = g.cat || 'Servicios Publicos';
-            document.getElementById('g-cat-manual').value = g.cat || '';
-            if (g.cat && !['Servicios Publicos','Arriendo Taller','Compra Materiales','Compra Colchones','Papeleria','Mantenimiento'].includes(g.cat)) {
-                document.getElementById('g-cat').value = 'MANUAL';
-                document.getElementById('box-cat-manual').style.display = 'flex';
-                document.getElementById('g-cat-manual').value = g.cat;
+        // ===== FUNCIONES GASTOS (MODAL) =====
+        function abrirModalGasto() {
+            const modal = document.getElementById('modal-gasto');
+            restaurarBackupModal('modal-gasto');
+            modal.classList.add('activo');
+            if (!document.getElementById('g-id-edicion').value) {
+                document.getElementById('g-cat').value = 'Servicios Publicos';
+                document.getElementById('g-cat-manual').value = '';
+                document.getElementById('g-concepto').value = '';
+                document.getElementById('g-cantidad').value = 1;
+                document.getElementById('g-detalle').value = '';
+                document.getElementById('g-medio').value = 'Banco';
+                document.getElementById('g-monto').value = '';
+                document.getElementById('g-fecha').value = new Date().toISOString().split('T')[0];
+                document.getElementById('box-cat-manual-modal').style.display = 'none';
+                document.getElementById('lbl-modal-gasto-titulo').innerText = '➕ Registrar Nuevo Gasto';
+                document.getElementById('btn-guardar-gasto-modal').innerText = 'Guardar Gasto';
             }
-            document.getElementById('g-concepto').value = g.concepto || '';
-            document.getElementById('g-cantidad').value = g.cantidad || 1;
-            document.getElementById('g-detalle').value = g.detalle || '';
-            document.getElementById('g-medio').value = g.medio || 'Banco';
-            document.getElementById('g-monto').value = g.monto ? g.monto.toLocaleString('es-CO') : '';
-            document.getElementById('g-fecha').value = g.fecha || new Date().toISOString().split('T')[0];
-            
-            document.getElementById('lbl-formulario-gasto-modo').innerText = '✏️ Editar Gasto';
-            document.getElementById('btn-guardar-gasto-accion').innerText = '💾 Guardar Cambios';
-            document.getElementById('btn-cancelar-edicion-gasto').style.display = 'inline-flex';
-            
-            document.getElementById('lbl-formulario-gasto-modo').scrollIntoView({ behavior: 'smooth' });
+            guardarBackupModal('modal-gasto');
+            setTimeout(() => {
+                document.getElementById('g-concepto').focus();
+            }, 300);
         }
 
-        function guardarGasto() {
+        function cerrarModalGasto(borrarDatos = false) {
+            document.getElementById('modal-gasto').classList.remove('activo');
+            if (borrarDatos) {
+                limpiarBackupModal('modal-gasto');
+            }
+        }
+
+        function guardarGastoModal() {
             let db = window.getDbData();
             let idEdicion = document.getElementById('g-id-edicion').value;
             
@@ -2668,7 +2699,6 @@
                     g.monto = monto;
                     g.fecha = fecha;
                 }
-                cancelarEdicionGasto();
             } else {
                 db.gastos.push({ 
                     id: 'g_' + Date.now(), 
@@ -2680,13 +2710,35 @@
                     medio, 
                     monto 
                 });
-                document.getElementById('g-concepto').value = '';
-                document.getElementById('g-cantidad').value = 1;
-                document.getElementById('g-detalle').value = '';
-                document.getElementById('g-monto').value = '';
-                document.getElementById('g-fecha').value = new Date().toISOString().split('T')[0];
             }
+            cerrarModalGasto(true);
             salvar();
+        }
+
+        function iniciarEdicionGastoModal(id) {
+            let db = window.getDbData();
+            let g = db.gastos.find(x => x.id === id);
+            if (!g) return;
+
+            abrirModalGasto();
+            document.getElementById('g-id-edicion').value = g.id;
+            document.getElementById('g-cat').value = g.cat || 'Servicios Publicos';
+            document.getElementById('g-cat-manual').value = g.cat || '';
+            if (g.cat && !['Servicios Publicos','Arriendo Taller','Compra Materiales','Compra Colchones','Papeleria','Mantenimiento'].includes(g.cat)) {
+                document.getElementById('g-cat').value = 'MANUAL';
+                document.getElementById('box-cat-manual-modal').style.display = 'flex';
+                document.getElementById('g-cat-manual').value = g.cat;
+            }
+            document.getElementById('g-concepto').value = g.concepto || '';
+            document.getElementById('g-cantidad').value = g.cantidad || 1;
+            document.getElementById('g-detalle').value = g.detalle || '';
+            document.getElementById('g-medio').value = g.medio || 'Banco';
+            document.getElementById('g-monto').value = g.monto ? g.monto.toLocaleString('es-CO') : '';
+            document.getElementById('g-fecha').value = g.fecha || new Date().toISOString().split('T')[0];
+            
+            document.getElementById('lbl-modal-gasto-titulo').innerText = '✏️ Editar Gasto';
+            document.getElementById('btn-guardar-gasto-modal').innerText = '💾 Guardar Cambios';
+            guardarBackupModal('modal-gasto');
         }
 
         function eliminarGasto(id) { 
@@ -2810,41 +2862,256 @@
             document.getElementById('modal-detalle-cliente').style.display = 'flex';
         }
 
-        // ===== ALERTAS =====
-        function evaluarAlertasCumpleanos(trabajadores) {
-            const pAlertas = document.getElementById('panel-alertas-automaticas');
-            if (!trabajadores || trabajadores.length === 0) return;
-            let hoy = new Date();
-            let hoyStr = hoy.toISOString().split('T')[0];
-            let manana = new Date();
-            manana.setDate(manana.getDate() + 1);
-            let mananaStr = manana.toISOString().split('T')[0];
-            let pasadoManana = new Date();
-            pasadoManana.setDate(pasadoManana.getDate() + 2);
-            let pasadoMananaStr = pasadoManana.toISOString().split('T')[0];
-
-            trabajadores.forEach(t => {
-                if (!t.cumpleanos) return;
-                let cumple = new Date(t.cumpleanos);
-                let mes = cumple.getMonth() + 1;
-                let dia = cumple.getDate();
-                let cumpleEsteAnio = new Date(hoy.getFullYear(), mes - 1, dia);
-                let cumpleStr = cumpleEsteAnio.toISOString().split('T')[0];
-                let cumpleManana = new Date(hoy.getFullYear(), mes - 1, dia - 1);
-                let cumpleMananaStr = cumpleManana.toISOString().split('T')[0];
-                let cumplePasadoManana = new Date(hoy.getFullYear(), mes - 1, dia - 2);
-                let cumplePasadoMananaStr = cumplePasadoManana.toISOString().split('T')[0];
-
-                if (cumpleStr === hoyStr) {
-                    pAlertas.innerHTML += `<div class="alert-item alert-cumple">🎂 <strong>¡FELIZ CUMPLEAÑOS!</strong> Hoy es el cumpleaños de <strong>${t.nombre}</strong> 🎉</div>`;
-                } else if (cumpleMananaStr === hoyStr) {
-                    pAlertas.innerHTML += `<div class="alert-item alert-manana">🎂 <strong>¡MAÑANA ES EL CUMPLEAÑOS!</strong> De <strong>${t.nombre}</strong> 🎈</div>`;
-                } else if (cumplePasadoMananaStr === hoyStr) {
-                    pAlertas.innerHTML += `<div class="alert-item alert-manana">🎂 <strong>¡PASADO MAÑANA ES EL CUMPLEAÑOS!</strong> De <strong>${t.nombre}</strong> 🎁</div>`;
-                }
-            });
+        // ===== FUNCIONES DE DESPACHO =====
+        function abrirModalDespacho(idVenta) {
+            document.getElementById('despacho-venta-id').value = idVenta;
+            document.getElementById('despacho-placa').value = '';
+            document.getElementById('despacho-conductor').value = '';
+            document.getElementById('despacho-telefono').value = '';
+            document.getElementById('modal-despacho').style.display = 'flex';
         }
 
+        function cerrarModalDespacho() {
+            document.getElementById('modal-despacho').style.display = 'none';
+            document.getElementById('despacho-venta-id').value = '';
+        }
+
+        function confirmarDespacho() {
+            let idVenta = document.getElementById('despacho-venta-id').value;
+            let placa = document.getElementById('despacho-placa').value.trim();
+            let conductor = document.getElementById('despacho-conductor').value.trim();
+            let telefono = document.getElementById('despacho-telefono').value.trim();
+
+            let db = window.getDbData();
+            let v = db.ventas.find(x => x.id === idVenta);
+            if (!v) return alert('Venta no encontrada.');
+
+            v.estadoEntrega = 'En Camino';
+            v.despacho = {
+                placa: placa || 'No registrada',
+                conductor: conductor || 'No registrado',
+                telefono: telefono || 'No registrado',
+                fechaHora: new Date().toISOString().replace('T', ' ').substring(0, 16)
+            };
+
+            salvar();
+            cerrarModalDespacho();
+            alert(`✅ Despacho confirmado para la factura Nº ${v.factura || 'S/N'}\n🚛 Conductor: ${conductor || 'No registrado'}\n📅 ${v.despacho.fechaHora}`);
+        }
+
+        function abrirModalEditarDespacho(idVenta) {
+            let db = window.getDbData();
+            let v = db.ventas.find(x => x.id === idVenta);
+            if (!v) return alert('Venta no encontrada.');
+
+            const modal = document.getElementById('modal-editar-despacho');
+            modal.classList.add('activo');
+            document.getElementById('editar-despacho-venta-id').value = idVenta;
+            document.getElementById('editar-despacho-estado').value = v.estadoEntrega || 'Pendiente';
+            document.getElementById('editar-despacho-placa').value = v.despacho?.placa || '';
+            document.getElementById('editar-despacho-conductor').value = v.despacho?.conductor || '';
+            document.getElementById('editar-despacho-telefono').value = v.despacho?.telefono || '';
+        }
+
+        function cerrarModalEditarDespacho() {
+            document.getElementById('modal-editar-despacho').classList.remove('activo');
+            document.getElementById('editar-despacho-venta-id').value = '';
+        }
+
+        function guardarEdicionDespachoModal() {
+            let idVenta = document.getElementById('editar-despacho-venta-id').value;
+            let estado = document.getElementById('editar-despacho-estado').value;
+            let placa = document.getElementById('editar-despacho-placa').value.trim();
+            let conductor = document.getElementById('editar-despacho-conductor').value.trim();
+            let telefono = document.getElementById('editar-despacho-telefono').value.trim();
+
+            let db = window.getDbData();
+            let v = db.ventas.find(x => x.id === idVenta);
+            if (!v) return alert('Venta no encontrada.');
+
+            v.estadoEntrega = estado;
+            if (!v.despacho) {
+                v.despacho = {};
+            }
+            v.despacho.placa = placa || 'No registrada';
+            v.despacho.conductor = conductor || 'No registrado';
+            v.despacho.telefono = telefono || 'No registrado';
+            if (!v.despacho.fechaHora) {
+                v.despacho.fechaHora = new Date().toISOString().replace('T', ' ').substring(0, 16);
+            }
+
+            salvar();
+            cerrarModalEditarDespacho();
+            alert(`✅ Datos de despacho actualizados para la factura Nº ${v.factura || 'S/N'}`);
+        }
+
+        function cambiarEstadoEntrega(idVenta) {
+            let db = window.getDbData();
+            let v = db.ventas.find(x => x.id === idVenta);
+            if (!v) return;
+
+            let est = v.estadoEntrega || 'Pendiente';
+            
+            if (est === 'Pendiente') {
+                abrirModalDespacho(idVenta);
+            } else if (est === 'En Camino') {
+                v.estadoEntrega = 'Entregado';
+                salvar();
+                alert(`✅ Entrega confirmada para la factura Nº ${v.factura || 'S/N'}`);
+            } else if (est === 'Entregado') {
+                v.estadoEntrega = 'Pendiente';
+                salvar();
+                alert(`↩️ Despacho reajustado a Pendiente`);
+            }
+        }
+
+        // ===== FUNCIONES DE IMPRESIÓN =====
+        function imprimirFactura(idVenta) {
+            let db = window.getDbData();
+            let v = db.ventas.find(x => x.id === idVenta);
+            if (!v) return alert('Venta no encontrada.');
+
+            let config = db.config || {};
+            let razonSocial = config.razonSocial || 'CARMENCITA DESIGN';
+            let nit = config.nit || 'NIT No registrado';
+            let direccionEmpresa = config.direccion || 'Dirección no registrada';
+            let telefonoEmpresa = config.telefono || 'Teléfono no registrado';
+            let correoEmpresa = config.correo || 'Correo no registrado';
+
+            let productosHtml = '';
+            let productosArray = v.productosArray || [];
+            if (productosArray.length === 0) {
+                productosHtml = '<tr><td colspan="5" style="text-align:center;">No hay productos registrados</td></tr>';
+            } else {
+                productosArray.forEach(p => {
+                    let subtotal = p.cantidad * p.precio;
+                    productosHtml += `<tr>
+                        <td style="text-align:center;">${p.cantidad}</td>
+                        <td>${p.detalle}</td>
+                        <td style="text-align:right;">${m(p.precio)}</td>
+                        <td style="text-align:right;">${m(subtotal)}</td>
+                    </tr>`;
+                });
+            }
+
+            let fecha = v.fechaRegistro || new Date().toISOString().split('T')[0];
+            let consecutivo = obtenerConsecutivo('factura');
+
+            let html = `
+                <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:15px;">
+                    <h1 style="font-size:24px; margin:0;">${razonSocial}</h1>
+                    <p style="margin:2px 0;">${nit}</p>
+                    <p style="margin:2px 0;">${direccionEmpresa}</p>
+                    <p style="margin:2px 0;">📞 ${telefonoEmpresa} | ✉️ ${correoEmpresa}</p>
+                    <h2 style="margin:10px 0 5px 0;">FACTURA DE VENTA</h2>
+                    <p style="margin:2px 0;"><strong>Consecutivo:</strong> ${consecutivo}</p>
+                    <p style="margin:2px 0;"><strong>Fecha:</strong> ${fecha}</p>
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <p><strong>Cliente:</strong> ${v.cliente}</p>
+                    <p><strong>NIT/Cédula:</strong> ${v.cedula || 'No registrado'}</p>
+                    <p><strong>Dirección:</strong> ${v.direccion || 'No registrada'}</p>
+                    <p><strong>Teléfono:</strong> ${v.telefono || 'No registrado'}</p>
+                </div>
+
+                <div style="margin:10px 0; padding:12px; border:1px solid #ddd; border-radius:4px; background:#f8fafc;">
+                    <p style="margin:0 0 4px 0;"><strong>📝 Detalle del Proyecto/Producto:</strong></p>
+                    <p style="margin:0; white-space:pre-wrap; font-size:0.95rem;">${v.desc || 'No especificado'}</p>
+                </div>
+
+                <div style="text-align:right; font-size:1.3rem; font-weight:700; margin:15px 0; padding:10px; border-top:2px solid #000; border-bottom:2px solid #000;">
+                    TOTAL: ${m(v.total)}
+                </div>
+
+                <div style="display:flex; justify-content:space-between; margin-top:30px; padding-top:20px; border-top:1px solid #ddd;">
+                    <div style="text-align:center; width:45%;">
+                        <p style="border-top:1px solid #000; padding-top:5px; margin:0;">Firma del Comprador</p>
+                    </div>
+                    <div style="text-align:center; width:45%;">
+                        <p style="border-top:1px solid #000; padding-top:5px; margin:0;">Firma del Vendedor</p>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-top:20px; font-size:12px; color:#64748b;">
+                    <p>¡Gracias por su compra! | ${razonSocial}</p>
+                </div>
+            `;
+
+            document.getElementById('print-content').innerHTML = html;
+            document.getElementById('print-area').style.display = 'block';
+            window.print();
+            document.getElementById('print-area').style.display = 'none';
+        }
+
+        function imprimirReciboAbono(idIngreso) {
+            let db = window.getDbData();
+            let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
+            if (!ingreso) return alert('Abono no encontrado.');
+
+            let config = db.config || {};
+            let razonSocial = config.razonSocial || 'CARMENCITA DESIGN';
+            let nit = config.nit || 'NIT No registrado';
+            let direccionEmpresa = config.direccion || 'Dirección no registrada';
+            let telefonoEmpresa = config.telefono || 'Teléfono no registrado';
+            let correoEmpresa = config.correo || 'Correo no registrado';
+
+            let cliente = 'Cliente sin registrar';
+            let factura = 'S/N';
+            let numeroRecibo = '';
+            
+            let reciboMatch = ingreso.origen.match(/\[Recibo #([^\]]+)\]/);
+            if (reciboMatch) numeroRecibo = reciboMatch[1];
+            
+            let clienteMatch = ingreso.origen.match(/-\s*([^\[]+)/);
+            if (clienteMatch) cliente = clienteMatch[1].trim();
+            
+            let facturaMatch = ingreso.origen.match(/Factura #([^\s)]+)/);
+            if (facturaMatch) factura = facturaMatch[1];
+
+            let consecutivo = obtenerConsecutivo('abono');
+
+            let html = `
+                <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:15px;">
+                    <h1 style="font-size:24px; margin:0;">${razonSocial}</h1>
+                    <p style="margin:2px 0;">${nit}</p>
+                    <p style="margin:2px 0;">${direccionEmpresa}</p>
+                    <p style="margin:2px 0;">📞 ${telefonoEmpresa} | ✉️ ${correoEmpresa}</p>
+                    <h2 style="margin:10px 0 5px 0;">RECIBO DE ABONO</h2>
+                    <p style="margin:2px 0;"><strong>Consecutivo:</strong> ${consecutivo}</p>
+                    <p style="margin:2px 0;"><strong>Fecha:</strong> ${ingreso.fecha || new Date().toISOString().split('T')[0]}</p>
+                    <p style="margin:2px 0;"><strong>Recibo #:</strong> ${numeroRecibo || 'N/R'}</p>
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <p><strong>Cliente:</strong> ${cliente}</p>
+                    <p><strong>Factura Asociada:</strong> ${factura}</p>
+                    <p><strong>Medio de Pago:</strong> ${ingreso.medio || 'No especificado'}</p>
+                </div>
+
+                <div style="text-align:right; font-size:1.3rem; font-weight:700; margin:15px 0; padding:10px; border-top:2px solid #000; border-bottom:2px solid #000;">
+                    TOTAL ABONADO: ${m(ingreso.monto)}
+                </div>
+
+                <div style="display:flex; justify-content:space-between; margin-top:30px; padding-top:20px; border-top:1px solid #ddd;">
+                    <div style="text-align:center; width:45%;">
+                        <p style="border-top:1px solid #000; padding-top:5px; margin:0;">Firma del Comprador</p>
+                    </div>
+                    <div style="text-align:center; width:45%;">
+                        <p style="border-top:1px solid #000; padding-top:5px; margin:0;">Firma del Vendedor</p>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-top:20px; font-size:12px; color:#64748b;">
+                    <p>¡Gracias por su pago! | ${razonSocial}</p>
+                </div>
+            `;
+
+            document.getElementById('print-content').innerHTML = html;
+            document.getElementById('print-area').style.display = 'block';
+            window.print();
+            document.getElementById('print-area').style.display = 'none';
+        }
+
+        // ===== EVALUAR ALERTAS DE ENTREGA =====
         function evaluarYMostrarAlertasLogistica(ventas) {
             const pAlertas = document.getElementById('panel-alertas-automaticas');
             if (!ventas || ventas.length === 0) return;
@@ -2856,10 +3123,19 @@
             ventas.forEach(v => {
                 if (v.estadoEntrega !== 'Entregado') {
                     let fPactada = v.fechaPactada || calcularDiasHabilesPorDefecto(v.fechaRegistro);
+                    let alertId = 'entrega_' + v.id + '_' + fPactada;
                     if (fPactada === hoyStr) {
-                        pAlertas.innerHTML += `<div class="alert-item alert-hoy">🚨 <strong>ENTREGA PARA HOY:</strong> La factura Nº ${v.factura || 'S/N'} del cliente ${v.cliente} (${v.desc}) debe despacharse hoy mismo. <span>Fecha: ${fPactada}</span></div>`;
+                        if (localStorage.getItem('alert_dismissed_' + alertId)) return;
+                        pAlertas.innerHTML += `<div class="alert-item alert-hoy" data-alert-id="${alertId}">
+                            🚨 <strong>ENTREGA PARA HOY:</strong> La factura Nº ${v.factura || 'S/N'} del cliente ${v.cliente} (${v.desc}) debe despacharse hoy mismo. <span>Fecha: ${fPactada}</span>
+                            <button class="alert-close" onclick="cerrarAlerta(this)">✕</button>
+                        </div>`;
                     } else if (fPactada === mananaStr) {
-                        pAlertas.innerHTML += `<div class="alert-item alert-manana">⚠️ <strong>ENTREGA MAÑANA:</strong> Recordatorio, mañana se vence el plazo pactado del cliente ${v.cliente} (Factura Nº ${v.factura || 'S/N'}). <span>Fecha: ${fPactada}</span></div>`;
+                        if (localStorage.getItem('alert_dismissed_' + alertId)) return;
+                        pAlertas.innerHTML += `<div class="alert-item alert-manana" data-alert-id="${alertId}">
+                            ⚠️ <strong>ENTREGA MAÑANA:</strong> Recordatorio, mañana se vence el plazo pactado del cliente ${v.cliente} (Factura Nº ${v.factura || 'S/N'}). <span>Fecha: ${fPactada}</span>
+                            <button class="alert-close" onclick="cerrarAlerta(this)">✕</button>
+                        </div>`;
                     }
                 }
             });
@@ -2978,7 +3254,6 @@
             document.getElementById('kpi-gastos').innerText = m(totalGastosMes);
             document.getElementById('kpi-ganancia').innerText = m(gananciaEstimada);
 
-            // Actualizar select de trabajadores
             const nSelect = document.getElementById('n-select-trabajador');
             if (nSelect) {
                 let currentVal = nSelect.value;
@@ -3056,6 +3331,7 @@
                             <button class="btn-accion btn-ojito" onclick="verDetalleIngreso('${i.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
                             <button class="btn-accion btn-editar" onclick="abrirModalEditarAbono('${i.id}')" style="padding:2px 4px;">✏️</button>
                             <button class="btn-accion btn-eliminar" onclick="eliminarIngresoDirecto('${i.id}')" style="padding:2px 4px;">x</button>
+                            <button class="btn-accion btn-verde" onclick="imprimirReciboAbono('${i.id}')" style="padding:2px 4px;" title="Imprimir Recibo">🖨️</button>
                         </td>
                     </tr>`;
                 }
@@ -3110,11 +3386,12 @@
                             <td style="color:var(--info);">${m(v.abonado)}</td>
                             <td style="color:var(--accent); font-weight:600;">📅 ${fPactadaFinal}</td>
                             <td>
-                                <div style="display:flex; gap:3px;">
+                                <div style="display:flex; gap:3px; flex-wrap:wrap;">
                                     <button class="btn-accion btn-ojito" onclick="verDetalleVenta('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
                                     <button class="btn-accion btn-editar" onclick="abrirModalVentaConDatos('${v.id}')" style="padding:2px 4px;">✏️</button>
-                                    <button class="btn-accion btn-verde" onclick="abrirCajaAbono('${v.id}', '${v.cliente}')" style="padding:2px 4px;">💵 +</button>
+                                    <button class="btn-accion btn-verde" onclick="abrirCajaAbono('${v.id}', '${v.cliente}', '${v.factura}')" style="padding:2px 4px;">💵 +</button>
                                     <button class="btn-accion btn-eliminar" onclick="eliminarVenta('${v.id}')" style="padding:2px 4px;">x</button>
+                                    <button class="btn-accion btn-azul" onclick="imprimirFactura('${v.id}')" style="padding:2px 4px;" title="Imprimir Factura">🖨️</button>
                                 </div>
                             </td>
                         </tr>`;
@@ -3185,6 +3462,7 @@
                                 <div style="display:flex; gap:3px;">
                                     <button class="btn-accion btn-ojito" onclick="verDetalleCobro('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
                                     <a href="${uri}" target="_blank" class="btn btn-verde" style="padding:4px 8px; font-size:0.75rem;">💬 Cobrar</a>
+                                    <button class="btn-accion btn-azul" onclick="imprimirFactura('${v.id}')" style="padding:2px 4px;" title="Imprimir Factura">🖨️</button>
                                 </div>
                             </td>
                         </tr>`;
@@ -3220,7 +3498,7 @@
                                     ${botonAprobar}
                                     <button class="btn-accion btn-whatsapp" onclick="enviarWhatsAppCotizacion('${c.id}')" style="padding:2px 4px; color:white;">💬</button>
                                     <button class="btn-accion" style="background:#25D366; color:white; padding:2px 4px;" onclick="enviarCotizacionExistenteWhatsApp('${c.id}')">📋</button>
-                                    <button class="btn-accion btn-editar" onclick="iniciarEdicionCotizacion('${c.id}')" style="padding:2px 4px;">✏️</button>
+                                    <button class="btn-accion btn-editar" onclick="iniciarEdicionCotizacionModal('${c.id}')" style="padding:2px 4px;">✏️</button>
                                     <button class="btn-accion btn-eliminar" onclick="eliminarCotizacion('${c.id}')" style="padding:2px 4px;">x</button>
                                 </div>
                             </td>
@@ -3284,7 +3562,7 @@
                         <td style="color:var(--danger); font-weight:600;">${m(g.monto)}</td>
                         <td>
                             <button class="btn-accion btn-ojito" onclick="verDetalleGasto('${g.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                            <button class="btn-accion btn-editar" onclick="iniciarEdicionGasto('${g.id}')" style="padding:2px 4px;">✏️</button>
+                            <button class="btn-accion btn-editar" onclick="iniciarEdicionGastoModal('${g.id}')" style="padding:2px 4px;">✏️</button>
                             <button class="btn-accion btn-eliminar" onclick="eliminarGasto('${g.id}')" style="padding:2px 4px;">x</button>
                         </td>
                     </tr>`;
@@ -3332,7 +3610,8 @@
                 cotizaciones: "🔍 Buscar por Cliente, Nº Cotización o Producto",
                 nomina: "🔍 Buscar por Nombre de Trabajador",
                 gastos: "🔍 Buscar por Categoría o Concepto",
-                cajamenor: "🔍 Buscar Movimiento de Caja Menor"
+                cajamenor: "🔍 Buscar Movimiento de Caja Menor",
+                config: "⚙️ Configuración de la Empresa"
             };
             document.getElementById('lbl-buscador-dinamico').innerText = labels[id] || "🔍 Buscar en este módulo";
 
@@ -3354,7 +3633,8 @@
                 cotizaciones: "📋 Cotizaciones y Presupuestos",
                 nomina: "👷 Pagos a Trabajadores",
                 gastos: "💡 Gastos de Empresa",
-                cajamenor: "🪙 Caja Menor"
+                cajamenor: "🪙 Caja Menor",
+                config: "⚙️ Configuración de la Empresa"
             };
             document.getElementById('txt-modulo-titulo').innerText = t[id];
 
@@ -3371,6 +3651,8 @@
         window.addEventListener('DOMContentLoaded', () => {
             establecerRangoMesActual();
             render();
+            setupModalCierre();
+            cargarConfiguracion();
         });
     </script>
 </body>
