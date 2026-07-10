@@ -180,6 +180,8 @@
         .btn-whatsapp:hover { background-color: #1da851; color: white; }
         .btn-cerrar-modal { background-color: #64748b; color: white; }
         .btn-ojito { background-color: #e0e7ff; color: #3730a3; }
+        .btn-debug { background-color: #8b5cf6; color: white; }
+        .btn-debug:hover { background-color: #7c3aed; }
 
         .badge { padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
         .bg-efectivo { background-color: #fef3c7; color: #92400e; }
@@ -375,7 +377,39 @@
             border: 1px dashed var(--border);
         }
 
-        /* Estilos para el modal de gastos y cotizaciones */
+        .config-empresa .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+        }
+        .config-empresa .checkbox-group input[type="checkbox"] {
+            width: auto;
+            height: 1.2rem;
+            width: 1.2rem;
+            cursor: pointer;
+        }
+        .config-empresa .checkbox-group label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+        .config-empresa .consecutivo-info {
+            background: #f1f5f9;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            margin: 0.5rem 0;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .config-empresa .consecutivo-info span {
+            font-weight: 600;
+        }
+
         .modal-flotante .productos-section {
             margin: 0.5rem 0 1rem 0;
         }
@@ -388,12 +422,189 @@
             display: none !important;
         }
 
+        .print-confirm-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .print-confirm-overlay.activo {
+            display: flex;
+        }
+        .print-confirm-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .print-confirm-box h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        .print-confirm-box p {
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+        }
+        .print-confirm-box .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .print-confirm-box .btn-group .btn {
+            min-width: 100px;
+        }
+
+        .campo input:disabled {
+            background: #e2e8f0;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .badge-saldo-pendiente {
+            background-color: #fef2f2;
+            color: #991b1b;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        .producto-item {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            background: #f8fafc;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--border);
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .producto-item .campo {
+            flex: 1;
+            min-width: 80px;
+        }
+        .producto-item .campo.cantidad {
+            flex: 0.5;
+            min-width: 60px;
+        }
+        .producto-item .campo.precio {
+            flex: 0.7;
+            min-width: 80px;
+        }
+        .producto-item .campo.detalle {
+            flex: 2;
+            min-width: 150px;
+        }
+        .producto-item .btn-eliminar-producto {
+            background: #fee2e2;
+            color: #991b1b;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        .producto-item .btn-eliminar-producto:hover {
+            background: #fecaca;
+        }
+
+        .gasto-item {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            background: #f8fafc;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--border);
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .gasto-item .campo {
+            flex: 1;
+            min-width: 80px;
+        }
+        .gasto-item .campo.cantidad {
+            flex: 0.5;
+            min-width: 60px;
+        }
+        .gasto-item .campo.precio {
+            flex: 0.7;
+            min-width: 80px;
+        }
+        .gasto-item .campo.detalle {
+            flex: 2;
+            min-width: 150px;
+        }
+        .gasto-item .btn-eliminar-gasto-item {
+            background: #fee2e2;
+            color: #991b1b;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        .gasto-item .btn-eliminar-gasto-item:hover {
+            background: #fecaca;
+        }
+
+        .debug-panel {
+            background: #f8fafc;
+            border: 2px solid #8b5cf6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .debug-panel.visible {
+            display: block;
+        }
+        .debug-panel h4 {
+            color: #7c3aed;
+            margin-bottom: 0.5rem;
+        }
+        .debug-panel .debug-item {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .debug-panel .debug-item .debug-factura {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .debug-panel .debug-item .debug-cliente {
+            color: var(--text-muted);
+        }
+        .debug-panel .debug-item .debug-id {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
         @media print {
             body * { visibility: hidden; }
             #print-area, #print-area * { visibility: visible; }
             #print-area { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 2rem; }
             .no-print { display: none !important; }
             .print-btn { display: none !important; }
+            .print-confirm-overlay { display: none !important; }
         }
 
         @media(max-width: 768px) {
@@ -409,6 +620,10 @@
             .modal-flotante .producto-row .campo { min-width: 100%; }
             .botones-nomina { flex-direction: column; width: 100%; }
             .botones-nomina .btn { width: 100%; justify-content: center; }
+            .producto-item { flex-direction: column; }
+            .producto-item .campo { min-width: 100%; }
+            .gasto-item { flex-direction: column; }
+            .gasto-item .campo { min-width: 100%; }
         }
 
         @media(max-width: 1024px) {
@@ -475,6 +690,7 @@
             <button id="btn-gastos" onclick="irA('gastos')">💡 Gastos Empresa</button>
             <button id="btn-cajamenor" onclick="irA('cajamenor')">🪙 Caja Menor</button>
             <button id="btn-config" onclick="irA('config')">⚙️ Configuración</button>
+            <button id="btn-debug" onclick="toggleDebug()" style="color: #8b5cf6;">🐞 Debug</button>
         </nav>
         <div class="status-firebase">
             <span id="sync-dot" class="dot"></span>
@@ -485,6 +701,16 @@
     <!-- Contenido Principal -->
     <main id="mainContent">
         <div class="alerts-container" id="panel-alertas-automaticas"></div>
+
+        <!-- Panel de Debug -->
+        <div class="debug-panel" id="debug-panel">
+            <h4>🐞 Panel de Depuración - Todas las Ventas</h4>
+            <div id="debug-content">
+                <p style="color:var(--text-muted);">Cargando...</p>
+            </div>
+            <button class="btn btn-debug" onclick="forzarRender()" style="margin-top:0.5rem;">🔄 Forzar Render</button>
+            <button class="btn btn-debug" onclick="limpiarFiltrosDebug()" style="margin-top:0.5rem; background:#ef4444;">🧹 Limpiar Filtros</button>
+        </div>
 
         <!-- KPIs -->
         <div class="stats-grid" id="contenedor-kpis-principal">
@@ -526,7 +752,7 @@
                 <label id="lbl-buscador-dinamico">🔍 Buscar en este módulo</label>
                 <input type="text" id="f-buscar" oninput="render()" placeholder="Escribe para filtrar...">
             </div>
-            <div id="div-filtro-tipo" style="width: 150px;" class="campo">
+            <div id="div-filtro-tipo" style="width: 150px;" class="campo" style="display:none;">
                 <label>⚖️ Tipo Movimiento</label>
                 <select id="f-tipo-movimiento" onchange="render()">
                     <option value="TODOS">🔄 Ver Ambos</option>
@@ -539,6 +765,7 @@
             <div style="display:flex; gap:0.5rem; margin-top:16px;">
                 <button class="btn" style="background:#64748b; height:38px;" onclick="limpiarFiltros()">Limpiar</button>
                 <button class="btn btn-verde" style="height:38px;" onclick="exportarBaseDeDatosExcel()">🟢 Excel</button>
+                <button class="btn btn-debug" style="height:38px;" onclick="toggleDebug()">🐞 Debug</button>
             </div>
         </div>
 
@@ -678,12 +905,12 @@
             <div class="panel">
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:1rem;">
                     <h3 style="border:none; padding:0; margin:0;">💡 Registro de Gastos Generales</h3>
-                    <button class="btn btn-azul" onclick="abrirModalGasto()">➕ Nuevo Gasto</button>
+                    <button class="btn btn-azul" onclick="abrirModalGasto()" id="btn-nuevo-gasto">➕ Nuevo Gasto</button>
                 </div>
                 <div class="table-scroll">
                     <div class="table-responsive">
                         <table id="t-gastos">
-                            <thead><tr><th>Fecha</th><th>Categoría</th><th>Producto</th><th>Cantidad</th><th>Detalle</th><th>Medio</th><th>Monto</th><th>Acciones</th></tr></thead>
+                            <thead><tr><th>Fecha</th><th>Categoría</th><th>Detalle</th><th>Medio</th><th>Monto</th><th>Acciones</th></tr></thead>
                             <tbody></tbody>
                         </table>
                     </div>
@@ -738,7 +965,19 @@
                         <div class="campo"><label>Consecutivo Facturas</label><input type="number" id="emp-consecutivo-factura" value="1" min="1"></div>
                         <div class="campo"><label>Consecutivo Abonos</label><input type="number" id="emp-consecutivo-abono" value="1" min="1"></div>
                     </div>
-                    <button class="btn btn-verde" onclick="guardarConfiguracion()">💾 Guardar Configuración</button>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="emp-modo-talonario-fisico">
+                        <label for="emp-modo-talonario-fisico">📄 Modo Talonario Físico (ingreso manual de números de factura y abonos)</label>
+                    </div>
+                    <div class="consecutivo-info">
+                        <span>📄 Siguiente Factura: <span id="info-siguiente-factura">0001</span></span>
+                        <span>💰 Siguiente Abono: <span id="info-siguiente-abono">0001</span></span>
+                    </div>
+                    <div style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
+                        <p>🔹 <strong>Modo Talonario Físico:</strong> Puedes ingresar manualmente el número de factura/abono que ya tienes en tu talonario.</p>
+                        <p>🔹 <strong>Modo Digital:</strong> El sistema genera automáticamente el siguiente consecutivo.</p>
+                    </div>
+                    <button class="btn btn-verde" onclick="guardarConfiguracion()" style="margin-top: 0.5rem;">💾 Guardar Configuración</button>
                 </div>
             </div>
         </div>
@@ -774,6 +1013,9 @@
             </div>
 
             <h4 style="margin: 0.5rem 0; color: var(--text-dark);">📦 Productos / Servicios</h4>
+            
+            <div id="v-productos-list" style="margin-bottom: 0.5rem;"></div>
+            
             <div class="producto-row">
                 <div class="campo cantidad"><label>Cantidad</label><input type="number" id="v-prod-cantidad" value="1" min="1"></div>
                 <div class="campo detalle"><label>Detalle del Producto</label><input type="text" id="v-prod-detalle" placeholder="Ej: Cocina integral RH + mesón cuarzo"></div>
@@ -998,18 +1240,44 @@
                     </select>
                 </div>
                 <div class="campo" id="box-cat-manual-modal" style="display:none;"><label>Escribe categoría</label><input type="text" id="g-cat-manual"></div>
-                <div class="campo"><label>Producto / Concepto</label><input type="text" id="g-concepto" placeholder="Ej: Madera MDF"></div>
-                <div class="campo"><label>Cantidad</label><input type="number" id="g-cantidad" value="1" min="1"></div>
-                <div class="campo"><label>Detalle / Especificación</label><input type="text" id="g-detalle" placeholder="Ej: 2.4m x 1.2m x 18mm"></div>
                 <div class="campo"><label>Medio</label>
                     <select id="g-medio">
                         <option value="Banco">Banco</option>
                         <option value="Efectivo">Efectivo</option>
                     </select>
                 </div>
-                <div class="campo"><label>Monto ($)</label><input type="text" id="g-monto" oninput="formatMoni(this)"></div>
                 <div class="campo"><label>Fecha del Gasto</label><input type="date" id="g-fecha"></div>
             </div>
+
+            <h4 style="margin: 0.5rem 0; color: var(--text-dark);">📦 Productos / Servicios del Gasto</h4>
+            
+            <div id="g-productos-list" style="margin-bottom: 0.5rem;"></div>
+            
+            <div class="producto-row">
+                <div class="campo cantidad"><label>Cantidad</label><input type="number" id="g-prod-cantidad" value="1" min="1"></div>
+                <div class="campo detalle"><label>Descripción</label><input type="text" id="g-prod-detalle" placeholder="Ej: Madera MDF"></div>
+                <div class="campo precio"><label>Valor Unitario ($)</label><input type="text" id="g-prod-precio" oninput="formatMoni(this)" placeholder="0"></div>
+                <button class="btn btn-verde" style="margin-bottom:4px; height:38px; align-self:flex-end;" onclick="agregarProductoGasto()">➕ Agregar</button>
+            </div>
+
+            <div style="margin: 0.5rem 0 1rem 0; overflow-x:auto;">
+                <table class="tabla-productos-cotizacion" id="tabla-productos-gasto-modal">
+                    <thead>
+                        <tr><th style="width:80px;">Cantidad</th><th>Descripción</th><th style="width:150px;">Valor Unit.</th><th style="width:150px;">Subtotal</th><th style="width:90px;">Acciones</th></tr>
+                    </thead>
+                    <tbody id="tbody-productos-gasto-modal">
+                        <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay productos agregados</td></tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="3" style="text-align:right;">TOTAL GASTO:</td>
+                            <td id="total-productos-gasto-modal" style="color:var(--danger); font-size:1.1rem;">$0</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
             <div style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
                 <button class="btn btn-verde" onclick="guardarGastoModal()" id="btn-guardar-gasto-modal" style="flex:1;">Guardar Gasto</button>
                 <button class="btn btn-cerrar-modal" onclick="cerrarModalGasto(true)" style="flex:0.5;">Cancelar</button>
@@ -1038,6 +1306,18 @@
                     <button class="btn btn-verde" onclick="guardarEdicionDespachoModal()" style="flex:1;">💾 Guardar Cambios</button>
                     <button class="btn btn-cerrar-modal" onclick="cerrarModalEditarDespacho()" style="flex:0.5;">Cancelar</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRMACIÓN DE IMPRESIÓN -->
+    <div class="print-confirm-overlay" id="print-confirm-overlay">
+        <div class="print-confirm-box">
+            <h3>🖨️ Confirmar Impresión</h3>
+            <p id="print-confirm-message">¿Deseas imprimir este documento?</p>
+            <div class="btn-group">
+                <button class="btn btn-verde" onclick="confirmarImpresion(true)">✅ Sí, Imprimir</button>
+                <button class="btn btn-rojo" onclick="confirmarImpresion(false)">❌ Cancelar</button>
             </div>
         </div>
     </div>
@@ -1120,7 +1400,11 @@
         window.productosTemp = [];
         window.productosVenta = [];
         window.productosCotizacion = [];
+        window.productosGasto = [];
         window.alertasMostradas = {};
+        window.pendingPrintData = null;
+        window.printConsecutivoUsado = false;
+        window.debugVisible = false;
 
         onValue(carmencitaRef, (snapshot) => {
             const data = snapshot.val();
@@ -1140,12 +1424,18 @@
             document.getElementById('sync-txt').innerText = "Nube Conectada";
             window.render();
             cargarConfiguracion();
+            if (window.debugVisible) {
+                actualizarDebug();
+            }
         });
 
         window.salvar = function() {
             set(carmencitaRef, db).then(() => { 
                 window.render(); 
                 console.log('✅ Datos guardados correctamente en Firebase');
+                if (window.debugVisible) {
+                    actualizarDebug();
+                }
             }).catch((e) => { 
                 console.error('❌ Error al guardar:', e);
                 alert('Error al guardar en Firebase. Revisa la consola.');
@@ -1159,7 +1449,6 @@
             render();
             setupModalCierre();
             cargarConfiguracion();
-            // Re-evaluar alertas cada hora
             setInterval(() => {
                 render();
             }, 3600000);
@@ -1167,6 +1456,66 @@
     </script>
 
     <script>
+        // ===== FUNCIONES DE DEBUG =====
+        function toggleDebug() {
+            window.debugVisible = !window.debugVisible;
+            const panel = document.getElementById('debug-panel');
+            if (window.debugVisible) {
+                panel.classList.add('visible');
+                actualizarDebug();
+            } else {
+                panel.classList.remove('visible');
+            }
+        }
+
+        function actualizarDebug() {
+            const container = document.getElementById('debug-content');
+            const db = window.getDbData();
+            if (!db || !db.ventas) {
+                container.innerHTML = '<p style="color:var(--text-muted);">No hay datos de ventas.</p>';
+                return;
+            }
+            
+            if (db.ventas.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted);">No hay ventas registradas.</p>';
+                return;
+            }
+            
+            let html = '';
+            db.ventas.forEach(v => {
+                const fecha = v.fechaRegistro || 'Sin fecha';
+                const factura = v.factura || 'S/N';
+                const cliente = v.cliente || 'Sin cliente';
+                const total = v.total || 0;
+                const abonado = v.abonado || 0;
+                const estado = v.estadoEntrega || 'Pendiente';
+                const id = v.id || 'Sin ID';
+                html += `
+                    <div class="debug-item">
+                        <span class="debug-factura">📄 #${factura}</span>
+                        <span class="debug-cliente">${cliente} - ${m(total)} (${m(abonado)} abonado) - ${estado}</span>
+                        <span class="debug-id">ID: ${id.substring(0, 12)}...</span>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function forzarRender() {
+            render();
+            actualizarDebug();
+            alert('✅ Render forzado. Verifica los datos en la tabla.');
+        }
+
+        function limpiarFiltrosDebug() {
+            document.getElementById('f-buscar').value = '';
+            document.getElementById('f-tipo-movimiento').value = 'TODOS';
+            establecerRangoMesActual();
+            render();
+            actualizarDebug();
+            alert('✅ Filtros limpiados. Todos los registros deberían ser visibles.');
+        }
+
         // ===== FUNCIONES GENERALES =====
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('abierto');
@@ -1200,6 +1549,7 @@
             document.getElementById('f-tipo-movimiento').value = 'TODOS';
             establecerRangoMesActual();
             render();
+            if (window.debugVisible) actualizarDebug();
         }
 
         function verificarCategoriaManual(select) {
@@ -1248,7 +1598,9 @@
                 document.getElementById('emp-correo').value = db.config.correo || '';
                 document.getElementById('emp-consecutivo-factura').value = db.config.consecutivoFactura || 1;
                 document.getElementById('emp-consecutivo-abono').value = db.config.consecutivoAbono || 1;
+                document.getElementById('emp-modo-talonario-fisico').checked = db.config.modoTalonarioFisico || false;
             }
+            actualizarInfoConsecutivos();
         }
 
         function guardarConfiguracion() {
@@ -1260,10 +1612,22 @@
                 telefono: document.getElementById('emp-telefono').value.trim(),
                 correo: document.getElementById('emp-correo').value.trim(),
                 consecutivoFactura: parseInt(document.getElementById('emp-consecutivo-factura').value) || 1,
-                consecutivoAbono: parseInt(document.getElementById('emp-consecutivo-abono').value) || 1
+                consecutivoAbono: parseInt(document.getElementById('emp-consecutivo-abono').value) || 1,
+                modoTalonarioFisico: document.getElementById('emp-modo-talonario-fisico').checked
             };
             salvar();
+            actualizarInfoConsecutivos();
             alert('✅ Configuración guardada correctamente.');
+        }
+
+        function actualizarInfoConsecutivos() {
+            let db = window.getDbData();
+            if (db.config) {
+                let facturaValor = db.config.consecutivoFactura || 1;
+                let abonoValor = db.config.consecutivoAbono || 1;
+                document.getElementById('info-siguiente-factura').textContent = String(facturaValor).padStart(4, '0');
+                document.getElementById('info-siguiente-abono').textContent = String(abonoValor).padStart(4, '0');
+            }
         }
 
         function obtenerConsecutivo(tipo) {
@@ -1272,8 +1636,41 @@
             let key = tipo === 'factura' ? 'consecutivoFactura' : 'consecutivoAbono';
             let valor = db.config[key] || 1;
             let padded = String(valor).padStart(4, '0');
-            db.config[key] = valor + 1;
+            window.pendingConsecutivo = { tipo: tipo, valor: valor, padded: padded };
             return padded;
+        }
+
+        function confirmarYIncrementarConsecutivo() {
+            if (window.pendingConsecutivo) {
+                let db = window.getDbData();
+                if (!db.config) db.config = {};
+                let key = window.pendingConsecutivo.tipo === 'factura' ? 'consecutivoFactura' : 'consecutivoAbono';
+                db.config[key] = window.pendingConsecutivo.valor + 1;
+                salvar();
+                actualizarInfoConsecutivos();
+                window.pendingConsecutivo = null;
+                return true;
+            }
+            return false;
+        }
+
+        function obtenerModoTalonarioFisico() {
+            let db = window.getDbData();
+            return db.config && db.config.modoTalonarioFisico ? true : false;
+        }
+
+        function obtenerSiguienteFacturaAuto() {
+            let db = window.getDbData();
+            if (!db.config) db.config = {};
+            let valor = db.config.consecutivoFactura || 1;
+            return String(valor).padStart(4, '0');
+        }
+
+        function obtenerSiguienteAbonoAuto() {
+            let db = window.getDbData();
+            if (!db.config) db.config = {};
+            let valor = db.config.consecutivoAbono || 1;
+            return String(valor).padStart(4, '0');
         }
 
         // ===== CIERRE DE MODALES CON ESC Y CLIC FUERA =====
@@ -1344,15 +1741,9 @@
             const alertItem = element.closest('.alert-item');
             if (alertItem) {
                 alertItem.classList.add('alert-dismissed');
-                // Guardar en localStorage para no mostrar de nuevo hasta que se recargue la página o pase 1 hora
                 const alertId = alertItem.dataset.alertId || 'alert_' + Date.now();
                 localStorage.setItem('alert_dismissed_' + alertId, 'true');
             }
-        }
-
-        function generarIdAlerta(texto) {
-            // Generar un ID único basado en el texto de la alerta
-            return 'alert_' + texto.replace(/\s+/g, '_').substring(0, 50) + '_' + Date.now();
         }
 
         // ===== MODAL DETALLE GENÉRICO =====
@@ -1558,8 +1949,11 @@
             const modal = document.getElementById('modal-abono-directo');
             restaurarBackupModal('modal-abono-directo');
             modal.classList.add('activo');
+            
+            const modoFisico = obtenerModoTalonarioFisico();
+            const numeroInput = document.getElementById('abono-directo-numero');
+            
             if (!document.getElementById('abono-directo-id').value) {
-                document.getElementById('abono-directo-numero').value = '';
                 document.getElementById('abono-directo-monto').value = '';
                 document.getElementById('abono-directo-medio').value = 'Banco';
                 document.getElementById('abono-directo-fecha').value = new Date().toISOString().split('T')[0];
@@ -1568,10 +1962,31 @@
                 document.getElementById('abono-directo-factura-precargada').value = facturaPrecargada || '';
                 document.getElementById('lbl-modal-abono-directo-titulo').innerText = '💰 Nuevo Abono Directo';
                 document.getElementById('btn-guardar-abono-directo').innerText = '💰 Guardar Abono';
+                
+                if (modoFisico) {
+                    numeroInput.disabled = false;
+                    numeroInput.placeholder = 'Ej: 045 (de tu talonario)';
+                    numeroInput.value = '';
+                    numeroInput.style.background = 'white';
+                } else {
+                    const siguienteAbono = obtenerSiguienteAbonoAuto();
+                    numeroInput.disabled = true;
+                    numeroInput.value = siguienteAbono;
+                    numeroInput.placeholder = 'Generado automáticamente';
+                    numeroInput.style.background = '#e2e8f0';
+                }
+            } else {
+                numeroInput.disabled = false;
+                numeroInput.style.background = 'white';
             }
+            
             guardarBackupModal('modal-abono-directo');
             setTimeout(() => {
-                document.getElementById('abono-directo-numero').focus();
+                if (!modoFisico || document.getElementById('abono-directo-id').value) {
+                    document.getElementById('abono-directo-cliente').focus();
+                } else {
+                    numeroInput.focus();
+                }
             }, 300);
         }
 
@@ -1593,7 +2008,17 @@
             let cliente = document.getElementById('abono-directo-cliente').value.trim() || 'Cliente sin registrar';
             let factura = document.getElementById('abono-directo-factura').value.trim() || 'S/N';
 
-            if (!numero) return alert('Ingresa el número de recibo de abono.');
+            const modoFisico = obtenerModoTalonarioFisico();
+            
+            if (!numero) {
+                if (modoFisico) {
+                    return alert('Ingresa el número de recibo de tu talonario físico.');
+                } else {
+                    numero = obtenerSiguienteAbonoAuto();
+                    document.getElementById('abono-directo-numero').value = numero;
+                }
+            }
+            
             if (monto <= 0) return alert('Ingresa un monto válido.');
 
             if (idEdicion && idEdicion !== "") {
@@ -1641,6 +2066,8 @@
             abrirModalAbonoDirecto(factura, cliente);
             document.getElementById('abono-directo-id').value = id;
             document.getElementById('abono-directo-numero').value = numeroRecibo || '';
+            document.getElementById('abono-directo-numero').disabled = false;
+            document.getElementById('abono-directo-numero').style.background = 'white';
             document.getElementById('abono-directo-monto').value = ingreso.monto ? ingreso.monto.toLocaleString('es-CO') : '';
             document.getElementById('abono-directo-medio').value = ingreso.medio || 'Banco';
             document.getElementById('abono-directo-fecha').value = ingreso.fecha || new Date().toISOString().split('T')[0];
@@ -1649,7 +2076,7 @@
             guardarBackupModal('modal-abono-directo');
         }
 
-        // ===== ALERTAS DE CUMPLEAÑOS (CORREGIDAS) =====
+        // ===== ALERTAS DE CUMPLEAÑOS =====
         function evaluarAlertasCumpleanos(trabajadores) {
             const pAlertas = document.getElementById('panel-alertas-automaticas');
             if (!trabajadores || trabajadores.length === 0) return;
@@ -1683,7 +2110,6 @@
                 let alertId = 'cumple_' + t.id + '_' + cumpleStr;
                 
                 if (cumpleStr === hoyStr) {
-                    // Verificar si ya fue descartada
                     if (localStorage.getItem('alert_dismissed_' + alertId)) return;
                     pAlertas.innerHTML += `<div class="alert-item alert-cumple" data-alert-id="${alertId}">
                         🎂 <strong>¡FELIZ CUMPLEAÑOS!</strong> Hoy es el cumpleaños de <strong>${t.nombre}</strong> 🎉
@@ -1724,14 +2150,16 @@
             let db = window.getDbData();
             let g = db.gastos.find(x => x.id === id);
             if (g) {
+                let productosHtml = g.productosArray && g.productosArray.length > 0 
+                    ? g.productosArray.map(p => `• ${p.cantidad}x ${p.detalle} - ${m(p.precio)} c/u = ${m(p.cantidad * p.precio)}`).join('<br>')
+                    : g.concepto || 'No especificado';
                 let contenido = `
                     <p><strong>Fecha:</strong> ${g.fecha || 'No especificada'}</p>
                     <p><strong>Categoría:</strong> ${g.cat || 'No especificada'}</p>
-                    <p><strong>Producto:</strong> ${g.concepto || 'No especificado'}</p>
-                    <p><strong>Cantidad:</strong> ${g.cantidad || 1}</p>
-                    <p><strong>Detalle:</strong> ${g.detalle || 'No especificado'}</p>
                     <p><strong>Medio:</strong> ${g.medio || 'No especificado'}</p>
-                    <p><strong>Monto:</strong> <span style="color:var(--danger); font-weight:700;">${m(g.monto)}</span></p>
+                    <p><strong>Detalle:</strong></p>
+                    <div style="background:#f8fafc; padding:10px; border-radius:4px; font-size:0.85rem;">${productosHtml}</div>
+                    <p style="margin-top:8px;"><strong>Total:</strong> <span style="color:var(--danger); font-weight:700;">${m(g.monto)}</span></p>
                     <p><strong>ID:</strong> ${g.id}</p>
                 `;
                 abrirModalDetalle('📤 Detalle del Egreso', contenido);
@@ -1768,6 +2196,13 @@
                     <p><strong>Fecha/Hora:</strong> ${v.despacho.fechaHora || 'No registrada'}</p>
                 `;
             }
+            let pendiente = v.total - v.abonado;
+            let saldoHtml = pendiente > 0 ? `<p style="color:var(--danger); font-weight:700;"><strong>💰 SALDO PENDIENTE:</strong> ${m(pendiente)}</p>` : '';
+            
+            let productosHtml = v.productosArray && v.productosArray.length > 0 
+                ? v.productosArray.map(p => `• ${p.cantidad}x ${p.detalle} - ${m(p.precio)} c/u = ${m(p.cantidad * p.precio)}`).join('<br>')
+                : v.desc || 'No especificado';
+            
             let contenido = `
                 <p><strong>Factura:</strong> ${v.factura || 'S/N'}</p>
                 <p><strong>Cliente:</strong> ${v.cliente}</p>
@@ -1775,12 +2210,13 @@
                 <p><strong>Teléfono:</strong> ${v.telefono || 'No registrado'}</p>
                 <p><strong>Dirección:</strong> ${v.direccion || 'No registrada'}</p>
                 <p><strong>Barrio:</strong> ${v.barrio || 'No registrado'}</p>
-                <p><strong>Proyecto:</strong> ${v.desc || 'No especificado'}</p>
                 <p><strong>F. Contrato:</strong> ${fOrig}</p>
                 <p style="color:var(--accent)"><strong>Entrega pactada:</strong> ${fPactadaFinal}</p>
-                <p><strong>Valor:</strong> ${m(v.total)}</p>
+                <p><strong>Productos:</strong></p>
+                <div style="background:#f8fafc; padding:10px; border-radius:4px; font-size:0.85rem;">${productosHtml}</div>
+                <p style="margin-top:8px;"><strong>Valor:</strong> ${m(v.total)}</p>
                 <p style="color:var(--success)"><strong>Abonado:</strong> ${m(v.abonado)}</p>
-                <p style="color:var(--danger)"><strong>Saldo:</strong> ${m(v.total - v.abonado)}</p>
+                ${saldoHtml}
                 <p><strong>Estado Entrega:</strong> ${v.estadoEntrega || 'Pendiente'}</p>
                 ${despachoInfo}
             `;
@@ -1875,14 +2311,16 @@
             let db = window.getDbData();
             let g = db.gastos.find(x => x.id === id);
             if (!g) return;
+            let productosHtml = g.productosArray && g.productosArray.length > 0 
+                ? g.productosArray.map(p => `• ${p.cantidad}x ${p.detalle} - ${m(p.precio)} c/u = ${m(p.cantidad * p.precio)}`).join('<br>')
+                : g.concepto || 'No especificado';
             let contenido = `
                 <p><strong>Fecha:</strong> ${g.fecha || 'No especificada'}</p>
                 <p><strong>Categoría:</strong> ${g.cat || 'No especificada'}</p>
-                <p><strong>Producto:</strong> ${g.concepto || 'No especificado'}</p>
-                <p><strong>Cantidad:</strong> ${g.cantidad || 1}</p>
-                <p><strong>Detalle:</strong> ${g.detalle || 'No especificado'}</p>
                 <p><strong>Medio:</strong> ${g.medio || 'No especificado'}</p>
-                <p><strong>Monto:</strong> <span style="color:var(--danger); font-weight:700;">${m(g.monto)}</span></p>
+                <p><strong>Detalle:</strong></p>
+                <div style="background:#f8fafc; padding:10px; border-radius:4px; font-size:0.85rem;">${productosHtml}</div>
+                <p style="margin-top:8px;"><strong>Total:</strong> <span style="color:var(--danger); font-weight:700;">${m(g.monto)}</span></p>
                 <p><strong>ID:</strong> ${g.id}</p>
             `;
             abrirModalDetalle('💡 Detalle del Gasto', contenido);
@@ -1903,7 +2341,7 @@
             abrirModalDetalle('🪙 Detalle de Caja Menor', contenido);
         }
 
-        // ===== FUNCIONES COTIZACIONES (MODAL) =====
+        // ===== FUNCIONES COTIZACIONES =====
         function abrirModalCotizacion() {
             const modal = document.getElementById('modal-cotizacion');
             restaurarBackupModal('modal-cotizacion');
@@ -2112,9 +2550,10 @@
                 ? JSON.parse(JSON.stringify(c.productosArray))
                 : [];
             actualizarTablaProductosVenta();
+            mostrarProductosVenta();
             
             let total = window.productosVenta.reduce((sum, p) => sum + (p.cantidad * p.precio), 0);
-            document.getElementById('v-total').value = total ? total.toLocaleString('es-CO') : '';
+            document.getElementById('total-productos-venta').textContent = m(total);
             
             document.getElementById('lbl-modal-venta-titulo').innerText = `✏️ Convertir Cotización Nº ${c.numero} en Venta`;
             document.getElementById('btn-guardar-venta-accion').innerText = '🚀 Guardar Venta';
@@ -2266,8 +2705,11 @@
             const modal = document.getElementById('modal-venta');
             restaurarBackupModal('modal-venta');
             modal.classList.add('activo');
+            
+            const modoFisico = obtenerModoTalonarioFisico();
+            const facturaInput = document.getElementById('v-factura');
+            
             if (!document.getElementById('v-id-edicion').value) {
-                document.getElementById('v-factura').value = '';
                 document.getElementById('v-cliente').value = '';
                 document.getElementById('v-cedula').value = '';
                 document.getElementById('v-direccion').value = '';
@@ -2283,12 +2725,34 @@
                 alternarVisibilidadMetodoPagoDividido('Banco');
                 window.productosVenta = [];
                 actualizarTablaProductosVenta();
+                mostrarProductosVenta();
                 document.getElementById('lbl-modal-venta-titulo').innerText = '➕ Nueva Venta';
                 document.getElementById('btn-guardar-venta-accion').innerText = '🚀 Guardar Venta';
+                
+                if (modoFisico) {
+                    facturaInput.disabled = false;
+                    facturaInput.placeholder = 'Ej: 0254 (de tu talonario)';
+                    facturaInput.value = '';
+                    facturaInput.style.background = 'white';
+                } else {
+                    const siguienteFactura = obtenerSiguienteFacturaAuto();
+                    facturaInput.disabled = true;
+                    facturaInput.value = siguienteFactura;
+                    facturaInput.placeholder = 'Generado automáticamente';
+                    facturaInput.style.background = '#e2e8f0';
+                }
+            } else {
+                facturaInput.disabled = false;
+                facturaInput.style.background = 'white';
             }
+            
             guardarBackupModal('modal-venta');
             setTimeout(() => {
-                document.getElementById('v-factura').focus();
+                if (!modoFisico || document.getElementById('v-id-edicion').value) {
+                    document.getElementById('v-cliente').focus();
+                } else {
+                    facturaInput.focus();
+                }
             }, 300);
         }
 
@@ -2298,6 +2762,7 @@
                 limpiarBackupModal('modal-venta');
                 window.productosVenta = [];
             }
+            document.getElementById('v-productos-list').innerHTML = '';
         }
 
         function abrirModalVentaConDatos(id) {
@@ -2309,6 +2774,8 @@
 
             document.getElementById('v-id-edicion').value = v.id;
             document.getElementById('v-factura').value = v.factura || '';
+            document.getElementById('v-factura').disabled = false;
+            document.getElementById('v-factura').style.background = 'white';
             document.getElementById('v-cliente').value = v.cliente || '';
             document.getElementById('v-cedula').value = v.cedula || '';
             document.getElementById('v-direccion').value = v.direccion || '';
@@ -2318,9 +2785,76 @@
             document.getElementById('v-fecha-registro').value = v.fechaRegistro || '';
             document.getElementById('v-fecha-pactada').value = v.fechaPactada || '';
             
+            window.productosVenta = v.productosArray && v.productosArray.length > 0 
+                ? JSON.parse(JSON.stringify(v.productosArray))
+                : [];
+            actualizarTablaProductosVenta();
+            mostrarProductosVenta();
+            
             document.getElementById('lbl-modal-venta-titulo').innerText = '✏️ Editar Venta';
             document.getElementById('btn-guardar-venta-accion').innerText = '💾 Guardar Cambios';
             guardarBackupModal('modal-venta');
+        }
+
+        function mostrarProductosVenta() {
+            const container = document.getElementById('v-productos-list');
+            if (!container) return;
+            
+            if (window.productosVenta.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">No hay productos agregados.</p>';
+                return;
+            }
+            
+            let html = '';
+            window.productosVenta.forEach((p, i) => {
+                html += `
+                    <div class="producto-item">
+                        <div class="campo cantidad">
+                            <label>Cantidad</label>
+                            <input type="number" id="v-prod-edit-${i}-cantidad" value="${p.cantidad}" min="1" onchange="actualizarProductoVenta(${i})">
+                        </div>
+                        <div class="campo detalle">
+                            <label>Detalle</label>
+                            <input type="text" id="v-prod-edit-${i}-detalle" value="${p.detalle}" onchange="actualizarProductoVenta(${i})">
+                        </div>
+                        <div class="campo precio">
+                            <label>Precio Unit.</label>
+                            <input type="text" id="v-prod-edit-${i}-precio" value="${p.precio.toLocaleString('es-CO')}" oninput="formatMoni(this); actualizarProductoVenta(${i})">
+                        </div>
+                        <div style="display:flex; align-items:center; gap:0.5rem; padding-bottom:4px;">
+                            <span style="font-weight:600; color:var(--text-dark);">${m(p.cantidad * p.precio)}</span>
+                            <button class="btn-eliminar-producto" onclick="eliminarProductoVentaEdit(${i})">✕</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function actualizarProductoVenta(index) {
+            const cantidadInput = document.getElementById(`v-prod-edit-${index}-cantidad`);
+            const detalleInput = document.getElementById(`v-prod-edit-${index}-detalle`);
+            const precioInput = document.getElementById(`v-prod-edit-${index}-precio`);
+            
+            if (cantidadInput && detalleInput && precioInput) {
+                const cantidad = parseInt(cantidadInput.value) || 1;
+                const detalle = detalleInput.value.trim() || 'Producto sin descripción';
+                const precio = cleanNum(precioInput.value);
+                
+                if (precio > 0) {
+                    window.productosVenta[index] = { cantidad, detalle, precio };
+                    actualizarTablaProductosVenta();
+                    mostrarProductosVenta();
+                }
+            }
+        }
+
+        function eliminarProductoVentaEdit(index) {
+            if (confirm('¿Eliminar este producto de la venta?')) {
+                window.productosVenta.splice(index, 1);
+                actualizarTablaProductosVenta();
+                mostrarProductosVenta();
+            }
         }
 
         function agregarProductoVenta() {
@@ -2336,11 +2870,13 @@
             document.getElementById('v-prod-precio').value = '';
             document.getElementById('v-prod-cantidad').value = 1;
             actualizarTablaProductosVenta();
+            mostrarProductosVenta();
         }
 
         function eliminarProductoVenta(index) {
             window.productosVenta.splice(index, 1);
             actualizarTablaProductosVenta();
+            mostrarProductosVenta();
         }
 
         function actualizarTablaProductosVenta() {
@@ -2394,8 +2930,25 @@
             let fechaFinal = fechaSeleccionada || new Date().toISOString().split('T')[0];
             let fechaPactada = document.getElementById('v-fecha-pactada').value;
 
-            if (!factura) return alert('Ingresa el número de Factura.');
+            const modoFisico = obtenerModoTalonarioFisico();
+            
+            if (!factura) {
+                if (modoFisico) {
+                    return alert('Ingresa el número de factura de tu talonario físico.');
+                } else {
+                    factura = obtenerSiguienteFacturaAuto();
+                    document.getElementById('v-factura').value = factura;
+                }
+            }
+
             if (!cliente || total <= 0) return alert('Verifica datos y monto total.');
+
+            if (modoFisico) {
+                let facturaExistente = db.ventas.find(v => v.factura === factura && v.id !== idEdicion);
+                if (facturaExistente) {
+                    return alert(`⚠️ La factura Nº ${factura} ya existe en el sistema. Verifica el número.`);
+                }
+            }
 
             if (idEdicion && idEdicion !== "") {
                 let v = db.ventas.find(x => x.id === idEdicion);
@@ -2411,6 +2964,7 @@
                     v.total = total; 
                     v.fechaRegistro = fechaFinal; 
                     v.fechaPactada = fechaPactada;
+                    v.productosArray = JSON.parse(JSON.stringify(window.productosVenta));
                 }
                 cerrarModalVenta(true);
             } else {
@@ -2469,12 +3023,14 @@
                     desc, 
                     total, 
                     abonado: abonoCalculadoTotal, 
-                    estadoEntrega: 'Pendiente' 
+                    estadoEntrega: 'Pendiente',
+                    productosArray: JSON.parse(JSON.stringify(window.productosVenta))
                 });
                 
                 cerrarModalVenta(true);
             }
             salvar();
+            if (window.debugVisible) actualizarDebug();
         }
 
         function eliminarVenta(id) {
@@ -2483,19 +3039,13 @@
                 db.ventas = db.ventas.filter(x => x.id !== id);
                 db.ingresosDirectos = db.ingresosDirectos.filter(i => !i.origen.includes(`(${id})`));
                 salvar();
+                if (window.debugVisible) actualizarDebug();
             }
         }
 
         // ===== FUNCIONES DE ABONOS EN CARTERA =====
         function abrirCajaAbono(id, cliente, factura) {
             abrirModalAbonoDirecto(factura || '', cliente);
-        }
-
-        function cerrarBoxAbono() { document.getElementById('box-abono-practico').style.display = 'none'; }
-
-        function procesarAbonoEstructurado() {
-            // Esta función ya no se usa con el nuevo modal, pero se mantiene por compatibilidad
-            alert('Usa el botón "💰 Nuevo Abono" desde la pestaña de Ventas.');
         }
 
         // ===== FUNCIONES DE EDITAR ABONO =====
@@ -2637,7 +3187,7 @@
             }
         }
 
-        // ===== FUNCIONES GASTOS (MODAL) =====
+        // ===== FUNCIONES GASTOS =====
         function abrirModalGasto() {
             const modal = document.getElementById('modal-gasto');
             restaurarBackupModal('modal-gasto');
@@ -2645,19 +3195,18 @@
             if (!document.getElementById('g-id-edicion').value) {
                 document.getElementById('g-cat').value = 'Servicios Publicos';
                 document.getElementById('g-cat-manual').value = '';
-                document.getElementById('g-concepto').value = '';
-                document.getElementById('g-cantidad').value = 1;
-                document.getElementById('g-detalle').value = '';
                 document.getElementById('g-medio').value = 'Banco';
-                document.getElementById('g-monto').value = '';
                 document.getElementById('g-fecha').value = new Date().toISOString().split('T')[0];
                 document.getElementById('box-cat-manual-modal').style.display = 'none';
+                window.productosGasto = [];
+                actualizarTablaProductosGasto();
+                mostrarProductosGasto();
                 document.getElementById('lbl-modal-gasto-titulo').innerText = '➕ Registrar Nuevo Gasto';
                 document.getElementById('btn-guardar-gasto-modal').innerText = 'Guardar Gasto';
             }
             guardarBackupModal('modal-gasto');
             setTimeout(() => {
-                document.getElementById('g-concepto').focus();
+                document.getElementById('g-medio').focus();
             }, 300);
         }
 
@@ -2665,6 +3214,124 @@
             document.getElementById('modal-gasto').classList.remove('activo');
             if (borrarDatos) {
                 limpiarBackupModal('modal-gasto');
+                window.productosGasto = [];
+                document.getElementById('g-productos-list').innerHTML = '';
+            }
+        }
+
+        function agregarProductoGasto() {
+            let detalle = document.getElementById('g-prod-detalle').value.trim();
+            let precio = cleanNum(document.getElementById('g-prod-precio').value);
+            let cantidad = parseInt(document.getElementById('g-prod-cantidad').value) || 1;
+
+            if (!detalle) return alert('Por favor ingresa la descripción del producto.');
+            if (precio <= 0) return alert('Por favor ingresa un valor válido.');
+
+            window.productosGasto.push({ cantidad, detalle, precio });
+            document.getElementById('g-prod-detalle').value = '';
+            document.getElementById('g-prod-precio').value = '';
+            document.getElementById('g-prod-cantidad').value = 1;
+            actualizarTablaProductosGasto();
+            mostrarProductosGasto();
+        }
+
+        function eliminarProductoGasto(index) {
+            window.productosGasto.splice(index, 1);
+            actualizarTablaProductosGasto();
+            mostrarProductosGasto();
+        }
+
+        function editarProductoGasto(index) {
+            let producto = window.productosGasto[index];
+            if (!producto) return;
+
+            document.getElementById('edit-producto-index').value = index;
+            document.getElementById('edit-producto-cantidad').value = producto.cantidad;
+            document.getElementById('edit-producto-detalle').value = producto.detalle;
+            document.getElementById('edit-producto-precio').value = producto.precio.toLocaleString('es-CO');
+            document.getElementById('modal-editar-producto').style.display = 'flex';
+        }
+
+        function actualizarTablaProductosGasto() {
+            const tbody = document.getElementById('tbody-productos-gasto-modal');
+            const totalSpan = document.getElementById('total-productos-gasto-modal');
+            
+            if (window.productosGasto.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay productos agregados</td></tr>';
+                totalSpan.textContent = '$0';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            window.productosGasto.forEach((p, i) => {
+                let subtotal = p.cantidad * p.precio;
+                total += subtotal;
+                html += `<tr>
+                    <td>${p.cantidad}</td>
+                    <td>${p.detalle}</td>
+                    <td>${m(p.precio)}</td>
+                    <td>${m(subtotal)}</td>
+                    <td>
+                        <button class="btn-accion btn-editar" onclick="editarProductoGasto(${i})" style="padding:2px 6px;">✏️</button>
+                        <button class="btn-accion btn-eliminar" onclick="eliminarProductoGasto(${i})" style="padding:2px 6px;">x</button>
+                    </td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+            totalSpan.textContent = m(total);
+        }
+
+        function mostrarProductosGasto() {
+            const container = document.getElementById('g-productos-list');
+            if (!container) return;
+            
+            if (window.productosGasto.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">No hay productos agregados.</p>';
+                return;
+            }
+            
+            let html = '';
+            window.productosGasto.forEach((p, i) => {
+                html += `
+                    <div class="gasto-item">
+                        <div class="campo cantidad">
+                            <label>Cantidad</label>
+                            <input type="number" id="g-prod-edit-${i}-cantidad" value="${p.cantidad}" min="1" onchange="actualizarProductoGasto(${i})">
+                        </div>
+                        <div class="campo detalle">
+                            <label>Descripción</label>
+                            <input type="text" id="g-prod-edit-${i}-detalle" value="${p.detalle}" onchange="actualizarProductoGasto(${i})">
+                        </div>
+                        <div class="campo precio">
+                            <label>Valor Unit.</label>
+                            <input type="text" id="g-prod-edit-${i}-precio" value="${p.precio.toLocaleString('es-CO')}" oninput="formatMoni(this); actualizarProductoGasto(${i})">
+                        </div>
+                        <div style="display:flex; align-items:center; gap:0.5rem; padding-bottom:4px;">
+                            <span style="font-weight:600; color:var(--text-dark);">${m(p.cantidad * p.precio)}</span>
+                            <button class="btn-eliminar-gasto-item" onclick="eliminarProductoGasto(${i})">✕</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function actualizarProductoGasto(index) {
+            const cantidadInput = document.getElementById(`g-prod-edit-${index}-cantidad`);
+            const detalleInput = document.getElementById(`g-prod-edit-${index}-detalle`);
+            const precioInput = document.getElementById(`g-prod-edit-${index}-precio`);
+            
+            if (cantidadInput && detalleInput && precioInput) {
+                const cantidad = parseInt(cantidadInput.value) || 1;
+                const detalle = detalleInput.value.trim() || 'Producto sin descripción';
+                const precio = cleanNum(precioInput.value);
+                
+                if (precio > 0) {
+                    window.productosGasto[index] = { cantidad, detalle, precio };
+                    actualizarTablaProductosGasto();
+                    mostrarProductosGasto();
+                }
             }
         }
 
@@ -2675,29 +3342,24 @@
             let catSelect = document.getElementById('g-cat').value;
             let catManual = document.getElementById('g-cat-manual').value.trim();
             let catFinal = catSelect === 'MANUAL' ? catManual : catSelect;
-            let concepto = document.getElementById('g-concepto').value.trim();
-            let cantidad = parseInt(document.getElementById('g-cantidad').value) || 1;
-            let detalle = document.getElementById('g-detalle').value.trim();
             let medio = document.getElementById('g-medio').value;
-            let monto = cleanNum(document.getElementById('g-monto').value);
             let fecha = document.getElementById('g-fecha').value || new Date().toISOString().split('T')[0];
 
-            if (!catFinal || monto <= 0) return alert('Verifica datos.');
+            if (!catFinal) return alert('Verifica la categoría.');
+            if (window.productosGasto.length === 0) return alert('Agrega al menos un producto/servicio al gasto.');
 
-            let descripcion = concepto;
-            if (cantidad > 1) descripcion += ` (${cantidad} und)`;
-            if (detalle) descripcion += ` - ${detalle}`;
+            let total = window.productosGasto.reduce((sum, p) => sum + (p.cantidad * p.precio), 0);
+            let descripcion = window.productosGasto.map(p => `${p.cantidad}x ${p.detalle}`).join('\n');
 
             if (idEdicion && idEdicion !== "") {
                 let g = db.gastos.find(x => x.id === idEdicion);
                 if (g) {
                     g.cat = catFinal;
                     g.concepto = descripcion;
-                    g.cantidad = cantidad;
-                    g.detalle = detalle;
                     g.medio = medio;
-                    g.monto = monto;
+                    g.monto = total;
                     g.fecha = fecha;
+                    g.productosArray = JSON.parse(JSON.stringify(window.productosGasto));
                 }
             } else {
                 db.gastos.push({ 
@@ -2705,10 +3367,9 @@
                     fecha: fecha, 
                     cat: catFinal, 
                     concepto: descripcion, 
-                    cantidad: cantidad,
-                    detalle: detalle,
-                    medio, 
-                    monto 
+                    medio: medio, 
+                    monto: total,
+                    productosArray: JSON.parse(JSON.stringify(window.productosGasto))
                 });
             }
             cerrarModalGasto(true);
@@ -2729,12 +3390,14 @@
                 document.getElementById('box-cat-manual-modal').style.display = 'flex';
                 document.getElementById('g-cat-manual').value = g.cat;
             }
-            document.getElementById('g-concepto').value = g.concepto || '';
-            document.getElementById('g-cantidad').value = g.cantidad || 1;
-            document.getElementById('g-detalle').value = g.detalle || '';
             document.getElementById('g-medio').value = g.medio || 'Banco';
-            document.getElementById('g-monto').value = g.monto ? g.monto.toLocaleString('es-CO') : '';
             document.getElementById('g-fecha').value = g.fecha || new Date().toISOString().split('T')[0];
+            
+            window.productosGasto = g.productosArray && g.productosArray.length > 0 
+                ? JSON.parse(JSON.stringify(g.productosArray))
+                : [];
+            actualizarTablaProductosGasto();
+            mostrarProductosGasto();
             
             document.getElementById('lbl-modal-gasto-titulo').innerText = '✏️ Editar Gasto';
             document.getElementById('btn-guardar-gasto-modal').innerText = '💾 Guardar Cambios';
@@ -2843,6 +3506,11 @@
                     <p><strong>Fecha/Hora:</strong> ${v.despacho.fechaHora || 'No registrada'}</p>
                 `;
             }
+            let pendiente = v.total - v.abonado;
+            let saldoHtml = pendiente > 0 ? `<p style="color:var(--danger); font-weight:700;"><strong>💰 SALDO PENDIENTE:</strong> ${m(pendiente)}</p>` : '';
+            let productosHtml = v.productosArray && v.productosArray.length > 0 
+                ? v.productosArray.map(p => `• ${p.cantidad}x ${p.detalle} - ${m(p.precio)} c/u = ${m(p.cantidad * p.precio)}`).join('<br>')
+                : v.desc || 'No especificado';
             let h = `
                 <p><strong>Factura:</strong> ${v.factura || 'S/N'}</p>
                 <p><strong>Cliente:</strong> ${v.cliente}</p>
@@ -2850,12 +3518,13 @@
                 <p><strong>Teléfono:</strong> ${v.telefono}</p>
                 <p><strong>Dirección:</strong> ${v.direccion}</p>
                 <p><strong>Barrio:</strong> ${v.barrio || 'No registrado'}</p>
-                <p><strong>Proyecto:</strong> ${v.desc}</p>
                 <p><strong>F. Contrato:</strong> ${fOrig}</p>
                 <p style="color:var(--accent)"><strong>Entrega pactada:</strong> ${fPactadaFinal}</p>
-                <p><strong>Valor:</strong> ${m(v.total)}</p>
+                <p><strong>Productos:</strong></p>
+                <div style="background:#f8fafc; padding:10px; border-radius:4px; font-size:0.85rem;">${productosHtml}</div>
+                <p style="margin-top:8px;"><strong>Valor:</strong> ${m(v.total)}</p>
                 <p style="color:var(--success)"><strong>Abonado:</strong> ${m(v.abonado)}</p>
-                <p style="color:var(--danger)"><strong>Saldo:</strong> ${m(v.total - v.abonado)}</p>
+                ${saldoHtml}
                 ${despachoInfo}
             `;
             document.getElementById('contenido-modal-detalle').innerHTML = h;
@@ -2966,6 +3635,22 @@
         }
 
         // ===== FUNCIONES DE IMPRESIÓN =====
+        function mostrarConfirmacionImpresion(mensaje, callback) {
+            document.getElementById('print-confirm-message').innerText = mensaje || '¿Deseas imprimir este documento?';
+            document.getElementById('print-confirm-overlay').classList.add('activo');
+            window.printConfirmCallback = callback;
+        }
+
+        function confirmarImpresion(confirmar) {
+            document.getElementById('print-confirm-overlay').classList.remove('activo');
+            if (confirmar && window.printConfirmCallback) {
+                window.printConfirmCallback();
+            } else {
+                window.pendingConsecutivo = null;
+            }
+            window.printConfirmCallback = null;
+        }
+
         function imprimirFactura(idVenta) {
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === idVenta);
@@ -2977,25 +3662,69 @@
             let direccionEmpresa = config.direccion || 'Dirección no registrada';
             let telefonoEmpresa = config.telefono || 'Teléfono no registrado';
             let correoEmpresa = config.correo || 'Correo no registrado';
-
-            let productosHtml = '';
-            let productosArray = v.productosArray || [];
-            if (productosArray.length === 0) {
-                productosHtml = '<tr><td colspan="5" style="text-align:center;">No hay productos registrados</td></tr>';
-            } else {
-                productosArray.forEach(p => {
-                    let subtotal = p.cantidad * p.precio;
-                    productosHtml += `<tr>
-                        <td style="text-align:center;">${p.cantidad}</td>
-                        <td>${p.detalle}</td>
-                        <td style="text-align:right;">${m(p.precio)}</td>
-                        <td style="text-align:right;">${m(subtotal)}</td>
-                    </tr>`;
-                });
-            }
+            let modoTalonarioFisico = config.modoTalonarioFisico || false;
 
             let fecha = v.fechaRegistro || new Date().toISOString().split('T')[0];
-            let consecutivo = obtenerConsecutivo('factura');
+            
+            let consecutivo = '';
+            if (modoTalonarioFisico) {
+                consecutivo = v.factura || 'S/N';
+                window.pendingConsecutivo = null;
+            } else {
+                consecutivo = obtenerConsecutivo('factura');
+            }
+
+            let pendiente = v.total - v.abonado;
+            let saldoHtml = pendiente > 0 ? `\n💰 SALDO PENDIENTE: ${m(pendiente)}` : '\n✅ FACTURA PAGADA EN SU TOTALIDAD';
+
+            let mensajeConfirmacion = `¿Deseas imprimir la factura Nº ${consecutivo}?\n\n`;
+            mensajeConfirmacion += `Cliente: ${v.cliente}\n`;
+            mensajeConfirmacion += `Total: ${m(v.total)}\n`;
+            mensajeConfirmacion += `Abonado: ${m(v.abonado)}`;
+            mensajeConfirmacion += saldoHtml;
+            
+            window.pendingPrintData = {
+                tipo: 'factura',
+                id: idVenta,
+                consecutivo: consecutivo,
+                modoTalonarioFisico: modoTalonarioFisico
+            };
+
+            mostrarConfirmacionImpresion(mensajeConfirmacion, function() {
+                ejecutarImpresionFactura(idVenta, consecutivo);
+            });
+        }
+
+        function ejecutarImpresionFactura(idVenta, consecutivo) {
+            let db = window.getDbData();
+            let v = db.ventas.find(x => x.id === idVenta);
+            if (!v) return;
+
+            let config = db.config || {};
+            let razonSocial = config.razonSocial || 'CARMENCITA DESIGN';
+            let nit = config.nit || 'NIT No registrado';
+            let direccionEmpresa = config.direccion || 'Dirección no registrada';
+            let telefonoEmpresa = config.telefono || 'Teléfono no registrado';
+            let correoEmpresa = config.correo || 'Correo no registrado';
+
+            let fecha = v.fechaRegistro || new Date().toISOString().split('T')[0];
+            let pendiente = v.total - v.abonado;
+            let saldoHtml = pendiente > 0 
+                ? `<div style="text-align:right; font-size:1.1rem; font-weight:700; margin:5px 0; padding:5px; border:2px solid #dc2626; border-radius:4px; color:#dc2626;">
+                    ⚠️ SALDO PENDIENTE: ${m(pendiente)}
+                   </div>`
+                : `<div style="text-align:right; font-size:1rem; font-weight:600; margin:5px 0; padding:5px; color:var(--success);">
+                    ✅ FACTURA PAGADA EN SU TOTALIDAD
+                   </div>`;
+
+            let productosHtml = v.productosArray && v.productosArray.length > 0 
+                ? v.productosArray.map(p => `<tr>
+                    <td style="text-align:center; padding:4px 8px; border-bottom:1px solid #ddd;">${p.cantidad}</td>
+                    <td style="padding:4px 8px; border-bottom:1px solid #ddd;">${p.detalle}</td>
+                    <td style="text-align:right; padding:4px 8px; border-bottom:1px solid #ddd;">${m(p.precio)}</td>
+                    <td style="text-align:right; padding:4px 8px; border-bottom:1px solid #ddd;">${m(p.cantidad * p.precio)}</td>
+                </tr>`).join('')
+                : `<tr><td colspan="4" style="text-align:center; padding:8px;">${v.desc || 'No especificado'}</td></tr>`;
 
             let html = `
                 <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:15px;">
@@ -3015,14 +3744,32 @@
                     <p><strong>Teléfono:</strong> ${v.telefono || 'No registrado'}</p>
                 </div>
 
-                <div style="margin:10px 0; padding:12px; border:1px solid #ddd; border-radius:4px; background:#f8fafc;">
-                    <p style="margin:0 0 4px 0;"><strong>📝 Detalle del Proyecto/Producto:</strong></p>
-                    <p style="margin:0; white-space:pre-wrap; font-size:0.95rem;">${v.desc || 'No especificado'}</p>
+                <div style="margin:10px 0;">
+                    <p style="font-weight:600; margin-bottom:5px;">📝 Detalle de Productos/Servicios:</p>
+                    <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+                        <thead>
+                            <tr style="background:#f1f5f9;">
+                                <th style="padding:6px 8px; border-bottom:2px solid #ddd; text-align:center;">Cant.</th>
+                                <th style="padding:6px 8px; border-bottom:2px solid #ddd; text-align:left;">Descripción</th>
+                                <th style="padding:6px 8px; border-bottom:2px solid #ddd; text-align:right;">Valor Unit.</th>
+                                <th style="padding:6px 8px; border-bottom:2px solid #ddd; text-align:right;">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${productosHtml}
+                            <tr style="font-weight:700; background:#f8fafc;">
+                                <td colspan="3" style="padding:6px 8px; text-align:right; border-top:2px solid #000;">TOTAL</td>
+                                <td style="padding:6px 8px; text-align:right; border-top:2px solid #000;">${m(v.total)}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <div style="text-align:right; font-size:1.3rem; font-weight:700; margin:15px 0; padding:10px; border-top:2px solid #000; border-bottom:2px solid #000;">
-                    TOTAL: ${m(v.total)}
+                <div style="text-align:right; font-size:1.1rem; font-weight:700; margin:10px 0; padding:5px; color:var(--success);">
+                    ABONADO: ${m(v.abonado)}
                 </div>
+
+                ${saldoHtml}
 
                 <div style="display:flex; justify-content:space-between; margin-top:30px; padding-top:20px; border-top:1px solid #ddd;">
                     <div style="text-align:center; width:45%;">
@@ -3041,12 +3788,61 @@
             document.getElementById('print-area').style.display = 'block';
             window.print();
             document.getElementById('print-area').style.display = 'none';
+            
+            if (!window.pendingPrintData?.modoTalonarioFisico && window.pendingConsecutivo) {
+                confirmarYIncrementarConsecutivo();
+            }
+            window.pendingPrintData = null;
         }
 
         function imprimirReciboAbono(idIngreso) {
             let db = window.getDbData();
             let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
             if (!ingreso) return alert('Abono no encontrado.');
+
+            let config = db.config || {};
+            let razonSocial = config.razonSocial || 'CARMENCITA DESIGN';
+            let nit = config.nit || 'NIT No registrado';
+            let direccionEmpresa = config.direccion || 'Dirección no registrada';
+            let telefonoEmpresa = config.telefono || 'Teléfono no registrado';
+            let correoEmpresa = config.correo || 'Correo no registrado';
+            let modoTalonarioFisico = config.modoTalonarioFisico || false;
+
+            let cliente = 'Cliente sin registrar';
+            let factura = 'S/N';
+            let numeroRecibo = '';
+            
+            let reciboMatch = ingreso.origen.match(/\[Recibo #([^\]]+)\]/);
+            if (reciboMatch) numeroRecibo = reciboMatch[1];
+            
+            let clienteMatch = ingreso.origen.match(/-\s*([^\[]+)/);
+            if (clienteMatch) cliente = clienteMatch[1].trim();
+            
+            let facturaMatch = ingreso.origen.match(/Factura #([^\s)]+)/);
+            if (facturaMatch) factura = facturaMatch[1];
+
+            let consecutivo = '';
+            if (modoTalonarioFisico) {
+                consecutivo = numeroRecibo || 'S/N';
+                window.pendingConsecutivo = null;
+            } else {
+                consecutivo = obtenerConsecutivo('abono');
+            }
+
+            let mensajeConfirmacion = `¿Deseas imprimir el recibo de abono Nº ${consecutivo}?\n\n`;
+            mensajeConfirmacion += `Cliente: ${cliente}\n`;
+            mensajeConfirmacion += `Factura Asociada: ${factura}\n`;
+            mensajeConfirmacion += `Monto: ${m(ingreso.monto)}`;
+
+            mostrarConfirmacionImpresion(mensajeConfirmacion, function() {
+                ejecutarImpresionReciboAbono(idIngreso, consecutivo);
+            });
+        }
+
+        function ejecutarImpresionReciboAbono(idIngreso, consecutivo) {
+            let db = window.getDbData();
+            let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
+            if (!ingreso) return;
 
             let config = db.config || {};
             let razonSocial = config.razonSocial || 'CARMENCITA DESIGN';
@@ -3067,8 +3863,6 @@
             
             let facturaMatch = ingreso.origen.match(/Factura #([^\s)]+)/);
             if (facturaMatch) factura = facturaMatch[1];
-
-            let consecutivo = obtenerConsecutivo('abono');
 
             let html = `
                 <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:15px;">
@@ -3109,6 +3903,11 @@
             document.getElementById('print-area').style.display = 'block';
             window.print();
             document.getElementById('print-area').style.display = 'none';
+            
+            if (!window.pendingPrintData?.modoTalonarioFisico && window.pendingConsecutivo) {
+                confirmarYIncrementarConsecutivo();
+            }
+            window.pendingPrintData = null;
         }
 
         // ===== EVALUAR ALERTAS DE ENTREGA =====
@@ -3175,8 +3974,7 @@
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dataIngresos), "Ingresos");
 
             let dataGastos = db.gastos.map(g => ({
-                "Fecha": g.fecha, "Categoría": g.cat, "Producto": g.concepto, "Cantidad": g.cantidad || 1,
-                "Detalle": g.detalle || '', "Medio": g.medio, "Monto": g.monto
+                "Fecha": g.fecha, "Categoría": g.cat, "Detalle": g.concepto || g.productosArray?.map(p => `${p.cantidad}x ${p.detalle}`).join('; ') || '', "Medio": g.medio, "Monto": g.monto
             }));
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dataGastos), "Gastos");
 
@@ -3208,13 +4006,14 @@
             let txtFiltro = document.getElementById('f-buscar').value.toLowerCase();
             let fDesde = document.getElementById('f-desde').value;
             let fHasta = document.getElementById('f-hasta').value;
-            let tipoMov = document.getElementById('f-tipo-movimiento').value;
 
             function cumpleFiltroBase(fecha, textoComparar) {
-                if (window.moduloActual === 'dashboard') {
-                    if (fDesde && fecha < fDesde) return false;
-                    if (fHasta && fecha > fHasta) return false;
+                // Para dashboard, ventas y entregas aplicar filtro de fechas
+                if (window.moduloActual === 'dashboard' || window.moduloActual === 'ventas' || window.moduloActual === 'entregas') {
+                    if (fDesde && fecha && fecha < fDesde) return false;
+                    if (fHasta && fecha && fecha > fHasta) return false;
                 }
+                // Si hay texto de búsqueda, buscar en el texto proporcionado
                 if (txtFiltro && !textoComparar.toLowerCase().includes(txtFiltro)) return false;
                 return true;
             }
@@ -3262,333 +4061,349 @@
                 if (currentVal) nSelect.value = currentVal;
             }
 
-            if (window.moduloActual === 'dashboard') {
-                if (tipoMov === 'INGRESOS') {
-                    document.getElementById('panel-dashboard-entradas').style.display = 'block';
-                    document.getElementById('panel-dashboard-salidas').style.display = 'none';
-                    document.getElementById('mod-dashboard').querySelector('.es-grid').style.gridTemplateColumns = '1fr';
-                } else if (tipoMov === 'EGRESOS') {
-                    document.getElementById('panel-dashboard-entradas').style.display = 'none';
-                    document.getElementById('panel-dashboard-salidas').style.display = 'block';
-                    document.getElementById('mod-dashboard').querySelector('.es-grid').style.gridTemplateColumns = '1fr';
-                } else {
-                    document.getElementById('panel-dashboard-entradas').style.display = 'block';
-                    document.getElementById('panel-dashboard-salidas').style.display = 'block';
-                    if (window.innerWidth > 768) {
-                        document.getElementById('mod-dashboard').querySelector('.es-grid').style.gridTemplateColumns = 'repeat(auto-fit, minmax(320px, 1fr))';
-                    }
-                }
-            }
-
             // Dashboard Entradas
             const bEntradas = document.querySelector('#t-dashboard-entradas tbody');
-            bEntradas.innerHTML = '';
-            db.ingresosDirectos.forEach(i => {
-                if (cumpleFiltroBase(i.fecha, i.origen + " " + i.medio)) {
-                    let clienteNombre = i.origen;
-                    let facturaNum = 'S/N';
-                    let reciboNum = '';
-                    let tipoLabel = 'INGRESO EXTRA';
-                    let badgeColor = 'bg-banco';
+            if (bEntradas) {
+                bEntradas.innerHTML = '';
+                db.ingresosDirectos.forEach(i => {
+                    let textoComparar = i.origen + " " + i.medio + " " + i.fecha;
+                    if (cumpleFiltroBase(i.fecha, textoComparar)) {
+                        let clienteNombre = i.origen;
+                        let facturaNum = 'S/N';
+                        let reciboNum = '';
+                        let tipoLabel = 'INGRESO EXTRA';
+                        let badgeColor = 'bg-banco';
 
-                    if (i.origen.includes('Factura #')) {
-                        let match = i.origen.match(/Factura #([^\s)]+)/);
-                        if (match) facturaNum = match[1];
+                        if (i.origen.includes('Factura #')) {
+                            let match = i.origen.match(/Factura #([^\s)]+)/);
+                            if (match) facturaNum = match[1];
+                        }
+
+                        let reciboMatch = i.origen.match(/\[Recibo #([^\]]+)\]/);
+                        if (reciboMatch) reciboNum = reciboMatch[1];
+
+                        if (i.origen.includes('Abono Inicial')) {
+                            tipoLabel = 'FACTURA DE VENTA';
+                            badgeColor = 'bg-efectivo';
+                            let cleanMatch = i.origen.match(/Abono Inicial.*?-\s*([^(]+)/);
+                            if (cleanMatch) clienteNombre = cleanMatch[1].trim();
+                        } else if (i.origen.includes('Abono Cartera')) {
+                            tipoLabel = 'FACTURA ABONADO';
+                            badgeColor = 'badge-abono';
+                            let cleanMatch = i.origen.match(/Abono Cartera.*?-\s*([^(]+)/);
+                            if (cleanMatch) clienteNombre = cleanMatch[1].trim();
+                        } else if (i.origen.includes('Abono Directo')) {
+                            tipoLabel = 'ABONO DIRECTO';
+                            badgeColor = 'badge-caja';
+                            let cleanMatch = i.origen.match(/Abono Directo.*?-\s*([^\[]+)/);
+                            if (cleanMatch) clienteNombre = cleanMatch[1].trim();
+                        }
+
+                        let facturaDisplay = `<span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${facturaNum}</span>`;
+                        if (reciboNum && (tipoLabel === 'FACTURA ABONADO' || tipoLabel === 'ABONO DIRECTO')) {
+                            facturaDisplay += ` → <span class="badge" style="background:#fce7f3; color:#9d174d; font-weight:700;">Recibo #${reciboNum}</span>`;
+                        }
+
+                        bEntradas.innerHTML += `<tr>
+                            <td>${i.fecha}</td>
+                            <td><strong>${clienteNombre}</strong></td>
+                            <td>${facturaDisplay}</td>
+                            <td><span class="badge ${badgeColor}">${tipoLabel}</span></td>
+                            <td style="color:var(--success); font-weight:600;">${m(i.monto)}</td>
+                            <td>
+                                <button class="btn-accion btn-ojito" onclick="verDetalleIngreso('${i.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                <button class="btn-accion btn-editar" onclick="abrirModalEditarAbono('${i.id}')" style="padding:2px 4px;">✏️</button>
+                                <button class="btn-accion btn-eliminar" onclick="eliminarIngresoDirecto('${i.id}')" style="padding:2px 4px;">x</button>
+                                <button class="btn-accion btn-verde" onclick="imprimirReciboAbono('${i.id}')" style="padding:2px 4px;" title="Imprimir Recibo">🖨️</button>
+                            </td>
+                        </tr>`;
                     }
-
-                    let reciboMatch = i.origen.match(/\[Recibo #([^\]]+)\]/);
-                    if (reciboMatch) reciboNum = reciboMatch[1];
-
-                    if (i.origen.includes('Abono Inicial')) {
-                        tipoLabel = 'FACTURA DE VENTA';
-                        badgeColor = 'bg-efectivo';
-                        let cleanMatch = i.origen.match(/Abono Inicial.*?-\s*([^(]+)/);
-                        if (cleanMatch) clienteNombre = cleanMatch[1].trim();
-                    } else if (i.origen.includes('Abono Cartera')) {
-                        tipoLabel = 'FACTURA ABONADO';
-                        badgeColor = 'badge-abono';
-                        let cleanMatch = i.origen.match(/Abono Cartera.*?-\s*([^(]+)/);
-                        if (cleanMatch) clienteNombre = cleanMatch[1].trim();
-                    } else if (i.origen.includes('Abono Directo')) {
-                        tipoLabel = 'ABONO DIRECTO';
-                        badgeColor = 'badge-caja';
-                        let cleanMatch = i.origen.match(/Abono Directo.*?-\s*([^\[]+)/);
-                        if (cleanMatch) clienteNombre = cleanMatch[1].trim();
-                    }
-
-                    let facturaDisplay = `<span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${facturaNum}</span>`;
-                    if (reciboNum && (tipoLabel === 'FACTURA ABONADO' || tipoLabel === 'ABONO DIRECTO')) {
-                        facturaDisplay += ` → <span class="badge" style="background:#fce7f3; color:#9d174d; font-weight:700;">Recibo #${reciboNum}</span>`;
-                    }
-
-                    bEntradas.innerHTML += `<tr>
-                        <td>${i.fecha}</td>
-                        <td><strong>${clienteNombre}</strong></td>
-                        <td>${facturaDisplay}</td>
-                        <td><span class="badge ${badgeColor}">${tipoLabel}</span></td>
-                        <td style="color:var(--success); font-weight:600;">${m(i.monto)}</td>
-                        <td>
-                            <button class="btn-accion btn-ojito" onclick="verDetalleIngreso('${i.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                            <button class="btn-accion btn-editar" onclick="abrirModalEditarAbono('${i.id}')" style="padding:2px 4px;">✏️</button>
-                            <button class="btn-accion btn-eliminar" onclick="eliminarIngresoDirecto('${i.id}')" style="padding:2px 4px;">x</button>
-                            <button class="btn-accion btn-verde" onclick="imprimirReciboAbono('${i.id}')" style="padding:2px 4px;" title="Imprimir Recibo">🖨️</button>
-                        </td>
-                    </tr>`;
-                }
-            });
+                });
+            }
 
             // Dashboard Salidas
             const bSalidas = document.querySelector('#t-dashboard-salidas tbody');
-            bSalidas.innerHTML = '';
-            db.gastos.forEach(g => {
-                if (cumpleFiltroBase(g.fecha, g.cat + " " + g.concepto)) {
-                    bSalidas.innerHTML += `<tr>
-                        <td>${g.fecha}</td>
-                        <td>🏠 ${g.cat}</td>
-                        <td>${g.concepto}</td>
-                        <td style="color:var(--danger);">${m(g.monto)}</td>
-                        <td>
-                            <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${g.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                            <button class="btn-accion btn-eliminar" onclick="eliminarGastoDirecto('${g.id}')" style="padding:2px 4px;">x</button>
-                        </td>
-                    </tr>`;
-                }
-            });
-            db.nomina.forEach(n => {
-                if (cumpleFiltroBase(n.fecha, n.nombre + " " + n.detalle)) {
-                    bSalidas.innerHTML += `<tr>
-                        <td>${n.fecha}</td>
-                        <td>👷 Nómina: ${n.nombre}</td>
-                        <td>${n.detalle}</td>
-                        <td style="color:var(--danger);">${m(n.monto)}</td>
-                        <td>
-                            <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${n.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                            <button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')" style="padding:2px 4px;">x</button>
-                        </td>
-                    </tr>`;
-                }
-            });
+            if (bSalidas) {
+                bSalidas.innerHTML = '';
+                db.gastos.forEach(g => {
+                    let textoComparar = g.cat + " " + (g.concepto || '') + " " + g.fecha;
+                    if (cumpleFiltroBase(g.fecha, textoComparar)) {
+                        let detalleCorto = g.productosArray && g.productosArray.length > 0 
+                            ? g.productosArray.map(p => `${p.cantidad}x ${p.detalle}`).join(', ').substring(0, 50) + '...'
+                            : g.concepto || '';
+                        bSalidas.innerHTML += `<tr>
+                            <td>${g.fecha}</td>
+                            <td>🏠 ${g.cat}</td>
+                            <td>${detalleCorto}</td>
+                            <td style="color:var(--danger);">${m(g.monto)}</td>
+                            <td>
+                                <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${g.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                <button class="btn-accion btn-eliminar" onclick="eliminarGastoDirecto('${g.id}')" style="padding:2px 4px;">x</button>
+                            </td>
+                        </tr>`;
+                    }
+                });
+                db.nomina.forEach(n => {
+                    let textoComparar = n.nombre + " " + n.detalle + " " + n.fecha;
+                    if (cumpleFiltroBase(n.fecha, textoComparar)) {
+                        bSalidas.innerHTML += `<tr>
+                            <td>${n.fecha}</td>
+                            <td>👷 Nómina: ${n.nombre}</td>
+                            <td>${n.detalle}</td>
+                            <td style="color:var(--danger);">${m(n.monto)}</td>
+                            <td>
+                                <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${n.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                <button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')" style="padding:2px 4px;">x</button>
+                            </td>
+                        </tr>`;
+                    }
+                });
+            }
 
             // Ventas
             const bVentas = document.querySelector('#t-ventas tbody');
-            bVentas.innerHTML = '';
-            db.ventas.forEach(v => {
-                let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
-                let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
-                if (cumpleFiltroBase(fechaOrig, v.cliente + " " + v.desc + " " + v.factura)) {
-                    bVentas.innerHTML += `
-                        <tr>
-                            <td><span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${v.factura || 'S/N'}</span></td>
-                            <td>${fechaOrig}</td>
-                            <td><strong>${v.cliente}</strong></td>
-                            <td style="max-width:150px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
-                            <td>${m(v.total)}</td>
-                            <td style="color:var(--info);">${m(v.abonado)}</td>
-                            <td style="color:var(--accent); font-weight:600;">📅 ${fPactadaFinal}</td>
-                            <td>
-                                <div style="display:flex; gap:3px; flex-wrap:wrap;">
-                                    <button class="btn-accion btn-ojito" onclick="verDetalleVenta('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                                    <button class="btn-accion btn-editar" onclick="abrirModalVentaConDatos('${v.id}')" style="padding:2px 4px;">✏️</button>
-                                    <button class="btn-accion btn-verde" onclick="abrirCajaAbono('${v.id}', '${v.cliente}', '${v.factura}')" style="padding:2px 4px;">💵 +</button>
-                                    <button class="btn-accion btn-eliminar" onclick="eliminarVenta('${v.id}')" style="padding:2px 4px;">x</button>
-                                    <button class="btn-accion btn-azul" onclick="imprimirFactura('${v.id}')" style="padding:2px 4px;" title="Imprimir Factura">🖨️</button>
-                                </div>
-                            </td>
-                        </tr>`;
-                }
-            });
+            if (bVentas) {
+                bVentas.innerHTML = '';
+                db.ventas.forEach(v => {
+                    let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
+                    let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
+                    let textoComparar = v.cliente + " " + v.desc + " " + v.factura + " " + fechaOrig + " " + fPactadaFinal + " " + v.id;
+                    if (cumpleFiltroBase(fechaOrig, textoComparar)) {
+                        bVentas.innerHTML += `
+                            <tr>
+                                <td><span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${v.factura || 'S/N'}</span></td>
+                                <td>${fechaOrig}</td>
+                                <td><strong>${v.cliente}</strong></td>
+                                <td style="max-width:150px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
+                                <td>${m(v.total)}</td>
+                                <td style="color:var(--info);">${m(v.abonado)}</td>
+                                <td style="color:var(--accent); font-weight:600;">📅 ${fPactadaFinal}</td>
+                                <td>
+                                    <div style="display:flex; gap:3px; flex-wrap:wrap;">
+                                        <button class="btn-accion btn-ojito" onclick="verDetalleVenta('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                        <button class="btn-accion btn-editar" onclick="abrirModalVentaConDatos('${v.id}')" style="padding:2px 4px;">✏️</button>
+                                        <button class="btn-accion btn-verde" onclick="abrirCajaAbono('${v.id}', '${v.cliente}', '${v.factura}')" style="padding:2px 4px;">💵 +</button>
+                                        <button class="btn-accion btn-eliminar" onclick="eliminarVenta('${v.id}')" style="padding:2px 4px;">x</button>
+                                        <button class="btn-accion btn-azul" onclick="imprimirFactura('${v.id}')" style="padding:2px 4px;" title="Imprimir Factura">🖨️</button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                    }
+                });
+            }
 
             // Entregas
             const bEntregas = document.querySelector('#t-entregas tbody');
-            bEntregas.innerHTML = '';
-            db.ventas.forEach(v => {
-                let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
-                let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
-                let est = v.estadoEntrega || 'Pendiente';
-                let claseEst = est === 'Pendiente' ? 'badge-pendiente' : est === 'En Camino' ? 'badge-encamino' : 'badge-entregado';
-                let txtBoton = est === 'Pendiente' ? '🚛 Despachar' : est === 'En Camino' ? '✅ Confirmar' : '↩️ Reajustar';
+            if (bEntregas) {
+                bEntregas.innerHTML = '';
+                db.ventas.forEach(v => {
+                    let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
+                    let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
+                    let est = v.estadoEntrega || 'Pendiente';
+                    let claseEst = est === 'Pendiente' ? 'badge-pendiente' : est === 'En Camino' ? 'badge-encamino' : 'badge-entregado';
+                    let txtBoton = est === 'Pendiente' ? '🚛 Despachar' : est === 'En Camino' ? '✅ Confirmar' : '↩️ Reajustar';
 
-                let infoConductor = '';
-                if (v.despacho) {
-                    infoConductor = `<div class="conductor-cell">
-                        <strong>${v.despacho.conductor || 'N/R'}</strong>
-                        <div class="tel">📱 ${v.despacho.telefono || 'N/R'}</div>
-                        <div style="font-size:0.65rem; color:var(--text-muted);">${v.despacho.placa || ''}</div>
-                    </div>`;
-                } else {
-                    infoConductor = '—';
-                }
+                    let infoConductor = '';
+                    if (v.despacho) {
+                        infoConductor = `<div class="conductor-cell">
+                            <strong>${v.despacho.conductor || 'N/R'}</strong>
+                            <div class="tel">📱 ${v.despacho.telefono || 'N/R'}</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">${v.despacho.placa || ''}</div>
+                        </div>`;
+                    } else {
+                        infoConductor = '—';
+                    }
 
-                if (cumpleFiltroBase(fechaOrig, v.cliente + " " + v.desc + " " + v.factura + " " + est)) {
-                    bEntregas.innerHTML += `
-                        <tr>
-                            <td><span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${v.factura || 'S/N'}</span></td>
-                            <td>${fechaOrig}</td>
-                            <td><strong>${v.cliente}</strong></td>
-                            <td style="max-width:120px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
-                            <td>${v.direccion || 'Taller'} (${v.barrio || 'S/B'})</td>
-                            <td style="color:var(--accent); font-weight:700;">📅 ${fPactadaFinal}</td>
-                            <td><span class="badge ${claseEst}">${est}</span></td>
-                            <td>${infoConductor}</td>
-                            <td>
-                                <div style="display:flex; gap:3px; flex-wrap:wrap;">
-                                    <button class="btn-accion btn-ojito" onclick="verDetalleEntrega('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                                    <button class="btn-accion btn-azul" onclick="cambiarEstadoEntrega('${v.id}')" style="padding:2px 4px;">${txtBoton}</button>
-                                    <button class="btn-accion btn-editar" onclick="abrirModalEditarDespacho('${v.id}')" style="padding:2px 4px;">✏️</button>
-                                    <button class="btn-accion btn-whatsapp" onclick="enviarWhatsAppEntrega('${v.id}')" style="padding:2px 4px; color:white;">💬</button>
-                                </div>
-                            </td>
-                        </tr>`;
-                }
-            });
+                    let textoComparar = v.cliente + " " + v.desc + " " + v.factura + " " + est + " " + fechaOrig + " " + fPactadaFinal + " " + v.direccion + " " + v.id;
+                    if (cumpleFiltroBase(fechaOrig, textoComparar)) {
+                        bEntregas.innerHTML += `
+                            <tr>
+                                <td><span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${v.factura || 'S/N'}</span></td>
+                                <td>${fechaOrig}</td>
+                                <td><strong>${v.cliente}</strong></td>
+                                <td style="max-width:120px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
+                                <td>${v.direccion || 'Taller'} (${v.barrio || 'S/B'})</td>
+                                <td style="color:var(--accent); font-weight:700;">📅 ${fPactadaFinal}</td>
+                                <td><span class="badge ${claseEst}">${est}</span></td>
+                                <td>${infoConductor}</td>
+                                <td>
+                                    <div style="display:flex; gap:3px; flex-wrap:wrap;">
+                                        <button class="btn-accion btn-ojito" onclick="verDetalleEntrega('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                        <button class="btn-accion btn-azul" onclick="cambiarEstadoEntrega('${v.id}')" style="padding:2px 4px;">${txtBoton}</button>
+                                        <button class="btn-accion btn-editar" onclick="abrirModalEditarDespacho('${v.id}')" style="padding:2px 4px;">✏️</button>
+                                        <button class="btn-accion btn-whatsapp" onclick="enviarWhatsAppEntrega('${v.id}')" style="padding:2px 4px; color:white;">💬</button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                    }
+                });
+            }
 
             // Cobros
             const bCobros = document.querySelector('#t-cobros tbody');
-            bCobros.innerHTML = '';
-            db.ventas.forEach(v => {
-                let pendiente = v.total - v.abonado;
-                if (pendiente > 0 && cumpleFiltroBase('', v.cliente + " " + v.desc || '')) {
-                    let msg = `Hola ${v.cliente}, le saludamos de CARMENCITA DESIGN. Su saldo pendiente es ${m(pendiente)} de la factura Nº ${v.factura || 'S/N'} (${v.desc}). ¡Agradecemos su pronta respuesta!`;
-                    let cleanNumCel = v.telefono.replace(/\D/g, '');
-                    let uri = `https://wa.me/57${cleanNumCel}?text=${encodeURIComponent(msg)}`;
-                    bCobros.innerHTML += `
-                        <tr>
-                            <td><span class="badge bg-efectivo"># ${v.factura || 'S/N'}</span></td>
-                            <td><strong>${v.cliente}</strong></td>
-                            <td>${v.telefono}</td>
-                            <td style="max-width:120px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
-                            <td style="color:var(--danger); font-weight:700;">${m(pendiente)}</td>
-                            <td>
-                                <div style="display:flex; gap:3px;">
-                                    <button class="btn-accion btn-ojito" onclick="verDetalleCobro('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                                    <a href="${uri}" target="_blank" class="btn btn-verde" style="padding:4px 8px; font-size:0.75rem;">💬 Cobrar</a>
-                                    <button class="btn-accion btn-azul" onclick="imprimirFactura('${v.id}')" style="padding:2px 4px;" title="Imprimir Factura">🖨️</button>
-                                </div>
-                            </td>
-                        </tr>`;
-                }
-            });
+            if (bCobros) {
+                bCobros.innerHTML = '';
+                db.ventas.forEach(v => {
+                    let pendiente = v.total - v.abonado;
+                    let textoComparar = v.cliente + " " + v.desc + " " + v.factura + " " + v.telefono + " " + v.id;
+                    if (pendiente > 0 && cumpleFiltroBase('', textoComparar)) {
+                        let msg = `Hola ${v.cliente}, le saludamos de CARMENCITA DESIGN. Su saldo pendiente es ${m(pendiente)} de la factura Nº ${v.factura || 'S/N'} (${v.desc}). ¡Agradecemos su pronta respuesta!`;
+                        let cleanNumCel = v.telefono.replace(/\D/g, '');
+                        let uri = `https://wa.me/57${cleanNumCel}?text=${encodeURIComponent(msg)}`;
+                        bCobros.innerHTML += `
+                            <tr>
+                                <td><span class="badge bg-efectivo"># ${v.factura || 'S/N'}</span></td>
+                                <td><strong>${v.cliente}</strong></td>
+                                <td>${v.telefono}</td>
+                                <td style="max-width:120px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
+                                <td style="color:var(--danger); font-weight:700;">${m(pendiente)}</td>
+                                <td>
+                                    <div style="display:flex; gap:3px;">
+                                        <button class="btn-accion btn-ojito" onclick="verDetalleCobro('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                        <a href="${uri}" target="_blank" class="btn btn-verde" style="padding:4px 8px; font-size:0.75rem;">💬 Cobrar</a>
+                                        <button class="btn-accion btn-azul" onclick="imprimirFactura('${v.id}')" style="padding:2px 4px;" title="Imprimir Factura">🖨️</button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                    }
+                });
+            }
 
             // Cotizaciones
             const bCotizaciones = document.querySelector('#t-cotizaciones tbody');
-            bCotizaciones.innerHTML = '';
-            db.cotizaciones.forEach(c => {
-                if (cumpleFiltroBase(c.fecha || '', c.cliente + " " + c.numero + " " + c.productos)) {
-                    let estadoEmoji = { 'Pendiente': '⏳ Pendiente', 'Aprobada': '✅ Aprobada', 'Rechazada': '❌ Rechazada', 'Vencida': '⏰ Vencida' };
-                    let estadoBadge = c.estado === 'Aprobada' ? 'badge-aprobada' : 'badge-cotizacion';
-                    let productosCortos = c.productos ? c.productos.substring(0, 50) + (c.productos.length > 50 ? '...' : '') : '';
-                    
-                    let botonAprobar = '';
-                    if (c.estado === 'Pendiente') {
-                        botonAprobar = `<button class="btn-accion btn-verde" onclick="aprobarCotizacionYVenta('${c.id}')" style="padding:2px 4px;">✅ Aprobar</button>`;
-                    }
+            if (bCotizaciones) {
+                bCotizaciones.innerHTML = '';
+                db.cotizaciones.forEach(c => {
+                    let textoComparar = c.cliente + " " + c.numero + " " + c.productos + " " + c.fecha + " " + c.id;
+                    if (cumpleFiltroBase(c.fecha || '', textoComparar)) {
+                        let estadoEmoji = { 'Pendiente': '⏳ Pendiente', 'Aprobada': '✅ Aprobada', 'Rechazada': '❌ Rechazada', 'Vencida': '⏰ Vencida' };
+                        let estadoBadge = c.estado === 'Aprobada' ? 'badge-aprobada' : 'badge-cotizacion';
+                        let productosCortos = c.productos ? c.productos.substring(0, 50) + (c.productos.length > 50 ? '...' : '') : '';
+                        
+                        let botonAprobar = '';
+                        if (c.estado === 'Pendiente') {
+                            botonAprobar = `<button class="btn-accion btn-verde" onclick="aprobarCotizacionYVenta('${c.id}')" style="padding:2px 4px;">✅ Aprobar</button>`;
+                        }
 
-                    bCotizaciones.innerHTML += `
-                        <tr>
-                            <td><span class="badge ${estadoBadge}" style="font-weight:700;"># ${c.numero || 'S/N'}</span></td>
-                            <td>${c.fecha || ''}</td>
-                            <td><strong>${c.cliente}</strong></td>
-                            <td>${c.telefono || ''}</td>
-                            <td><div style="font-size:0.8rem; max-width:150px; white-space:pre-wrap; word-break:break-word;">${productosCortos || 'No especificados'}</div></td>
-                            <td style="color:var(--success); font-weight:600;">${m(c.total)}</td>
-                            <td><span class="badge ${estadoBadge}">${estadoEmoji[c.estado] || c.estado}</span></td>
-                            <td>
-                                <div style="display:flex; gap:3px; flex-wrap:wrap;">
-                                    <button class="btn-accion btn-ojito" onclick="verDetalleCotizacion('${c.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                                    ${botonAprobar}
-                                    <button class="btn-accion btn-whatsapp" onclick="enviarWhatsAppCotizacion('${c.id}')" style="padding:2px 4px; color:white;">💬</button>
-                                    <button class="btn-accion" style="background:#25D366; color:white; padding:2px 4px;" onclick="enviarCotizacionExistenteWhatsApp('${c.id}')">📋</button>
-                                    <button class="btn-accion btn-editar" onclick="iniciarEdicionCotizacionModal('${c.id}')" style="padding:2px 4px;">✏️</button>
-                                    <button class="btn-accion btn-eliminar" onclick="eliminarCotizacion('${c.id}')" style="padding:2px 4px;">x</button>
-                                </div>
-                            </td>
-                        </tr>`;
-                }
-            });
+                        bCotizaciones.innerHTML += `
+                            <tr>
+                                <td><span class="badge ${estadoBadge}" style="font-weight:700;"># ${c.numero || 'S/N'}</span></td>
+                                <td>${c.fecha || ''}</td>
+                                <td><strong>${c.cliente}</strong></td>
+                                <td>${c.telefono || ''}</td>
+                                <td><div style="font-size:0.8rem; max-width:150px; white-space:pre-wrap; word-break:break-word;">${productosCortos || 'No especificados'}</div></td>
+                                <td style="color:var(--success); font-weight:600;">${m(c.total)}</td>
+                                <td><span class="badge ${estadoBadge}">${estadoEmoji[c.estado] || c.estado}</span></td>
+                                <td>
+                                    <div style="display:flex; gap:3px; flex-wrap:wrap;">
+                                        <button class="btn-accion btn-ojito" onclick="verDetalleCotizacion('${c.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                        ${botonAprobar}
+                                        <button class="btn-accion btn-whatsapp" onclick="enviarWhatsAppCotizacion('${c.id}')" style="padding:2px 4px; color:white;">💬</button>
+                                        <button class="btn-accion" style="background:#25D366; color:white; padding:2px 4px;" onclick="enviarCotizacionExistenteWhatsApp('${c.id}')">📋</button>
+                                        <button class="btn-accion btn-editar" onclick="iniciarEdicionCotizacionModal('${c.id}')" style="padding:2px 4px;">✏️</button>
+                                        <button class="btn-accion btn-eliminar" onclick="eliminarCotizacion('${c.id}')" style="padding:2px 4px;">x</button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                    }
+                });
+            }
 
             // Trabajadores
             const bTrabajadores = document.querySelector('#t-trabajadores tbody');
-            bTrabajadores.innerHTML = '';
-            db.trabajadores.forEach(t => {
-                let cumpleMostrar = t.cumpleanos ? t.cumpleanos : 'No registrado';
-                bTrabajadores.innerHTML += `
-                    <tr>
-                        <td><strong>${t.nombre}</strong></td>
-                        <td>${t.cedula || ''}</td>
-                        <td>${t.telefono || ''}</td>
-                        <td>${t.cargo || ''}</td>
-                        <td>${cumpleMostrar}</td>
-                        <td>
-                            <button class="btn-accion btn-ojito" onclick="abrirModalDetalle('👤 Detalle del Trabajador', '<p><strong>Nombre:</strong> ${t.nombre}</p><p><strong>Cédula:</strong> ${t.cedula || 'No registrada'}</p><p><strong>Teléfono:</strong> ${t.telefono || 'No registrado'}</p><p><strong>Dirección:</strong> ${t.direccion || 'No registrada'}</p><p><strong>Cargo:</strong> ${t.cargo || 'No especificado'}</p><p><strong>Cumpleaños:</strong> ${cumpleMostrar}</p><p><strong>ID:</strong> ${t.id}</p>')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                            <button class="btn-accion btn-editar" onclick="iniciarEdicionTrabajador('${t.id}')" style="padding:2px 4px;">✏️</button>
-                            <button class="btn-accion btn-eliminar" onclick="eliminarTrabajador('${t.id}')" style="padding:2px 4px;">x</button>
-                        </td>
-                    </tr>
-                `;
-            });
+            if (bTrabajadores) {
+                bTrabajadores.innerHTML = '';
+                db.trabajadores.forEach(t => {
+                    let cumpleMostrar = t.cumpleanos ? t.cumpleanos : 'No registrado';
+                    bTrabajadores.innerHTML += `
+                        <tr>
+                            <td><strong>${t.nombre}</strong></td>
+                            <td>${t.cedula || ''}</td>
+                            <td>${t.telefono || ''}</td>
+                            <td>${t.cargo || ''}</td>
+                            <td>${cumpleMostrar}</td>
+                            <td>
+                                <button class="btn-accion btn-ojito" onclick="abrirModalDetalle('👤 Detalle del Trabajador', '<p><strong>Nombre:</strong> ${t.nombre}</p><p><strong>Cédula:</strong> ${t.cedula || 'No registrada'}</p><p><strong>Teléfono:</strong> ${t.telefono || 'No registrado'}</p><p><strong>Dirección:</strong> ${t.direccion || 'No registrada'}</p><p><strong>Cargo:</strong> ${t.cargo || 'No especificado'}</p><p><strong>Cumpleaños:</strong> ${cumpleMostrar}</p><p><strong>ID:</strong> ${t.id}</p>')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                <button class="btn-accion btn-editar" onclick="iniciarEdicionTrabajador('${t.id}')" style="padding:2px 4px;">✏️</button>
+                                <button class="btn-accion btn-eliminar" onclick="eliminarTrabajador('${t.id}')" style="padding:2px 4px;">x</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
 
             // Nómina
             const bNomina = document.querySelector('#t-nomina tbody');
-            bNomina.innerHTML = '';
-            db.nomina.forEach(n => {
-                if (cumpleFiltroBase(n.fecha, n.nombre + " " + n.detalle)) {
-                    bNomina.innerHTML += `<tr>
-                        <td>${n.fecha}</td>
-                        <td><strong>${n.nombre}</strong></td>
-                        <td>${n.detalle}</td>
-                        <td>${n.origen}</td>
-                        <td style="color:var(--danger); font-weight:600;">${m(n.monto)}</td>
-                        <td>
-                            <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${n.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                            <button class="btn-accion btn-editar" onclick="iniciarEdicionNomina('${n.id}')" style="padding:2px 4px;">✏️</button>
-                            <button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')" style="padding:2px 4px;">x</button>
-                        </td>
-                    </tr>`;
-                }
-            });
+            if (bNomina) {
+                bNomina.innerHTML = '';
+                db.nomina.forEach(n => {
+                    let textoComparar = n.nombre + " " + n.detalle + " " + n.fecha + " " + n.id;
+                    if (cumpleFiltroBase(n.fecha, textoComparar)) {
+                        bNomina.innerHTML += `<tr>
+                            <td>${n.fecha}</td>
+                            <td><strong>${n.nombre}</strong></td>
+                            <td>${n.detalle}</td>
+                            <td>${n.origen}</td>
+                            <td style="color:var(--danger); font-weight:600;">${m(n.monto)}</td>
+                            <td>
+                                <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${n.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                <button class="btn-accion btn-editar" onclick="iniciarEdicionNomina('${n.id}')" style="padding:2px 4px;">✏️</button>
+                                <button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')" style="padding:2px 4px;">x</button>
+                            </td>
+                        </tr>`;
+                    }
+                });
+            }
 
             // Gastos
             const bGastos = document.querySelector('#t-gastos tbody');
-            bGastos.innerHTML = '';
-            db.gastos.forEach(g => {
-                if (cumpleFiltroBase(g.fecha, g.cat + " " + g.concepto)) {
-                    bGastos.innerHTML += `<tr>
-                        <td>${g.fecha}</td>
-                        <td><span class="badge bg-efectivo" style="background:#e2e8f0; color:#334155;">${g.cat}</span></td>
-                        <td>${g.concepto || ''}</td>
-                        <td>${g.cantidad || 1}</td>
-                        <td>${g.detalle || ''}</td>
-                        <td>${g.medio}</td>
-                        <td style="color:var(--danger); font-weight:600;">${m(g.monto)}</td>
-                        <td>
-                            <button class="btn-accion btn-ojito" onclick="verDetalleGasto('${g.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                            <button class="btn-accion btn-editar" onclick="iniciarEdicionGastoModal('${g.id}')" style="padding:2px 4px;">✏️</button>
-                            <button class="btn-accion btn-eliminar" onclick="eliminarGasto('${g.id}')" style="padding:2px 4px;">x</button>
-                        </td>
-                    </tr>`;
-                }
-            });
+            if (bGastos) {
+                bGastos.innerHTML = '';
+                db.gastos.forEach(g => {
+                    let textoComparar = g.cat + " " + (g.concepto || '') + " " + g.fecha + " " + (g.detalle || '') + " " + g.id;
+                    if (cumpleFiltroBase(g.fecha, textoComparar)) {
+                        let detalleCorto = g.productosArray && g.productosArray.length > 0 
+                            ? g.productosArray.map(p => `${p.cantidad}x ${p.detalle}`).join(', ').substring(0, 60) + (g.productosArray.length > 2 ? '...' : '')
+                            : g.concepto || '';
+                        bGastos.innerHTML += `<tr>
+                            <td>${g.fecha}</td>
+                            <td><span class="badge bg-efectivo" style="background:#e2e8f0; color:#334155;">${g.cat}</span></td>
+                            <td>${detalleCorto}</td>
+                            <td>${g.medio}</td>
+                            <td style="color:var(--danger); font-weight:600;">${m(g.monto)}</td>
+                            <td>
+                                <button class="btn-accion btn-ojito" onclick="verDetalleGasto('${g.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                <button class="btn-accion btn-editar" onclick="iniciarEdicionGastoModal('${g.id}')" style="padding:2px 4px;">✏️</button>
+                                <button class="btn-accion btn-eliminar" onclick="eliminarGasto('${g.id}')" style="padding:2px 4px;">x</button>
+                            </td>
+                        </tr>`;
+                    }
+                });
+            }
 
             // Caja Menor
             const bMenor = document.querySelector('#t-cajamenor tbody');
-            bMenor.innerHTML = '';
-            db.cajaMenor.forEach(cm => {
-                if (cumpleFiltroBase(cm.fecha, cm.concepto + " " + cm.tipo)) {
-                    let col = cm.tipo === 'Reembolso' ? 'color:var(--success);' : 'color:var(--danger);';
-                    let icono = cm.tipo === 'Reembolso' ? '🔄' : '💸';
-                    bMenor.innerHTML += `<tr>
-                        <td>${cm.fecha}</td>
-                        <td>${icono} ${cm.tipo}</td>
-                        <td>${cm.concepto}</td>
-                        <td style="${col}">${m(cm.monto)}</td>
-                        <td>
-                            <button class="btn-accion btn-ojito" onclick="verDetalleCajaMenor('${cm.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                            <button class="btn-accion btn-editar" onclick="iniciarEdicionCaja('${cm.id}')" style="padding:2px 4px;">✏️</button>
-                            <button class="btn-accion btn-eliminar" onclick="eliminarCM('${cm.id}')" style="padding:2px 4px;">x</button>
-                        </td>
-                    </tr>`;
-                }
-            });
+            if (bMenor) {
+                bMenor.innerHTML = '';
+                db.cajaMenor.forEach(cm => {
+                    let textoComparar = cm.concepto + " " + cm.tipo + " " + cm.fecha + " " + cm.id;
+                    if (cumpleFiltroBase(cm.fecha, textoComparar)) {
+                        let col = cm.tipo === 'Reembolso' ? 'color:var(--success);' : 'color:var(--danger);';
+                        let icono = cm.tipo === 'Reembolso' ? '🔄' : '💸';
+                        bMenor.innerHTML += `<tr>
+                            <td>${cm.fecha}</td>
+                            <td>${icono} ${cm.tipo}</td>
+                            <td>${cm.concepto}</td>
+                            <td style="${col}">${m(cm.monto)}</td>
+                            <td>
+                                <button class="btn-accion btn-ojito" onclick="verDetalleCajaMenor('${cm.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                <button class="btn-accion btn-editar" onclick="iniciarEdicionCaja('${cm.id}')" style="padding:2px 4px;">✏️</button>
+                                <button class="btn-accion btn-eliminar" onclick="eliminarCM('${cm.id}')" style="padding:2px 4px;">x</button>
+                            </td>
+                        </tr>`;
+                    }
+                });
+            }
         }
 
         // ===== NAVEGACIÓN =====
@@ -3604,8 +4419,8 @@
 
             const labels = {
                 dashboard: "🔍 Buscar en Entradas/Salidas",
-                ventas: "🔍 Buscar por Cliente, Proyecto o Factura",
-                entregas: "🔍 Buscar por Cliente, Factura, Dirección o Estado",
+                ventas: "🔍 Buscar por Cliente, Proyecto o Factura (incluye fechas)",
+                entregas: "🔍 Buscar por Cliente, Factura, Dirección o Estado (incluye fechas)",
                 cobros: "🔍 Buscar Deudor, Proyecto o Factura",
                 cotizaciones: "🔍 Buscar por Cliente, Nº Cotización o Producto",
                 nomina: "🔍 Buscar por Nombre de Trabajador",
@@ -3615,13 +4430,17 @@
             };
             document.getElementById('lbl-buscador-dinamico').innerText = labels[id] || "🔍 Buscar en este módulo";
 
-            if (id === 'dashboard') {
+            if (id === 'dashboard' || id === 'ventas' || id === 'entregas') {
                 document.getElementById('div-filtro-desde').style.display = 'flex';
                 document.getElementById('div-filtro-hasta').style.display = 'flex';
-                document.getElementById('div-filtro-tipo').style.display = 'flex';
             } else {
                 document.getElementById('div-filtro-desde').style.display = 'none';
                 document.getElementById('div-filtro-hasta').style.display = 'none';
+            }
+
+            if (id === 'dashboard') {
+                document.getElementById('div-filtro-tipo').style.display = 'flex';
+            } else {
                 document.getElementById('div-filtro-tipo').style.display = 'none';
             }
 
@@ -3640,6 +4459,7 @@
 
             cerrarMenuSiMovil();
             render();
+            if (window.debugVisible) actualizarDebug();
         }
 
         document.querySelectorAll('nav button').forEach(btn => {
