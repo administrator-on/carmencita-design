@@ -180,8 +180,6 @@
         .btn-whatsapp:hover { background-color: #1da851; color: white; }
         .btn-cerrar-modal { background-color: #64748b; color: white; }
         .btn-ojito { background-color: #e0e7ff; color: #3730a3; }
-        .btn-debug { background-color: #8b5cf6; color: white; }
-        .btn-debug:hover { background-color: #7c3aed; }
 
         .badge { padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
         .bg-efectivo { background-color: #fef3c7; color: #92400e; }
@@ -562,42 +560,6 @@
             background: #fecaca;
         }
 
-        .debug-panel {
-            background: #f8fafc;
-            border: 2px solid #8b5cf6;
-            border-radius: 0.375rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            display: none;
-        }
-        .debug-panel.visible {
-            display: block;
-        }
-        .debug-panel h4 {
-            color: #7c3aed;
-            margin-bottom: 0.5rem;
-        }
-        .debug-panel .debug-item {
-            font-size: 0.8rem;
-            padding: 0.25rem 0.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-        .debug-panel .debug-item .debug-factura {
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-        .debug-panel .debug-item .debug-cliente {
-            color: var(--text-muted);
-        }
-        .debug-panel .debug-item .debug-id {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            font-family: monospace;
-        }
-
         @media print {
             body * { visibility: hidden; }
             #print-area, #print-area * { visibility: visible; }
@@ -690,7 +652,6 @@
             <button id="btn-gastos" onclick="irA('gastos')">💡 Gastos Empresa</button>
             <button id="btn-cajamenor" onclick="irA('cajamenor')">🪙 Caja Menor</button>
             <button id="btn-config" onclick="irA('config')">⚙️ Configuración</button>
-            <button id="btn-debug" onclick="toggleDebug()" style="color: #8b5cf6;">🐞 Debug</button>
         </nav>
         <div class="status-firebase">
             <span id="sync-dot" class="dot"></span>
@@ -701,16 +662,6 @@
     <!-- Contenido Principal -->
     <main id="mainContent">
         <div class="alerts-container" id="panel-alertas-automaticas"></div>
-
-        <!-- Panel de Debug -->
-        <div class="debug-panel" id="debug-panel">
-            <h4>🐞 Panel de Depuración - Todas las Ventas</h4>
-            <div id="debug-content">
-                <p style="color:var(--text-muted);">Cargando...</p>
-            </div>
-            <button class="btn btn-debug" onclick="forzarRender()" style="margin-top:0.5rem;">🔄 Forzar Render</button>
-            <button class="btn btn-debug" onclick="limpiarFiltrosDebug()" style="margin-top:0.5rem; background:#ef4444;">🧹 Limpiar Filtros</button>
-        </div>
 
         <!-- KPIs -->
         <div class="stats-grid" id="contenedor-kpis-principal">
@@ -750,22 +701,21 @@
         <div class="filter-bar" id="barra-busqueda-general">
             <div style="flex: 1; min-width: 200px;" class="campo">
                 <label id="lbl-buscador-dinamico">🔍 Buscar en este módulo</label>
-                <input type="text" id="f-buscar" oninput="render()" placeholder="Escribe para filtrar...">
+                <input type="text" id="f-buscar" oninput="actualizarFiltroYRender()" placeholder="Escribe para filtrar...">
             </div>
-            <div id="div-filtro-tipo" style="width: 150px;" class="campo" style="display:none;">
+            <div id="div-filtro-tipo" style="width: 150px;" class="campo">
                 <label>⚖️ Tipo Movimiento</label>
-                <select id="f-tipo-movimiento" onchange="render()">
+                <select id="f-tipo-movimiento" onchange="actualizarFiltroYRender()">
                     <option value="TODOS">🔄 Ver Ambos</option>
                     <option value="INGRESOS">📥 Solo Ingresos</option>
                     <option value="EGRESOS">📤 Solo Egresos</option>
                 </select>
             </div>
-            <div id="div-filtro-desde" style="width: 140px;" class="campo"><label>📅 Desde</label><input type="date" id="f-desde" onchange="render()"></div>
-            <div id="div-filtro-hasta" style="width: 140px;" class="campo"><label>📅 Hasta</label><input type="date" id="f-hasta" onchange="render()"></div>
+            <div id="div-filtro-desde" style="width: 140px;" class="campo"><label>📅 Desde</label><input type="date" id="f-desde" onchange="actualizarFiltroYRender()"></div>
+            <div id="div-filtro-hasta" style="width: 140px;" class="campo"><label>📅 Hasta</label><input type="date" id="f-hasta" onchange="actualizarFiltroYRender()"></div>
             <div style="display:flex; gap:0.5rem; margin-top:16px;">
                 <button class="btn" style="background:#64748b; height:38px;" onclick="limpiarFiltros()">Limpiar</button>
                 <button class="btn btn-verde" style="height:38px;" onclick="exportarBaseDeDatosExcel()">🟢 Excel</button>
-                <button class="btn btn-debug" style="height:38px;" onclick="toggleDebug()">🐞 Debug</button>
             </div>
         </div>
 
@@ -1055,6 +1005,7 @@
             <h3 id="lbl-modal-abono-directo-titulo">💰 Nuevo Abono Directo</h3>
             <input type="hidden" id="abono-directo-id" value="">
             <input type="hidden" id="abono-directo-factura-precargada" value="">
+            <input type="hidden" id="abono-directo-venta-id" value="">
             <div class="flex-form" style="grid-template-columns:1fr 1fr;">
                 <div class="campo"><label>Nº Recibo</label><input type="text" id="abono-directo-numero" placeholder="Ej: 045"></div>
                 <div class="campo"><label>Monto ($)</label><input type="text" id="abono-directo-monto" oninput="formatMoni(this)" placeholder="0"></div>
@@ -1285,6 +1236,24 @@
         </div>
     </div>
 
+    <!-- MODAL DESPACHO (flotante) -->
+    <div class="modal-overlay" id="modal-despacho">
+        <div class="modal-flotante" style="max-width:450px;">
+            <span class="close-modal-top" onclick="cerrarModalDespacho()">&times;</span>
+            <h3 style="color:var(--accent);">🚛 Datos del Despacho</h3>
+            <input type="hidden" id="despacho-venta-id">
+            <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.5rem;">
+                <div class="campo"><label>Placa del Vehículo</label><input type="text" id="despacho-placa" placeholder="Ej: ABC-123"></div>
+                <div class="campo"><label>Nombre del Conductor</label><input type="text" id="despacho-conductor" placeholder="Nombre completo"></div>
+                <div class="campo"><label>Teléfono del Conductor</label><input type="text" id="despacho-telefono" placeholder="Celular"></div>
+                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                    <button class="btn btn-verde" onclick="confirmarDespacho()" style="flex:1;">✅ Confirmar Despacho</button>
+                    <button class="btn btn-cerrar-modal" onclick="cerrarModalDespacho()" style="flex:0.5;">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL EDITAR DESPACHO -->
     <div class="modal-overlay" id="modal-editar-despacho">
         <div class="modal-flotante" style="max-width:450px;">
@@ -1358,23 +1327,6 @@
         </div>
     </div>
 
-    <div id="modal-despacho" class="modal" style="display:none;">
-        <div class="modal-content" style="max-width:450px;">
-            <span class="close-modal" onclick="cerrarModalDespacho()">&times;</span>
-            <h3 style="color:var(--accent);">🚛 Datos del Despacho</h3>
-            <input type="hidden" id="despacho-venta-id">
-            <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.5rem;">
-                <div class="campo"><label>Placa del Vehículo</label><input type="text" id="despacho-placa" placeholder="Ej: ABC-123"></div>
-                <div class="campo"><label>Nombre del Conductor</label><input type="text" id="despacho-conductor" placeholder="Nombre completo"></div>
-                <div class="campo"><label>Teléfono del Conductor</label><input type="text" id="despacho-telefono" placeholder="Celular"></div>
-                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-                    <button class="btn btn-verde" onclick="confirmarDespacho()" style="flex:1;">✅ Confirmar Despacho</button>
-                    <button class="btn btn-cerrar-modal" onclick="cerrarModalDespacho()">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -1404,7 +1356,6 @@
         window.alertasMostradas = {};
         window.pendingPrintData = null;
         window.printConsecutivoUsado = false;
-        window.debugVisible = false;
 
         onValue(carmencitaRef, (snapshot) => {
             const data = snapshot.val();
@@ -1424,18 +1375,12 @@
             document.getElementById('sync-txt').innerText = "Nube Conectada";
             window.render();
             cargarConfiguracion();
-            if (window.debugVisible) {
-                actualizarDebug();
-            }
         });
 
         window.salvar = function() {
             set(carmencitaRef, db).then(() => { 
                 window.render(); 
                 console.log('✅ Datos guardados correctamente en Firebase');
-                if (window.debugVisible) {
-                    actualizarDebug();
-                }
             }).catch((e) => { 
                 console.error('❌ Error al guardar:', e);
                 alert('Error al guardar en Firebase. Revisa la consola.');
@@ -1456,66 +1401,6 @@
     </script>
 
     <script>
-        // ===== FUNCIONES DE DEBUG =====
-        function toggleDebug() {
-            window.debugVisible = !window.debugVisible;
-            const panel = document.getElementById('debug-panel');
-            if (window.debugVisible) {
-                panel.classList.add('visible');
-                actualizarDebug();
-            } else {
-                panel.classList.remove('visible');
-            }
-        }
-
-        function actualizarDebug() {
-            const container = document.getElementById('debug-content');
-            const db = window.getDbData();
-            if (!db || !db.ventas) {
-                container.innerHTML = '<p style="color:var(--text-muted);">No hay datos de ventas.</p>';
-                return;
-            }
-            
-            if (db.ventas.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-muted);">No hay ventas registradas.</p>';
-                return;
-            }
-            
-            let html = '';
-            db.ventas.forEach(v => {
-                const fecha = v.fechaRegistro || 'Sin fecha';
-                const factura = v.factura || 'S/N';
-                const cliente = v.cliente || 'Sin cliente';
-                const total = v.total || 0;
-                const abonado = v.abonado || 0;
-                const estado = v.estadoEntrega || 'Pendiente';
-                const id = v.id || 'Sin ID';
-                html += `
-                    <div class="debug-item">
-                        <span class="debug-factura">📄 #${factura}</span>
-                        <span class="debug-cliente">${cliente} - ${m(total)} (${m(abonado)} abonado) - ${estado}</span>
-                        <span class="debug-id">ID: ${id.substring(0, 12)}...</span>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function forzarRender() {
-            render();
-            actualizarDebug();
-            alert('✅ Render forzado. Verifica los datos en la tabla.');
-        }
-
-        function limpiarFiltrosDebug() {
-            document.getElementById('f-buscar').value = '';
-            document.getElementById('f-tipo-movimiento').value = 'TODOS';
-            establecerRangoMesActual();
-            render();
-            actualizarDebug();
-            alert('✅ Filtros limpiados. Todos los registros deberían ser visibles.');
-        }
-
         // ===== FUNCIONES GENERALES =====
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('abierto');
@@ -1548,8 +1433,29 @@
             document.getElementById('f-buscar').value = '';
             document.getElementById('f-tipo-movimiento').value = 'TODOS';
             establecerRangoMesActual();
+            // Guardar en el estado de la pestaña actual
+            const pestana = window.moduloActual || 'dashboard';
+            if (pestana === 'dashboard') {
+                window.filtrosPorPestana = window.filtrosPorPestana || {};
+                window.filtrosPorPestana.dashboard = { busqueda: '', desde: '', hasta: '', tipo: 'TODOS' };
+            }
             render();
-            if (window.debugVisible) actualizarDebug();
+        }
+
+        function actualizarFiltroYRender() {
+            const pestana = window.moduloActual || 'dashboard';
+            const busqueda = document.getElementById('f-buscar').value || '';
+            const desde = document.getElementById('f-desde').value || '';
+            const hasta = document.getElementById('f-hasta').value || '';
+            const tipo = document.getElementById('f-tipo-movimiento').value || 'TODOS';
+            
+            window.filtrosPorPestana = window.filtrosPorPestana || {};
+            if (pestana === 'dashboard') {
+                window.filtrosPorPestana.dashboard = { busqueda, desde, hasta, tipo };
+            } else {
+                window.filtrosPorPestana[pestana] = { busqueda };
+            }
+            render();
         }
 
         function verificarCategoriaManual(select) {
@@ -1945,7 +1851,7 @@
             abrirModalAbonoDirecto();
         }
 
-        function abrirModalAbonoDirecto(facturaPrecargada = '', clientePrecargado = '') {
+        function abrirModalAbonoDirecto(facturaPrecargada = '', clientePrecargado = '', ventaIdPrecargada = '') {
             const modal = document.getElementById('modal-abono-directo');
             restaurarBackupModal('modal-abono-directo');
             modal.classList.add('activo');
@@ -1960,6 +1866,7 @@
                 document.getElementById('abono-directo-cliente').value = clientePrecargado || '';
                 document.getElementById('abono-directo-factura').value = facturaPrecargada || '';
                 document.getElementById('abono-directo-factura-precargada').value = facturaPrecargada || '';
+                document.getElementById('abono-directo-venta-id').value = ventaIdPrecargada || '';
                 document.getElementById('lbl-modal-abono-directo-titulo').innerText = '💰 Nuevo Abono Directo';
                 document.getElementById('btn-guardar-abono-directo').innerText = '💰 Guardar Abono';
                 
@@ -1995,6 +1902,7 @@
             if (borrarDatos) {
                 limpiarBackupModal('modal-abono-directo');
                 document.getElementById('abono-directo-factura-precargada').value = '';
+                document.getElementById('abono-directo-venta-id').value = '';
             }
         }
 
@@ -2007,6 +1915,7 @@
             let fecha = document.getElementById('abono-directo-fecha').value || new Date().toISOString().split('T')[0];
             let cliente = document.getElementById('abono-directo-cliente').value.trim() || 'Cliente sin registrar';
             let factura = document.getElementById('abono-directo-factura').value.trim() || 'S/N';
+            let ventaId = document.getElementById('abono-directo-venta-id').value || '';
 
             const modoFisico = obtenerModoTalonarioFisico();
             
@@ -2021,9 +1930,25 @@
             
             if (monto <= 0) return alert('Ingresa un monto válido.');
 
+            // Verificar duplicado
+            let abonoExistente = db.ingresosDirectos.find(i => 
+                i.origen.includes(`[Recibo #${numero}]`) && 
+                i.origen.includes(`Factura #${factura}`) &&
+                i.id !== idEdicion
+            );
+            if (abonoExistente) {
+                return alert(`⚠️ Ya existe un abono con el Recibo #${numero} para la factura #${factura}. No se puede duplicar.`);
+            }
+
             if (idEdicion && idEdicion !== "") {
                 let ingreso = db.ingresosDirectos.find(x => x.id === idEdicion);
                 if (ingreso) {
+                    if (ventaId) {
+                        let venta = db.ventas.find(v => v.id === ventaId);
+                        if (venta) {
+                            venta.abonado = Math.max(0, venta.abonado - ingreso.monto + monto);
+                        }
+                    }
                     let nuevoOrigen = `Abono Directo (Factura #${factura}) - ${cliente} [Recibo #${numero}]`;
                     ingreso.fecha = fecha;
                     ingreso.origen = nuevoOrigen;
@@ -2031,13 +1956,21 @@
                     ingreso.monto = monto;
                 }
             } else {
-                db.ingresosDirectos.push({
+                let nuevoIngreso = {
                     id: 'i_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
                     fecha: fecha,
                     origen: `Abono Directo (Factura #${factura}) - ${cliente} [Recibo #${numero}]`,
                     medio: medio,
                     monto: monto
-                });
+                };
+                db.ingresosDirectos.push(nuevoIngreso);
+                
+                if (ventaId) {
+                    let venta = db.ventas.find(v => v.id === ventaId);
+                    if (venta) {
+                        venta.abonado = (venta.abonado || 0) + monto;
+                    }
+                }
             }
 
             cerrarModalAbonoDirecto(true);
@@ -2053,6 +1986,7 @@
             let cliente = 'Cliente sin registrar';
             let factura = 'S/N';
             let numeroRecibo = '';
+            let ventaId = '';
             
             let reciboMatch = ingreso.origen.match(/\[Recibo #([^\]]+)\]/);
             if (reciboMatch) numeroRecibo = reciboMatch[1];
@@ -2063,7 +1997,10 @@
             let facturaMatch = ingreso.origen.match(/Factura #([^\s)]+)/);
             if (facturaMatch) factura = facturaMatch[1];
 
-            abrirModalAbonoDirecto(factura, cliente);
+            let ventaEncontrada = db.ventas.find(v => v.factura === factura);
+            if (ventaEncontrada) ventaId = ventaEncontrada.id;
+
+            abrirModalAbonoDirecto(factura, cliente, ventaId);
             document.getElementById('abono-directo-id').value = id;
             document.getElementById('abono-directo-numero').value = numeroRecibo || '';
             document.getElementById('abono-directo-numero').disabled = false;
@@ -2131,7 +2068,7 @@
             });
         }
 
-        // ===== FUNCIONES DE DETALLE =====
+        // ===== FUNCIONES DE DETALLE ===== (mantenidas igual)
         function verDetalleIngreso(id) {
             let db = window.getDbData();
             let i = db.ingresosDirectos.find(x => x.id === id);
@@ -2341,7 +2278,7 @@
             abrirModalDetalle('🪙 Detalle de Caja Menor', contenido);
         }
 
-        // ===== FUNCIONES COTIZACIONES =====
+        // ===== FUNCIONES COTIZACIONES ===== (mantenidas igual)
         function abrirModalCotizacion() {
             const modal = document.getElementById('modal-cotizacion');
             restaurarBackupModal('modal-cotizacion');
@@ -2563,7 +2500,7 @@
             }, 500);
         }
 
-        // ===== FUNCIONES WHATSAPP =====
+        // ===== FUNCIONES WHATSAPP ===== (mantenidas igual)
         function enviarCotizacionWhatsAppModal() {
             let telefono = document.getElementById('c-telefono').value.trim();
             if (!telefono) return alert('Por favor ingresa el número de teléfono del cliente.');
@@ -3030,7 +2967,6 @@
                 cerrarModalVenta(true);
             }
             salvar();
-            if (window.debugVisible) actualizarDebug();
         }
 
         function eliminarVenta(id) {
@@ -3039,16 +2975,15 @@
                 db.ventas = db.ventas.filter(x => x.id !== id);
                 db.ingresosDirectos = db.ingresosDirectos.filter(i => !i.origen.includes(`(${id})`));
                 salvar();
-                if (window.debugVisible) actualizarDebug();
             }
         }
 
         // ===== FUNCIONES DE ABONOS EN CARTERA =====
         function abrirCajaAbono(id, cliente, factura) {
-            abrirModalAbonoDirecto(factura || '', cliente);
+            abrirModalAbonoDirecto(factura || '', cliente, id);
         }
 
-        // ===== FUNCIONES DE EDITAR ABONO =====
+        // ===== FUNCIONES DE EDITAR ABONO ===== (mantenidas igual)
         function abrirModalEditarAbono(idIngreso) {
             let db = window.getDbData();
             let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
@@ -3187,7 +3122,7 @@
             }
         }
 
-        // ===== FUNCIONES GASTOS =====
+        // ===== FUNCIONES GASTOS ===== (mantenidas igual)
         function abrirModalGasto() {
             const modal = document.getElementById('modal-gasto');
             restaurarBackupModal('modal-gasto');
@@ -3412,7 +3347,7 @@
             } 
         }
 
-        // ===== FUNCIONES CAJA MENOR =====
+        // ===== FUNCIONES CAJA MENOR ===== (mantenidas igual)
         function cancelarEdicionCaja() {
             document.getElementById('cm-id-edicion').value = '';
             document.getElementById('cm-tipo').value = 'Gasto Menor';
@@ -3531,17 +3466,17 @@
             document.getElementById('modal-detalle-cliente').style.display = 'flex';
         }
 
-        // ===== FUNCIONES DE DESPACHO =====
+        // ===== FUNCIONES DE DESPACHO (con modal flotante) =====
         function abrirModalDespacho(idVenta) {
             document.getElementById('despacho-venta-id').value = idVenta;
             document.getElementById('despacho-placa').value = '';
             document.getElementById('despacho-conductor').value = '';
             document.getElementById('despacho-telefono').value = '';
-            document.getElementById('modal-despacho').style.display = 'flex';
+            document.getElementById('modal-despacho').classList.add('activo');
         }
 
         function cerrarModalDespacho() {
-            document.getElementById('modal-despacho').style.display = 'none';
+            document.getElementById('modal-despacho').classList.remove('activo');
             document.getElementById('despacho-venta-id').value = '';
         }
 
@@ -3634,7 +3569,7 @@
             }
         }
 
-        // ===== FUNCIONES DE IMPRESIÓN =====
+        // ===== FUNCIONES DE IMPRESIÓN ===== (mantenidas igual)
         function mostrarConfirmacionImpresion(mensaje, callback) {
             document.getElementById('print-confirm-message').innerText = mensaje || '¿Deseas imprimir este documento?';
             document.getElementById('print-confirm-overlay').classList.add('activo');
@@ -4003,19 +3938,81 @@
             evaluarYMostrarAlertasLogistica(db.ventas);
             evaluarAlertasCumpleanos(db.trabajadores);
 
-            let txtFiltro = document.getElementById('f-buscar').value.toLowerCase();
-            let fDesde = document.getElementById('f-desde').value;
-            let fHasta = document.getElementById('f-hasta').value;
+            const pestana = window.moduloActual || 'dashboard';
+            
+            // Obtener filtros de la pestaña actual
+            let txtFiltro = '';
+            let fDesde = '';
+            let fHasta = '';
+            let tipoMov = 'TODOS';
+            
+            if (pestana === 'dashboard') {
+                txtFiltro = document.getElementById('f-buscar').value || '';
+                fDesde = document.getElementById('f-desde').value || '';
+                fHasta = document.getElementById('f-hasta').value || '';
+                tipoMov = document.getElementById('f-tipo-movimiento').value || 'TODOS';
+            } else {
+                txtFiltro = document.getElementById('f-buscar').value || '';
+            }
 
-            function cumpleFiltroBase(fecha, textoComparar) {
-                // Para dashboard, ventas y entregas aplicar filtro de fechas
-                if (window.moduloActual === 'dashboard' || window.moduloActual === 'ventas' || window.moduloActual === 'entregas') {
-                    if (fDesde && fecha && fecha < fDesde) return false;
-                    if (fHasta && fecha && fecha > fHasta) return false;
-                }
-                // Si hay texto de búsqueda, buscar en el texto proporcionado
-                if (txtFiltro && !textoComparar.toLowerCase().includes(txtFiltro)) return false;
+            function cumpleFiltroFechas(fecha) {
+                if (pestana !== 'dashboard') return true;
+                if (!fDesde && !fHasta) return true;
+                if (!fecha) return false;
+                if (fDesde && fecha < fDesde) return false;
+                if (fHasta && fecha > fHasta) return false;
                 return true;
+            }
+
+            function buscarEnVenta(venta, texto) {
+                if (!texto) return true;
+                const campos = [
+                    venta.factura || '',
+                    venta.cliente || '',
+                    venta.desc || '',
+                    venta.direccion || '',
+                    venta.barrio || '',
+                    venta.telefono || '',
+                    venta.cedula || '',
+                    venta.correo || '',
+                    venta.estadoEntrega || '',
+                    venta.id || ''
+                ];
+                if (venta.productosArray && venta.productosArray.length > 0) {
+                    venta.productosArray.forEach(p => {
+                        campos.push(p.detalle || '');
+                    });
+                }
+                return campos.some(campo => campo.toLowerCase().includes(texto));
+            }
+
+            function buscarEnIngreso(ingreso, texto) {
+                if (!texto) return true;
+                const campos = [
+                    ingreso.origen || '',
+                    ingreso.medio || '',
+                    ingreso.fecha || '',
+                    ingreso.id || ''
+                ];
+                return campos.some(campo => campo.toLowerCase().includes(texto));
+            }
+
+            function buscarEnGasto(gasto, texto) {
+                if (!texto) return true;
+                const campos = [
+                    gasto.cat || '',
+                    gasto.concepto || '',
+                    gasto.detalle || '',
+                    gasto.medio || '',
+                    gasto.fecha || '',
+                    gasto.id || ''
+                ];
+                if (gasto.productosArray && gasto.productosArray.length > 0) {
+                    gasto.productosArray.forEach(p => {
+                        campos.push(p.detalle || '');
+                    });
+                }
+                return campos.some(campo => campo.toLowerCase().includes(texto));
             }
 
             if (!db.ventas) db.ventas = [];
@@ -4033,13 +4030,21 @@
             db.cotizaciones.sort((a, b) => new Date(b.fecha || '') - new Date(a.fecha || ''));
             db.cajaMenor.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
-            // KPIs
-            let ingresosBanco = db.ingresosDirectos.filter(i => i.medio === 'Banco' && cumpleFiltroBase(i.fecha, '')).reduce((s, i) => s + i.monto, 0);
-            let ingresosEfectivo = db.ingresosDirectos.filter(i => i.medio === 'Efectivo' && cumpleFiltroBase(i.fecha, '')).reduce((s, i) => s + i.monto, 0);
-            let gastosBanco = db.gastos.filter(g => g.medio === 'Banco' && cumpleFiltroBase(g.fecha, '')).reduce((s, g) => s + g.monto, 0);
-            let gastosEfectivo = db.gastos.filter(g => g.medio === 'Efectivo' && cumpleFiltroBase(g.fecha, '')).reduce((s, g) => s + g.monto, 0);
-            let nominaBanco = db.nomina.filter(n => n.origen === 'Banco' && cumpleFiltroBase(n.fecha, '')).reduce((s, n) => s + n.monto, 0);
-            let nominaEfectivo = db.nomina.filter(n => n.origen === 'Efectivo' && cumpleFiltroBase(n.fecha, '')).reduce((s, n) => s + n.monto, 0);
+            // KPIs - SOLO DEL MES ACTUAL (para los recuadros superiores)
+            let hoy = new Date();
+            let primerDiaMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1).toISOString().split('T')[0];
+            let ultimoDiaMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).toISOString().split('T')[0];
+
+            function esDelMes(fecha) {
+                return fecha >= primerDiaMes && fecha <= ultimoDiaMes;
+            }
+
+            let ingresosBanco = db.ingresosDirectos.filter(i => i.medio === 'Banco' && esDelMes(i.fecha)).reduce((s, i) => s + i.monto, 0);
+            let ingresosEfectivo = db.ingresosDirectos.filter(i => i.medio === 'Efectivo' && esDelMes(i.fecha)).reduce((s, i) => s + i.monto, 0);
+            let gastosBanco = db.gastos.filter(g => g.medio === 'Banco' && esDelMes(g.fecha)).reduce((s, g) => s + g.monto, 0);
+            let gastosEfectivo = db.gastos.filter(g => g.medio === 'Efectivo' && esDelMes(g.fecha)).reduce((s, g) => s + g.monto, 0);
+            let nominaBanco = db.nomina.filter(n => n.origen === 'Banco' && esDelMes(n.fecha)).reduce((s, n) => s + n.monto, 0);
+            let nominaEfectivo = db.nomina.filter(n => n.origen === 'Efectivo' && esDelMes(n.fecha)).reduce((s, n) => s + n.monto, 0);
 
             let globalIngresadoTodo = ingresosBanco + ingresosEfectivo;
             let totalDisponibleBanco = ingresosBanco - (gastosBanco + nominaBanco);
@@ -4061,13 +4066,20 @@
                 if (currentVal) nSelect.value = currentVal;
             }
 
-            // Dashboard Entradas
-            const bEntradas = document.querySelector('#t-dashboard-entradas tbody');
-            if (bEntradas) {
-                bEntradas.innerHTML = '';
-                db.ingresosDirectos.forEach(i => {
-                    let textoComparar = i.origen + " " + i.medio + " " + i.fecha;
-                    if (cumpleFiltroBase(i.fecha, textoComparar)) {
+            // Dashboard - solo se muestra en la pestaña de dashboard
+            if (pestana === 'dashboard') {
+                document.getElementById('mod-dashboard').style.display = 'block';
+                // Dashboard Entradas
+                const bEntradas = document.querySelector('#t-dashboard-entradas tbody');
+                if (bEntradas) {
+                    bEntradas.innerHTML = '';
+                    let ingresosFiltrados = db.ingresosDirectos.filter(i => buscarEnIngreso(i, txtFiltro) && cumpleFiltroFechas(i.fecha));
+                    
+                    if (tipoMov === 'EGRESOS') {
+                        ingresosFiltrados = [];
+                    }
+                    
+                    ingresosFiltrados.forEach(i => {
                         let clienteNombre = i.origen;
                         let facturaNum = 'S/N';
                         let reciboNum = '';
@@ -4117,165 +4129,199 @@
                                 <button class="btn-accion btn-verde" onclick="imprimirReciboAbono('${i.id}')" style="padding:2px 4px;" title="Imprimir Recibo">🖨️</button>
                             </td>
                         </tr>`;
-                    }
-                });
-            }
+                    });
+                }
 
-            // Dashboard Salidas
-            const bSalidas = document.querySelector('#t-dashboard-salidas tbody');
-            if (bSalidas) {
-                bSalidas.innerHTML = '';
-                db.gastos.forEach(g => {
-                    let textoComparar = g.cat + " " + (g.concepto || '') + " " + g.fecha;
-                    if (cumpleFiltroBase(g.fecha, textoComparar)) {
-                        let detalleCorto = g.productosArray && g.productosArray.length > 0 
-                            ? g.productosArray.map(p => `${p.cantidad}x ${p.detalle}`).join(', ').substring(0, 50) + '...'
-                            : g.concepto || '';
-                        bSalidas.innerHTML += `<tr>
-                            <td>${g.fecha}</td>
-                            <td>🏠 ${g.cat}</td>
-                            <td>${detalleCorto}</td>
-                            <td style="color:var(--danger);">${m(g.monto)}</td>
-                            <td>
-                                <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${g.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                                <button class="btn-accion btn-eliminar" onclick="eliminarGastoDirecto('${g.id}')" style="padding:2px 4px;">x</button>
-                            </td>
-                        </tr>`;
+                // Dashboard Salidas
+                const bSalidas = document.querySelector('#t-dashboard-salidas tbody');
+                if (bSalidas) {
+                    bSalidas.innerHTML = '';
+                    let egresosFiltrados = [];
+                    
+                    db.gastos.forEach(g => {
+                        if (buscarEnGasto(g, txtFiltro) && cumpleFiltroFechas(g.fecha)) {
+                            egresosFiltrados.push({ tipo: 'gasto', data: g });
+                        }
+                    });
+                    db.nomina.forEach(n => {
+                        if (cumpleFiltroFechas(n.fecha) && (txtFiltro ? (n.nombre || '').toLowerCase().includes(txtFiltro) || (n.detalle || '').toLowerCase().includes(txtFiltro) : true)) {
+                            egresosFiltrados.push({ tipo: 'nomina', data: n });
+                        }
+                    });
+                    
+                    if (tipoMov === 'INGRESOS') {
+                        egresosFiltrados = [];
                     }
-                });
-                db.nomina.forEach(n => {
-                    let textoComparar = n.nombre + " " + n.detalle + " " + n.fecha;
-                    if (cumpleFiltroBase(n.fecha, textoComparar)) {
-                        bSalidas.innerHTML += `<tr>
-                            <td>${n.fecha}</td>
-                            <td>👷 Nómina: ${n.nombre}</td>
-                            <td>${n.detalle}</td>
-                            <td style="color:var(--danger);">${m(n.monto)}</td>
-                            <td>
-                                <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${n.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                                <button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')" style="padding:2px 4px;">x</button>
-                            </td>
-                        </tr>`;
-                    }
-                });
-            }
-
-            // Ventas
-            const bVentas = document.querySelector('#t-ventas tbody');
-            if (bVentas) {
-                bVentas.innerHTML = '';
-                db.ventas.forEach(v => {
-                    let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
-                    let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
-                    let textoComparar = v.cliente + " " + v.desc + " " + v.factura + " " + fechaOrig + " " + fPactadaFinal + " " + v.id;
-                    if (cumpleFiltroBase(fechaOrig, textoComparar)) {
-                        bVentas.innerHTML += `
-                            <tr>
-                                <td><span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${v.factura || 'S/N'}</span></td>
-                                <td>${fechaOrig}</td>
-                                <td><strong>${v.cliente}</strong></td>
-                                <td style="max-width:150px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
-                                <td>${m(v.total)}</td>
-                                <td style="color:var(--info);">${m(v.abonado)}</td>
-                                <td style="color:var(--accent); font-weight:600;">📅 ${fPactadaFinal}</td>
+                    
+                    egresosFiltrados.forEach(item => {
+                        if (item.tipo === 'gasto') {
+                            let g = item.data;
+                            let detalleCorto = g.productosArray && g.productosArray.length > 0 
+                                ? g.productosArray.map(p => `${p.cantidad}x ${p.detalle}`).join(', ').substring(0, 50) + '...'
+                                : g.concepto || '';
+                            bSalidas.innerHTML += `<tr>
+                                <td>${g.fecha}</td>
+                                <td>🏠 ${g.cat}</td>
+                                <td>${detalleCorto}</td>
+                                <td style="color:var(--danger);">${m(g.monto)}</td>
                                 <td>
-                                    <div style="display:flex; gap:3px; flex-wrap:wrap;">
-                                        <button class="btn-accion btn-ojito" onclick="verDetalleVenta('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                                        <button class="btn-accion btn-editar" onclick="abrirModalVentaConDatos('${v.id}')" style="padding:2px 4px;">✏️</button>
-                                        <button class="btn-accion btn-verde" onclick="abrirCajaAbono('${v.id}', '${v.cliente}', '${v.factura}')" style="padding:2px 4px;">💵 +</button>
-                                        <button class="btn-accion btn-eliminar" onclick="eliminarVenta('${v.id}')" style="padding:2px 4px;">x</button>
-                                        <button class="btn-accion btn-azul" onclick="imprimirFactura('${v.id}')" style="padding:2px 4px;" title="Imprimir Factura">🖨️</button>
-                                    </div>
+                                    <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${g.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                    <button class="btn-accion btn-eliminar" onclick="eliminarGastoDirecto('${g.id}')" style="padding:2px 4px;">x</button>
                                 </td>
                             </tr>`;
-                    }
-                });
-            }
-
-            // Entregas
-            const bEntregas = document.querySelector('#t-entregas tbody');
-            if (bEntregas) {
-                bEntregas.innerHTML = '';
-                db.ventas.forEach(v => {
-                    let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
-                    let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
-                    let est = v.estadoEntrega || 'Pendiente';
-                    let claseEst = est === 'Pendiente' ? 'badge-pendiente' : est === 'En Camino' ? 'badge-encamino' : 'badge-entregado';
-                    let txtBoton = est === 'Pendiente' ? '🚛 Despachar' : est === 'En Camino' ? '✅ Confirmar' : '↩️ Reajustar';
-
-                    let infoConductor = '';
-                    if (v.despacho) {
-                        infoConductor = `<div class="conductor-cell">
-                            <strong>${v.despacho.conductor || 'N/R'}</strong>
-                            <div class="tel">📱 ${v.despacho.telefono || 'N/R'}</div>
-                            <div style="font-size:0.65rem; color:var(--text-muted);">${v.despacho.placa || ''}</div>
-                        </div>`;
-                    } else {
-                        infoConductor = '—';
-                    }
-
-                    let textoComparar = v.cliente + " " + v.desc + " " + v.factura + " " + est + " " + fechaOrig + " " + fPactadaFinal + " " + v.direccion + " " + v.id;
-                    if (cumpleFiltroBase(fechaOrig, textoComparar)) {
-                        bEntregas.innerHTML += `
-                            <tr>
-                                <td><span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${v.factura || 'S/N'}</span></td>
-                                <td>${fechaOrig}</td>
-                                <td><strong>${v.cliente}</strong></td>
-                                <td style="max-width:120px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
-                                <td>${v.direccion || 'Taller'} (${v.barrio || 'S/B'})</td>
-                                <td style="color:var(--accent); font-weight:700;">📅 ${fPactadaFinal}</td>
-                                <td><span class="badge ${claseEst}">${est}</span></td>
-                                <td>${infoConductor}</td>
+                        } else if (item.tipo === 'nomina') {
+                            let n = item.data;
+                            bSalidas.innerHTML += `<tr>
+                                <td>${n.fecha}</td>
+                                <td>👷 Nómina: ${n.nombre}</td>
+                                <td>${n.detalle}</td>
+                                <td style="color:var(--danger);">${m(n.monto)}</td>
                                 <td>
-                                    <div style="display:flex; gap:3px; flex-wrap:wrap;">
-                                        <button class="btn-accion btn-ojito" onclick="verDetalleEntrega('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                                        <button class="btn-accion btn-azul" onclick="cambiarEstadoEntrega('${v.id}')" style="padding:2px 4px;">${txtBoton}</button>
-                                        <button class="btn-accion btn-editar" onclick="abrirModalEditarDespacho('${v.id}')" style="padding:2px 4px;">✏️</button>
-                                        <button class="btn-accion btn-whatsapp" onclick="enviarWhatsAppEntrega('${v.id}')" style="padding:2px 4px; color:white;">💬</button>
-                                    </div>
+                                    <button class="btn-accion btn-ojito" onclick="verDetalleEgreso('${n.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                    <button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')" style="padding:2px 4px;">x</button>
                                 </td>
                             </tr>`;
-                    }
-                });
+                        }
+                    });
+                }
+            } else {
+                document.getElementById('mod-dashboard').style.display = 'none';
             }
 
-            // Cobros
-            const bCobros = document.querySelector('#t-cobros tbody');
-            if (bCobros) {
-                bCobros.innerHTML = '';
-                db.ventas.forEach(v => {
-                    let pendiente = v.total - v.abonado;
-                    let textoComparar = v.cliente + " " + v.desc + " " + v.factura + " " + v.telefono + " " + v.id;
-                    if (pendiente > 0 && cumpleFiltroBase('', textoComparar)) {
-                        let msg = `Hola ${v.cliente}, le saludamos de CARMENCITA DESIGN. Su saldo pendiente es ${m(pendiente)} de la factura Nº ${v.factura || 'S/N'} (${v.desc}). ¡Agradecemos su pronta respuesta!`;
-                        let cleanNumCel = v.telefono.replace(/\D/g, '');
-                        let uri = `https://wa.me/57${cleanNumCel}?text=${encodeURIComponent(msg)}`;
-                        bCobros.innerHTML += `
-                            <tr>
-                                <td><span class="badge bg-efectivo"># ${v.factura || 'S/N'}</span></td>
-                                <td><strong>${v.cliente}</strong></td>
-                                <td>${v.telefono}</td>
-                                <td style="max-width:120px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
-                                <td style="color:var(--danger); font-weight:700;">${m(pendiente)}</td>
-                                <td>
-                                    <div style="display:flex; gap:3px;">
-                                        <button class="btn-accion btn-ojito" onclick="verDetalleCobro('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                                        <a href="${uri}" target="_blank" class="btn btn-verde" style="padding:4px 8px; font-size:0.75rem;">💬 Cobrar</a>
-                                        <button class="btn-accion btn-azul" onclick="imprimirFactura('${v.id}')" style="padding:2px 4px;" title="Imprimir Factura">🖨️</button>
-                                    </div>
-                                </td>
-                            </tr>`;
-                    }
-                });
+            // Ventas - solo en pestaña de Ventas
+            if (pestana === 'ventas') {
+                document.getElementById('mod-ventas').style.display = 'block';
+                const bVentas = document.querySelector('#t-ventas tbody');
+                if (bVentas) {
+                    bVentas.innerHTML = '';
+                    db.ventas.forEach(v => {
+                        let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
+                        let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
+                        
+                        if (buscarEnVenta(v, txtFiltro)) {
+                            bVentas.innerHTML += `
+                                <tr>
+                                    <td><span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${v.factura || 'S/N'}</span></td>
+                                    <td>${fechaOrig}</td>
+                                    <td><strong>${v.cliente}</strong></td>
+                                    <td style="max-width:150px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
+                                    <td>${m(v.total)}</td>
+                                    <td style="color:var(--info);">${m(v.abonado)}</td>
+                                    <td style="color:var(--accent); font-weight:600;">📅 ${fPactadaFinal}</td>
+                                    <td>
+                                        <div style="display:flex; gap:3px; flex-wrap:wrap;">
+                                            <button class="btn-accion btn-ojito" onclick="verDetalleVenta('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                            <button class="btn-accion btn-editar" onclick="abrirModalVentaConDatos('${v.id}')" style="padding:2px 4px;">✏️</button>
+                                            <button class="btn-accion btn-verde" onclick="abrirCajaAbono('${v.id}', '${v.cliente}', '${v.factura}')" style="padding:2px 4px;">💵 +</button>
+                                            <button class="btn-accion btn-eliminar" onclick="eliminarVenta('${v.id}')" style="padding:2px 4px;">x</button>
+                                            <button class="btn-accion btn-azul" onclick="imprimirFactura('${v.id}')" style="padding:2px 4px;" title="Imprimir Factura">🖨️</button>
+                                        </div>
+                                    </td>
+                                </tr>`;
+                        }
+                    });
+                }
+            } else {
+                document.getElementById('mod-ventas').style.display = 'none';
             }
 
-            // Cotizaciones
-            const bCotizaciones = document.querySelector('#t-cotizaciones tbody');
-            if (bCotizaciones) {
-                bCotizaciones.innerHTML = '';
-                db.cotizaciones.forEach(c => {
-                    let textoComparar = c.cliente + " " + c.numero + " " + c.productos + " " + c.fecha + " " + c.id;
-                    if (cumpleFiltroBase(c.fecha || '', textoComparar)) {
+            // Entregas - solo en pestaña de Entregas y solo Pendiente/En Camino
+            if (pestana === 'entregas') {
+                document.getElementById('mod-entregas').style.display = 'block';
+                const bEntregas = document.querySelector('#t-entregas tbody');
+                if (bEntregas) {
+                    bEntregas.innerHTML = '';
+                    db.ventas.forEach(v => {
+                        if (v.estadoEntrega === 'Entregado') return;
+                        
+                        let fechaOrig = v.fechaRegistro || new Date().toISOString().split('T')[0];
+                        let fPactadaFinal = v.fechaPactada || calcularDiasHabilesPorDefecto(fechaOrig);
+                        let est = v.estadoEntrega || 'Pendiente';
+                        let claseEst = est === 'Pendiente' ? 'badge-pendiente' : est === 'En Camino' ? 'badge-encamino' : 'badge-entregado';
+                        let txtBoton = est === 'Pendiente' ? '🚛 Despachar' : est === 'En Camino' ? '✅ Confirmar' : '↩️ Reajustar';
+
+                        let infoConductor = '';
+                        if (v.despacho) {
+                            infoConductor = `<div class="conductor-cell">
+                                <strong>${v.despacho.conductor || 'N/R'}</strong>
+                                <div class="tel">📱 ${v.despacho.telefono || 'N/R'}</div>
+                                <div style="font-size:0.65rem; color:var(--text-muted);">${v.despacho.placa || ''}</div>
+                            </div>`;
+                        } else {
+                            infoConductor = '—';
+                        }
+
+                        if (buscarEnVenta(v, txtFiltro)) {
+                            bEntregas.innerHTML += `
+                                <tr>
+                                    <td><span class="badge bg-efectivo" style="color:#000; font-weight:700;"># ${v.factura || 'S/N'}</span></td>
+                                    <td>${fechaOrig}</td>
+                                    <td><strong>${v.cliente}</strong></td>
+                                    <td style="max-width:120px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
+                                    <td>${v.direccion || 'Taller'} (${v.barrio || 'S/B'})</td>
+                                    <td style="color:var(--accent); font-weight:700;">📅 ${fPactadaFinal}</td>
+                                    <td><span class="badge ${claseEst}">${est}</span></td>
+                                    <td>${infoConductor}</td>
+                                    <td>
+                                        <div style="display:flex; gap:3px; flex-wrap:wrap;">
+                                            <button class="btn-accion btn-ojito" onclick="verDetalleEntrega('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                            <button class="btn-accion btn-azul" onclick="cambiarEstadoEntrega('${v.id}')" style="padding:2px 4px;">${txtBoton}</button>
+                                            <button class="btn-accion btn-editar" onclick="abrirModalEditarDespacho('${v.id}')" style="padding:2px 4px;">✏️</button>
+                                            <button class="btn-accion btn-whatsapp" onclick="enviarWhatsAppEntrega('${v.id}')" style="padding:2px 4px; color:white;">💬</button>
+                                        </div>
+                                    </td>
+                                </tr>`;
+                        }
+                    });
+                }
+            } else {
+                document.getElementById('mod-entregas').style.display = 'none';
+            }
+
+            // Cobros - solo en pestaña de Cobros
+            if (pestana === 'cobros') {
+                document.getElementById('mod-cobros').style.display = 'block';
+                const bCobros = document.querySelector('#t-cobros tbody');
+                if (bCobros) {
+                    bCobros.innerHTML = '';
+                    db.ventas.forEach(v => {
+                        let pendiente = v.total - v.abonado;
+                        if (pendiente > 0 && buscarEnVenta(v, txtFiltro)) {
+                            let msg = `Hola ${v.cliente}, le saludamos de CARMENCITA DESIGN. Su saldo pendiente es ${m(pendiente)} de la factura Nº ${v.factura || 'S/N'} (${v.desc}). ¡Agradecemos su pronta respuesta!`;
+                            let cleanNumCel = v.telefono.replace(/\D/g, '');
+                            let uri = `https://wa.me/57${cleanNumCel}?text=${encodeURIComponent(msg)}`;
+                            bCobros.innerHTML += `
+                                <tr>
+                                    <td><span class="badge bg-efectivo"># ${v.factura || 'S/N'}</span></td>
+                                    <td><strong>${v.cliente}</strong></td>
+                                    <td>${v.telefono}</td>
+                                    <td style="max-width:120px; white-space:pre-wrap; word-break:break-word;">${v.desc}</td>
+                                    <td style="color:var(--danger); font-weight:700;">${m(pendiente)}</td>
+                                    <td>
+                                        <div style="display:flex; gap:3px;">
+                                            <button class="btn-accion btn-ojito" onclick="verDetalleCobro('${v.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                            <a href="${uri}" target="_blank" class="btn btn-verde" style="padding:4px 8px; font-size:0.75rem;">💬 Cobrar</a>
+                                            <button class="btn-accion btn-azul" onclick="imprimirFactura('${v.id}')" style="padding:2px 4px;" title="Imprimir Factura">🖨️</button>
+                                        </div>
+                                    </td>
+                                </tr>`;
+                        }
+                    });
+                }
+            } else {
+                document.getElementById('mod-cobros').style.display = 'none';
+            }
+
+            // Cotizaciones - solo en pestaña de Cotizaciones
+            if (pestana === 'cotizaciones') {
+                document.getElementById('mod-cotizaciones').style.display = 'block';
+                const bCotizaciones = document.querySelector('#t-cotizaciones tbody');
+                if (bCotizaciones) {
+                    bCotizaciones.innerHTML = '';
+                    db.cotizaciones.forEach(c => {
+                        let textoBusqueda = c.cliente + " " + c.numero + " " + c.productos + " " + c.fecha + " " + c.telefono + " " + c.direccion;
+                        if (txtFiltro && !textoBusqueda.toLowerCase().includes(txtFiltro)) return;
+                        
                         let estadoEmoji = { 'Pendiente': '⏳ Pendiente', 'Aprobada': '✅ Aprobada', 'Rechazada': '❌ Rechazada', 'Vencida': '⏰ Vencida' };
                         let estadoBadge = c.estado === 'Aprobada' ? 'badge-aprobada' : 'badge-cotizacion';
                         let productosCortos = c.productos ? c.productos.substring(0, 50) + (c.productos.length > 50 ? '...' : '') : '';
@@ -4305,40 +4351,42 @@
                                     </div>
                                 </td>
                             </tr>`;
-                    }
-                });
+                    });
+                }
+            } else {
+                document.getElementById('mod-cotizaciones').style.display = 'none';
             }
 
-            // Trabajadores
-            const bTrabajadores = document.querySelector('#t-trabajadores tbody');
-            if (bTrabajadores) {
-                bTrabajadores.innerHTML = '';
-                db.trabajadores.forEach(t => {
-                    let cumpleMostrar = t.cumpleanos ? t.cumpleanos : 'No registrado';
-                    bTrabajadores.innerHTML += `
-                        <tr>
-                            <td><strong>${t.nombre}</strong></td>
-                            <td>${t.cedula || ''}</td>
-                            <td>${t.telefono || ''}</td>
-                            <td>${t.cargo || ''}</td>
-                            <td>${cumpleMostrar}</td>
-                            <td>
-                                <button class="btn-accion btn-ojito" onclick="abrirModalDetalle('👤 Detalle del Trabajador', '<p><strong>Nombre:</strong> ${t.nombre}</p><p><strong>Cédula:</strong> ${t.cedula || 'No registrada'}</p><p><strong>Teléfono:</strong> ${t.telefono || 'No registrado'}</p><p><strong>Dirección:</strong> ${t.direccion || 'No registrada'}</p><p><strong>Cargo:</strong> ${t.cargo || 'No especificado'}</p><p><strong>Cumpleaños:</strong> ${cumpleMostrar}</p><p><strong>ID:</strong> ${t.id}</p>')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
-                                <button class="btn-accion btn-editar" onclick="iniciarEdicionTrabajador('${t.id}')" style="padding:2px 4px;">✏️</button>
-                                <button class="btn-accion btn-eliminar" onclick="eliminarTrabajador('${t.id}')" style="padding:2px 4px;">x</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            }
-
-            // Nómina
-            const bNomina = document.querySelector('#t-nomina tbody');
-            if (bNomina) {
-                bNomina.innerHTML = '';
-                db.nomina.forEach(n => {
-                    let textoComparar = n.nombre + " " + n.detalle + " " + n.fecha + " " + n.id;
-                    if (cumpleFiltroBase(n.fecha, textoComparar)) {
+            // Nómina - solo en pestaña de Nómina
+            if (pestana === 'nomina') {
+                document.getElementById('mod-nomina').style.display = 'block';
+                const bTrabajadores = document.querySelector('#t-trabajadores tbody');
+                if (bTrabajadores) {
+                    bTrabajadores.innerHTML = '';
+                    db.trabajadores.forEach(t => {
+                        let cumpleMostrar = t.cumpleanos ? t.cumpleanos : 'No registrado';
+                        if (txtFiltro && !(t.nombre || '').toLowerCase().includes(txtFiltro) && !(t.cedula || '').toLowerCase().includes(txtFiltro) && !(t.cargo || '').toLowerCase().includes(txtFiltro)) return;
+                        bTrabajadores.innerHTML += `
+                            <tr>
+                                <td><strong>${t.nombre}</strong></td>
+                                <td>${t.cedula || ''}</td>
+                                <td>${t.telefono || ''}</td>
+                                <td>${t.cargo || ''}</td>
+                                <td>${cumpleMostrar}</td>
+                                <td>
+                                    <button class="btn-accion btn-ojito" onclick="abrirModalDetalle('👤 Detalle del Trabajador', '<p><strong>Nombre:</strong> ${t.nombre}</p><p><strong>Cédula:</strong> ${t.cedula || 'No registrada'}</p><p><strong>Teléfono:</strong> ${t.telefono || 'No registrado'}</p><p><strong>Dirección:</strong> ${t.direccion || 'No registrada'}</p><p><strong>Cargo:</strong> ${t.cargo || 'No especificado'}</p><p><strong>Cumpleaños:</strong> ${cumpleMostrar}</p><p><strong>ID:</strong> ${t.id}</p>')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                    <button class="btn-accion btn-editar" onclick="iniciarEdicionTrabajador('${t.id}')" style="padding:2px 4px;">✏️</button>
+                                    <button class="btn-accion btn-eliminar" onclick="eliminarTrabajador('${t.id}')" style="padding:2px 4px;">x</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+                const bNomina = document.querySelector('#t-nomina tbody');
+                if (bNomina) {
+                    bNomina.innerHTML = '';
+                    db.nomina.forEach(n => {
+                        if (txtFiltro && !(n.nombre || '').toLowerCase().includes(txtFiltro) && !(n.detalle || '').toLowerCase().includes(txtFiltro)) return;
                         bNomina.innerHTML += `<tr>
                             <td>${n.fecha}</td>
                             <td><strong>${n.nombre}</strong></td>
@@ -4351,17 +4399,20 @@
                                 <button class="btn-accion btn-eliminar" onclick="eliminarNomina('${n.id}')" style="padding:2px 4px;">x</button>
                             </td>
                         </tr>`;
-                    }
-                });
+                    });
+                }
+            } else {
+                document.getElementById('mod-nomina').style.display = 'none';
             }
 
-            // Gastos
-            const bGastos = document.querySelector('#t-gastos tbody');
-            if (bGastos) {
-                bGastos.innerHTML = '';
-                db.gastos.forEach(g => {
-                    let textoComparar = g.cat + " " + (g.concepto || '') + " " + g.fecha + " " + (g.detalle || '') + " " + g.id;
-                    if (cumpleFiltroBase(g.fecha, textoComparar)) {
+            // Gastos - solo en pestaña de Gastos
+            if (pestana === 'gastos') {
+                document.getElementById('mod-gastos').style.display = 'block';
+                const bGastos = document.querySelector('#t-gastos tbody');
+                if (bGastos) {
+                    bGastos.innerHTML = '';
+                    db.gastos.forEach(g => {
+                        if (!buscarEnGasto(g, txtFiltro)) return;
                         let detalleCorto = g.productosArray && g.productosArray.length > 0 
                             ? g.productosArray.map(p => `${p.cantidad}x ${p.detalle}`).join(', ').substring(0, 60) + (g.productosArray.length > 2 ? '...' : '')
                             : g.concepto || '';
@@ -4377,17 +4428,20 @@
                                 <button class="btn-accion btn-eliminar" onclick="eliminarGasto('${g.id}')" style="padding:2px 4px;">x</button>
                             </td>
                         </tr>`;
-                    }
-                });
+                    });
+                }
+            } else {
+                document.getElementById('mod-gastos').style.display = 'none';
             }
 
-            // Caja Menor
-            const bMenor = document.querySelector('#t-cajamenor tbody');
-            if (bMenor) {
-                bMenor.innerHTML = '';
-                db.cajaMenor.forEach(cm => {
-                    let textoComparar = cm.concepto + " " + cm.tipo + " " + cm.fecha + " " + cm.id;
-                    if (cumpleFiltroBase(cm.fecha, textoComparar)) {
+            // Caja Menor - solo en pestaña de Caja Menor
+            if (pestana === 'cajamenor') {
+                document.getElementById('mod-cajamenor').style.display = 'block';
+                const bMenor = document.querySelector('#t-cajamenor tbody');
+                if (bMenor) {
+                    bMenor.innerHTML = '';
+                    db.cajaMenor.forEach(cm => {
+                        if (txtFiltro && !(cm.concepto || '').toLowerCase().includes(txtFiltro) && !(cm.tipo || '').toLowerCase().includes(txtFiltro)) return;
                         let col = cm.tipo === 'Reembolso' ? 'color:var(--success);' : 'color:var(--danger);';
                         let icono = cm.tipo === 'Reembolso' ? '🔄' : '💸';
                         bMenor.innerHTML += `<tr>
@@ -4401,8 +4455,10 @@
                                 <button class="btn-accion btn-eliminar" onclick="eliminarCM('${cm.id}')" style="padding:2px 4px;">x</button>
                             </td>
                         </tr>`;
-                    }
-                });
+                    });
+                }
+            } else {
+                document.getElementById('mod-cajamenor').style.display = 'none';
             }
         }
 
@@ -4415,12 +4471,21 @@
             document.getElementById('btn-' + id).classList.add('active');
 
             document.getElementById('contenedor-kpis-principal').style.display = id === 'dashboard' ? 'grid' : 'none';
-            document.getElementById('f-buscar').value = '';
+
+            // Restaurar búsqueda de la pestaña
+            if (id === 'dashboard') {
+                document.getElementById('f-buscar').value = window.filtrosPorPestana?.dashboard?.busqueda || '';
+                document.getElementById('f-desde').value = window.filtrosPorPestana?.dashboard?.desde || '';
+                document.getElementById('f-hasta').value = window.filtrosPorPestana?.dashboard?.hasta || '';
+                document.getElementById('f-tipo-movimiento').value = window.filtrosPorPestana?.dashboard?.tipo || 'TODOS';
+            } else {
+                document.getElementById('f-buscar').value = window.filtrosPorPestana?.[id]?.busqueda || '';
+            }
 
             const labels = {
-                dashboard: "🔍 Buscar en Entradas/Salidas",
-                ventas: "🔍 Buscar por Cliente, Proyecto o Factura (incluye fechas)",
-                entregas: "🔍 Buscar por Cliente, Factura, Dirección o Estado (incluye fechas)",
+                dashboard: "🔍 Buscar en Entradas/Salidas (por texto)",
+                ventas: "🔍 Buscar por Cliente, Proyecto o Factura",
+                entregas: "🔍 Buscar por Cliente, Factura, Dirección o Estado",
                 cobros: "🔍 Buscar Deudor, Proyecto o Factura",
                 cotizaciones: "🔍 Buscar por Cliente, Nº Cotización o Producto",
                 nomina: "🔍 Buscar por Nombre de Trabajador",
@@ -4430,24 +4495,21 @@
             };
             document.getElementById('lbl-buscador-dinamico').innerText = labels[id] || "🔍 Buscar en este módulo";
 
-            if (id === 'dashboard' || id === 'ventas' || id === 'entregas') {
+            // Filtros de fecha SOLO visibles en Vista Rápida
+            if (id === 'dashboard') {
                 document.getElementById('div-filtro-desde').style.display = 'flex';
                 document.getElementById('div-filtro-hasta').style.display = 'flex';
+                document.getElementById('div-filtro-tipo').style.display = 'flex';
             } else {
                 document.getElementById('div-filtro-desde').style.display = 'none';
                 document.getElementById('div-filtro-hasta').style.display = 'none';
-            }
-
-            if (id === 'dashboard') {
-                document.getElementById('div-filtro-tipo').style.display = 'flex';
-            } else {
                 document.getElementById('div-filtro-tipo').style.display = 'none';
             }
 
             const t = {
                 dashboard: "📊 Vista Rápida de Entradas y Salidas",
                 ventas: "🛍️ Ventas y Fichas de Clientes",
-                entregas: "📦 Órdenes de Entrega",
+                entregas: "📦 Órdenes de Entrega (Pendientes y En Camino)",
                 cobros: "🚨 Cartera y Cobros",
                 cotizaciones: "📋 Cotizaciones y Presupuestos",
                 nomina: "👷 Pagos a Trabajadores",
@@ -4459,7 +4521,6 @@
 
             cerrarMenuSiMovil();
             render();
-            if (window.debugVisible) actualizarDebug();
         }
 
         document.querySelectorAll('nav button').forEach(btn => {
@@ -4467,6 +4528,19 @@
                 if (window.innerWidth <= 1024) cerrarMenuSiMovil();
             });
         });
+
+        // Inicializar filtros por pestaña
+        window.filtrosPorPestana = {
+            dashboard: { busqueda: '', desde: '', hasta: '', tipo: 'TODOS' },
+            ventas: { busqueda: '' },
+            entregas: { busqueda: '' },
+            cobros: { busqueda: '' },
+            cotizaciones: { busqueda: '' },
+            nomina: { busqueda: '' },
+            gastos: { busqueda: '' },
+            cajamenor: { busqueda: '' },
+            config: { busqueda: '' }
+        };
 
         window.addEventListener('DOMContentLoaded', () => {
             establecerRangoMesActual();
