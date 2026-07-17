@@ -1855,13 +1855,11 @@
 
         function abrirModalAbonoDirecto(facturaPrecargada = '', clientePrecargado = '', ventaIdPrecargada = '') {
             const modal = document.getElementById('modal-abono-directo');
-            restaurarBackupModal('modal-abono-directo');
-            modal.classList.add('activo');
             
-            const modoFisico = obtenerModoTalonarioFisico();
-            const numeroInput = document.getElementById('abono-directo-numero');
-            
+            // Forzar limpieza SIEMPRE al abrir un nuevo abono
             if (!document.getElementById('abono-directo-id').value) {
+                document.getElementById('abono-directo-id').value = '';
+                document.getElementById('abono-directo-numero').value = '';
                 document.getElementById('abono-directo-monto').value = '';
                 document.getElementById('abono-directo-medio').value = 'Banco';
                 document.getElementById('abono-directo-fecha').value = new Date().toISOString().split('T')[0];
@@ -1873,6 +1871,8 @@
                 document.getElementById('lbl-modal-abono-directo-titulo').innerText = '💰 Nuevo Abono Directo';
                 document.getElementById('btn-guardar-abono-directo').innerText = '💰 Guardar Abono';
                 
+                const modoFisico = obtenerModoTalonarioFisico();
+                const numeroInput = document.getElementById('abono-directo-numero');
                 if (modoFisico) {
                     numeroInput.disabled = false;
                     numeroInput.placeholder = 'Ej: 045 (de tu talonario)';
@@ -1885,17 +1885,16 @@
                     numeroInput.placeholder = 'Generado automáticamente';
                     numeroInput.style.background = '#e2e8f0';
                 }
-            } else {
-                numeroInput.disabled = false;
-                numeroInput.style.background = 'white';
             }
             
+            modal.classList.add('activo');
             guardarBackupModal('modal-abono-directo');
             setTimeout(() => {
-                if (!modoFisico || document.getElementById('abono-directo-id').value) {
-                    document.getElementById('abono-directo-cliente').focus();
-                } else {
+                const numeroInput = document.getElementById('abono-directo-numero');
+                if (!numeroInput.disabled && !document.getElementById('abono-directo-id').value) {
                     numeroInput.focus();
+                } else {
+                    document.getElementById('abono-directo-cliente').focus();
                 }
             }, 300);
         }
@@ -1960,7 +1959,7 @@
                         }
                     } else if (ventaEncontrada) {
                         // Si se ingresó un número de factura que existe, asociar a esa venta
-                        ventaEncontrada.abonado = (ventaEncontrada.abonado || 0) - ingreso.monto + monto;
+                        ventaEncontrada.abonado = Math.max(0, ventaEncontrada.abonado - ingreso.monto + monto);
                     }
                     ingreso.fecha = fecha;
                     ingreso.origen = origenTexto;
@@ -2302,9 +2301,9 @@
         // ===== FUNCIONES COTIZACIONES ===== (mantenidas igual)
         function abrirModalCotizacion() {
             const modal = document.getElementById('modal-cotizacion');
-            restaurarBackupModal('modal-cotizacion');
-            modal.classList.add('activo');
+            // Forzar limpieza SIEMPRE al abrir una nueva cotización
             if (!document.getElementById('c-id-edicion').value) {
+                document.getElementById('c-id-edicion').value = '';
                 document.getElementById('c-numero').value = '';
                 document.getElementById('c-cliente').value = '';
                 document.getElementById('c-telefono').value = '';
@@ -2325,6 +2324,7 @@
                 document.getElementById('lbl-modal-cotizacion-titulo').innerText = '➕ Nueva Cotización';
                 document.getElementById('btn-guardar-cotizacion-modal').innerText = '🚀 Guardar Cotización';
             }
+            modal.classList.add('activo');
             guardarBackupModal('modal-cotizacion');
             setTimeout(() => {
                 document.getElementById('c-numero').focus();
@@ -2661,13 +2661,10 @@
                 return;
             }
             const modal = document.getElementById('modal-venta');
-            restaurarBackupModal('modal-venta');
-            modal.classList.add('activo');
             
-            const modoFisico = obtenerModoTalonarioFisico();
-            const facturaInput = document.getElementById('v-factura');
-            
+            // Forzar limpieza SIEMPRE al abrir una nueva venta
             if (!document.getElementById('v-id-edicion').value) {
+                document.getElementById('v-id-edicion').value = '';
                 document.getElementById('v-cliente').value = '';
                 document.getElementById('v-cedula').value = '';
                 document.getElementById('v-direccion').value = '';
@@ -2688,6 +2685,8 @@
                 document.getElementById('lbl-modal-venta-titulo').innerText = '➕ Nueva Venta';
                 document.getElementById('btn-guardar-venta-accion').innerText = '🚀 Guardar Venta';
                 
+                const modoFisico = obtenerModoTalonarioFisico();
+                const facturaInput = document.getElementById('v-factura');
                 if (modoFisico) {
                     facturaInput.disabled = false;
                     facturaInput.placeholder = 'Ej: 0254 (de tu talonario)';
@@ -2700,17 +2699,16 @@
                     facturaInput.placeholder = 'Generado automáticamente';
                     facturaInput.style.background = '#e2e8f0';
                 }
-            } else {
-                facturaInput.disabled = false;
-                facturaInput.style.background = 'white';
             }
             
+            modal.classList.add('activo');
             guardarBackupModal('modal-venta');
             setTimeout(() => {
-                if (!modoFisico || document.getElementById('v-id-edicion').value) {
-                    document.getElementById('v-cliente').focus();
-                } else {
+                const facturaInput = document.getElementById('v-factura');
+                if (!facturaInput.disabled && !document.getElementById('v-id-edicion').value) {
                     facturaInput.focus();
+                } else {
+                    document.getElementById('v-cliente').focus();
                 }
             }, 300);
         }
@@ -2729,7 +2727,9 @@
             let v = db.ventas.find(x => x.id === id);
             if (!v) return;
 
-            abrirModalVenta();
+            // Abrir el modal pero con los datos de la venta
+            const modal = document.getElementById('modal-venta');
+            modal.classList.add('activo');
 
             document.getElementById('v-id-edicion').value = v.id;
             document.getElementById('v-factura').value = v.factura || '';
@@ -2745,12 +2745,38 @@
             document.getElementById('v-fecha-pactada').value = v.fechaPactada || '';
             document.getElementById('v-observaciones').value = v.observaciones || '';
             
+            // Cargar productos
             window.productosVenta = v.productosArray && v.productosArray.length > 0 
                 ? JSON.parse(JSON.stringify(v.productosArray))
                 : [];
             actualizarTablaProductosVenta();
             mostrarProductosVenta();
             
+            // Cargar abono si existe
+            // Buscar el ingreso directo asociado a esta venta
+            let ingresoAsociado = db.ingresosDirectos.find(i => i.origen.includes(`(${v.id})`) || i.origen.includes(`Factura #${v.factura}`) && i.origen.includes('Abono Inicial'));
+            if (ingresoAsociado) {
+                // Si el ingreso es dividido, no podemos saber exactamente el desglose, pero lo dejamos en el campo unico
+                // Mejor lo dejamos en el campo de abono unico
+                if (ingresoAsociado.medio === 'Banco' || ingresoAsociado.medio === 'Efectivo') {
+                    document.getElementById('v-medio').value = ingresoAsociado.medio;
+                    document.getElementById('v-abono').value = ingresoAsociado.monto.toLocaleString('es-CO');
+                    alternarVisibilidadMetodoPagoDividido(ingresoAsociado.medio);
+                } else {
+                    // Si es dividido, no lo podemos reconstruir, lo dejamos como está
+                    document.getElementById('v-medio').value = 'Banco';
+                    document.getElementById('v-abono').value = '';
+                    alternarVisibilidadMetodoPagoDividido('Banco');
+                }
+            } else {
+                // Si no hay abono, limpiar
+                document.getElementById('v-abono').value = '';
+                document.getElementById('v-abono-banco').value = '';
+                document.getElementById('v-abono-efectivo').value = '';
+                document.getElementById('v-medio').value = 'Banco';
+                alternarVisibilidadMetodoPagoDividido('Banco');
+            }
+
             document.getElementById('lbl-modal-venta-titulo').innerText = '✏️ Editar Venta';
             document.getElementById('btn-guardar-venta-accion').innerText = '💾 Guardar Cambios';
             guardarBackupModal('modal-venta');
@@ -2911,9 +2937,32 @@
                 }
             }
 
+            let medioSeleccionado = document.getElementById('v-medio').value;
+            let abonoCalculadoTotal = 0;
+            let abonoBanco = 0;
+            let abonoEfectivo = 0;
+
+            if (medioSeleccionado === 'DIVIDIDO') {
+                abonoBanco = cleanNum(document.getElementById('v-abono-banco').value);
+                abonoEfectivo = cleanNum(document.getElementById('v-abono-efectivo').value);
+                abonoCalculadoTotal = abonoBanco + abonoEfectivo;
+            } else {
+                abonoCalculadoTotal = cleanNum(document.getElementById('v-abono').value);
+                if (medioSeleccionado === 'Banco') {
+                    abonoBanco = abonoCalculadoTotal;
+                } else if (medioSeleccionado === 'Efectivo') {
+                    abonoEfectivo = abonoCalculadoTotal;
+                }
+            }
+
             if (idEdicion && idEdicion !== "") {
+                // EDITAR VENTA EXISTENTE
                 let v = db.ventas.find(x => x.id === idEdicion);
                 if (v) {
+                    // Guardar el abono anterior para ajustar
+                    let abonoAnterior = v.abonado || 0;
+                    
+                    // Actualizar datos de la venta
                     v.factura = factura; 
                     v.cliente = cliente; 
                     v.cedula = cedula; 
@@ -2927,48 +2976,61 @@
                     v.fechaPactada = fechaPactada;
                     v.productosArray = JSON.parse(JSON.stringify(window.productosVenta));
                     v.observaciones = observaciones;
-                }
-                cerrarModalVenta(true);
-            } else {
-                let medioSeleccionado = document.getElementById('v-medio').value;
-                let abonoCalculadoTotal = 0;
-                let idVentaNueva = 'v_' + Date.now();
-
-                if (medioSeleccionado === 'DIVIDIDO') {
-                    let abonoBanco = cleanNum(document.getElementById('v-abono-banco').value);
-                    let abonoEfectivo = cleanNum(document.getElementById('v-abono-efectivo').value);
-                    abonoCalculadoTotal = abonoBanco + abonoEfectivo;
                     
+                    // Actualizar el abono: eliminar el ingreso directo asociado y crear uno nuevo
+                    // Buscar ingresos directos asociados a esta venta
+                    let ingresosAsociados = db.ingresosDirectos.filter(i => i.origen.includes(`(${idEdicion})`) || i.origen.includes(`Factura #${factura}`) && i.origen.includes('Abono Inicial'));
+                    
+                    // Eliminar los ingresos antiguos
+                    db.ingresosDirectos = db.ingresosDirectos.filter(i => !ingresosAsociados.includes(i));
+                    
+                    // Crear nuevos ingresos con el nuevo abono
                     if (abonoBanco > 0) {
-                        db.ingresosDirectos.push({ 
-                            id: 'i_b_' + Date.now(), 
-                            fecha: fechaFinal, 
-                            origen: `Abono Inicial BANCO (Factura #${factura}) - ${cliente} (${idVentaNueva})`, 
-                            medio: 'Banco', 
-                            monto: abonoBanco 
+                        db.ingresosDirectos.push({
+                            id: 'i_edit_b_' + Date.now(),
+                            fecha: fechaFinal,
+                            origen: `Abono Inicial BANCO (Factura #${factura}) - ${cliente} (${idEdicion})`,
+                            medio: 'Banco',
+                            monto: abonoBanco,
+                            observaciones: 'Abono inicial (editado)'
                         });
                     }
                     if (abonoEfectivo > 0) {
-                        db.ingresosDirectos.push({ 
-                            id: 'i_e_' + Date.now(), 
-                            fecha: fechaFinal, 
-                            origen: `Abono Inicial EFECTIVO (Factura #${factura}) - ${cliente} (${idVentaNueva})`, 
-                            medio: 'Efectivo', 
-                            monto: abonoEfectivo 
+                        db.ingresosDirectos.push({
+                            id: 'i_edit_e_' + Date.now(),
+                            fecha: fechaFinal,
+                            origen: `Abono Inicial EFECTIVO (Factura #${factura}) - ${cliente} (${idEdicion})`,
+                            medio: 'Efectivo',
+                            monto: abonoEfectivo,
+                            observaciones: 'Abono inicial (editado)'
                         });
                     }
-                } else {
-                    let abonoUnico = cleanNum(document.getElementById('v-abono').value);
-                    abonoCalculadoTotal = abonoUnico;
-                    if (abonoUnico > 0) {
-                        db.ingresosDirectos.push({ 
-                            id: 'i_' + Date.now(), 
-                            fecha: fechaFinal, 
-                            origen: `Abono Inicial (Factura #${factura}) - ${cliente} (${idVentaNueva})`, 
-                            medio: medioSeleccionado, 
-                            monto: abonoUnico 
-                        });
-                    }
+                    
+                    // Actualizar el abonado de la venta
+                    v.abonado = abonoCalculadoTotal;
+                }
+                cerrarModalVenta(true);
+            } else {
+                // NUEVA VENTA
+                let idVentaNueva = 'v_' + Date.now();
+
+                if (abonoBanco > 0) {
+                    db.ingresosDirectos.push({ 
+                        id: 'i_b_' + Date.now(), 
+                        fecha: fechaFinal, 
+                        origen: `Abono Inicial BANCO (Factura #${factura}) - ${cliente} (${idVentaNueva})`, 
+                        medio: 'Banco', 
+                        monto: abonoBanco 
+                    });
+                }
+                if (abonoEfectivo > 0) {
+                    db.ingresosDirectos.push({ 
+                        id: 'i_e_' + Date.now(), 
+                        fecha: fechaFinal, 
+                        origen: `Abono Inicial EFECTIVO (Factura #${factura}) - ${cliente} (${idVentaNueva})`, 
+                        medio: 'Efectivo', 
+                        monto: abonoEfectivo 
+                    });
                 }
 
                 db.ventas.push({ 
@@ -2998,8 +3060,15 @@
         function eliminarVenta(id) {
             let db = window.getDbData();
             if (confirm('¿Eliminar este contrato?')) {
+                let venta = db.ventas.find(x => x.id === id);
+                if (venta) {
+                    // Eliminar todos los ingresos directos asociados a esta venta (por ID y por factura)
+                    db.ingresosDirectos = db.ingresosDirectos.filter(i => 
+                        !i.origen.includes(`(${id})`) && 
+                        !(i.origen.includes(`Factura #${venta.factura}`) && i.origen.includes('Abono Inicial'))
+                    );
+                }
                 db.ventas = db.ventas.filter(x => x.id !== id);
-                db.ingresosDirectos = db.ingresosDirectos.filter(i => !i.origen.includes(`(${id})`));
                 salvar();
             }
         }
@@ -3160,9 +3229,9 @@
         // ===== FUNCIONES GASTOS ===== (mantenidas igual)
         function abrirModalGasto() {
             const modal = document.getElementById('modal-gasto');
-            restaurarBackupModal('modal-gasto');
-            modal.classList.add('activo');
+            // Forzar limpieza SIEMPRE al abrir un nuevo gasto
             if (!document.getElementById('g-id-edicion').value) {
+                document.getElementById('g-id-edicion').value = '';
                 document.getElementById('g-cat').value = 'Servicios Publicos';
                 document.getElementById('g-cat-manual').value = '';
                 document.getElementById('g-medio').value = 'Banco';
@@ -3174,6 +3243,7 @@
                 document.getElementById('lbl-modal-gasto-titulo').innerText = '➕ Registrar Nuevo Gasto';
                 document.getElementById('btn-guardar-gasto-modal').innerText = 'Guardar Gasto';
             }
+            modal.classList.add('activo');
             guardarBackupModal('modal-gasto');
             setTimeout(() => {
                 document.getElementById('g-medio').focus();
