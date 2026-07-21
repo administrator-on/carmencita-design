@@ -1131,8 +1131,6 @@
                     <select id="c-estado">
                         <option value="Pendiente">⏳ Pendiente</option>
                         <option value="Aprobada">✅ Aprobada</option>
-                        <option value="Rechazada">❌ Rechazada</option>
-                        <option value="Vencida">⏰ Vencida</option>
                     </select>
                 </div>
                 <div class="campo"><label>Notas (opcional)</label>
@@ -1239,16 +1237,18 @@
         </div>
     </div>
 
-    <!-- MODAL DESPACHO (flotante) -->
+    <!-- MODAL DESPACHO (flotante) CON OBSERVACIONES -->
     <div class="modal-overlay" id="modal-despacho">
         <div class="modal-flotante" style="max-width:450px;">
             <span class="close-modal-top" onclick="cerrarModalDespacho()">&times;</span>
             <h3 style="color:var(--accent);">🚛 Datos del Despacho</h3>
             <input type="hidden" id="despacho-venta-id">
             <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.5rem;">
+                <div class="campo"><label>Fecha de Despacho</label><input type="date" id="despacho-fecha"></div>
                 <div class="campo"><label>Placa del Vehículo</label><input type="text" id="despacho-placa" placeholder="Ej: ABC-123"></div>
                 <div class="campo"><label>Nombre del Conductor</label><input type="text" id="despacho-conductor" placeholder="Nombre completo"></div>
                 <div class="campo"><label>Teléfono del Conductor</label><input type="text" id="despacho-telefono" placeholder="Celular"></div>
+                <div class="campo"><label>Observaciones</label><textarea id="despacho-observaciones" placeholder="Notas sobre el despacho..." rows="2"></textarea></div>
                 <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
                     <button class="btn btn-verde" onclick="confirmarDespacho()" style="flex:1;">✅ Confirmar Despacho</button>
                     <button class="btn btn-cerrar-modal" onclick="cerrarModalDespacho()" style="flex:0.5;">Cancelar</button>
@@ -1257,7 +1257,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR DESPACHO -->
+    <!-- MODAL EDITAR DESPACHO CON OBSERVACIONES -->
     <div class="modal-overlay" id="modal-editar-despacho">
         <div class="modal-flotante" style="max-width:450px;">
             <span class="close-modal-top" onclick="cerrarModalEditarDespacho()">&times;</span>
@@ -1271,9 +1271,11 @@
                         <option value="Entregado">✅ Entregado</option>
                     </select>
                 </div>
+                <div class="campo"><label>Fecha de Despacho</label><input type="date" id="editar-despacho-fecha"></div>
                 <div class="campo"><label>Placa del Vehículo</label><input type="text" id="editar-despacho-placa" placeholder="Ej: ABC-123"></div>
                 <div class="campo"><label>Nombre del Conductor</label><input type="text" id="editar-despacho-conductor" placeholder="Nombre completo"></div>
                 <div class="campo"><label>Teléfono del Conductor</label><input type="text" id="editar-despacho-telefono" placeholder="Celular"></div>
+                <div class="campo"><label>Observaciones</label><textarea id="editar-despacho-observaciones" placeholder="Notas sobre el despacho..." rows="2"></textarea></div>
                 <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
                     <button class="btn btn-verde" onclick="guardarEdicionDespachoModal()" style="flex:1;">💾 Guardar Cambios</button>
                     <button class="btn btn-cerrar-modal" onclick="cerrarModalEditarDespacho()" style="flex:0.5;">Cancelar</button>
@@ -1841,7 +1843,7 @@
             } 
         }
 
-        // ===== MODAL ABONO DIRECTO (CORREGIDO) =====
+        // ===== MODAL ABONO DIRECTO =====
         function abrirModalAbonoDirectoDesdeVentas() {
             if (window.moduloActual !== 'ventas') {
                 irA('ventas');
@@ -1856,7 +1858,6 @@
         function abrirModalAbonoDirecto(facturaPrecargada = '', clientePrecargado = '', ventaIdPrecargada = '') {
             const modal = document.getElementById('modal-abono-directo');
             
-            // Forzar limpieza SIEMPRE al abrir un nuevo abono
             if (!document.getElementById('abono-directo-id').value) {
                 document.getElementById('abono-directo-id').value = '';
                 document.getElementById('abono-directo-numero').value = '';
@@ -1933,7 +1934,6 @@
             
             if (monto <= 0) return alert('Ingresa un monto válido.');
 
-            // Verificar duplicado
             let abonoExistente = db.ingresosDirectos.find(i => 
                 i.origen.includes(`[Recibo #${numero}]`) && 
                 i.origen.includes(`Factura #${factura}`) &&
@@ -1943,7 +1943,6 @@
                 return alert(`⚠️ Ya existe un abono con el Recibo #${numero} para la factura #${factura}. No se puede duplicar.`);
             }
 
-            // Buscar la venta por el número de factura
             let ventaEncontrada = db.ventas.find(v => v.factura === factura);
             let origenTexto = `Abono Directo (Factura #${factura}) - ${cliente} [Recibo #${numero}]`;
             if (observaciones) origenTexto += ` (${observaciones})`;
@@ -1951,14 +1950,12 @@
             if (idEdicion && idEdicion !== "") {
                 let ingreso = db.ingresosDirectos.find(x => x.id === idEdicion);
                 if (ingreso) {
-                    // Si el abono tiene una venta asociada, ajustar el abonado
                     if (ventaId) {
                         let venta = db.ventas.find(v => v.id === ventaId);
                         if (venta) {
                             venta.abonado = Math.max(0, venta.abonado - ingreso.monto + monto);
                         }
                     } else if (ventaEncontrada) {
-                        // Si se ingresó un número de factura que existe, asociar a esa venta
                         ventaEncontrada.abonado = Math.max(0, ventaEncontrada.abonado - ingreso.monto + monto);
                     }
                     ingreso.fecha = fecha;
@@ -1978,7 +1975,6 @@
                 };
                 db.ingresosDirectos.push(nuevoIngreso);
                 
-                // Si se ingresó un número de factura que existe, sumar al abonado
                 if (ventaEncontrada) {
                     ventaEncontrada.abonado = (ventaEncontrada.abonado || 0) + monto;
                 } else if (ventaId) {
@@ -2086,7 +2082,7 @@
             });
         }
 
-        // ===== FUNCIONES DE DETALLE ===== (mantenidas igual)
+        // ===== FUNCIONES DE DETALLE =====
         function verDetalleIngreso(id) {
             let db = window.getDbData();
             let i = db.ingresosDirectos.find(x => x.id === id);
@@ -2146,9 +2142,11 @@
                 despachoInfo = `
                     <hr style="margin:8px 0;">
                     <p><strong>🚛 DATOS DE DESPACHO:</strong></p>
+                    <p><strong>Fecha:</strong> ${v.despacho.fecha || 'No registrada'}</p>
                     <p><strong>Placa:</strong> ${v.despacho.placa || 'No registrada'}</p>
                     <p><strong>Conductor:</strong> ${v.despacho.conductor || 'No registrado'}</p>
                     <p><strong>Teléfono:</strong> ${v.despacho.telefono || 'No registrado'}</p>
+                    <p><strong>Observaciones:</strong> ${v.despacho.observaciones || 'Sin observaciones'}</p>
                     <p><strong>Fecha/Hora:</strong> ${v.despacho.fechaHora || 'No registrada'}</p>
                 `;
             }
@@ -2190,9 +2188,11 @@
             if (v.despacho) {
                 despachoInfo = `
                     <p><strong>🚛 DATOS DE DESPACHO:</strong></p>
+                    <p><strong>Fecha:</strong> ${v.despacho.fecha || 'No registrada'}</p>
                     <p><strong>Placa:</strong> ${v.despacho.placa || 'No registrada'}</p>
                     <p><strong>Conductor:</strong> ${v.despacho.conductor || 'No registrado'}</p>
                     <p><strong>Teléfono:</strong> ${v.despacho.telefono || 'No registrado'}</p>
+                    <p><strong>Observaciones:</strong> ${v.despacho.observaciones || 'Sin observaciones'}</p>
                     <p><strong>Fecha/Hora:</strong> ${v.despacho.fechaHora || 'No registrada'}</p>
                 `;
             }
@@ -2232,16 +2232,17 @@
             abrirModalDetalle('🚨 Detalle del Cobro', contenido);
         }
 
-        function verDetalleCotizacion(id) {
+        function verDetalleCotizacionMejorada(id) {
             let db = window.getDbData();
             let c = db.cotizaciones.find(x => x.id === id);
             if (!c) return;
-            let estadoEmoji = { 'Pendiente': '⏳ Pendiente', 'Aprobada': '✅ Aprobada', 'Rechazada': '❌ Rechazada', 'Vencida': '⏰ Vencida' };
+            
+            let estadoEmoji = { 'Pendiente': '⏳ Pendiente', 'Aprobada': '✅ Aprobada' };
             let productosHtml = c.productosArray && c.productosArray.length > 0 
                 ? c.productosArray.map(p => `• ${p.cantidad}x ${p.detalle} - ${m(p.precio)} c/u = ${m(p.cantidad * p.precio)}`).join('<br>')
                 : c.productos || 'No especificados';
 
-            let h = `
+            let contenido = `
                 <p><strong>Nº Cotización:</strong> ${c.numero || 'S/N'}</p>
                 <p><strong>Fecha:</strong> ${c.fecha || 'No especificada'}</p>
                 <p><strong>Cliente:</strong> ${c.cliente}</p>
@@ -2254,15 +2255,18 @@
                 <p><strong>💰 Total:</strong> <span style="color:var(--success); font-weight:700;">${m(c.total)}</span></p>
                 <p><strong>📦 Plazo:</strong> ${c.plazo || 'No especificado'}</p>
                 <p><strong>📅 Válido hasta:</strong> ${c.validoHasta || 'No especificado'}</p>
-                <p><strong>📊 Estado:</strong> <span class="badge badge-cotizacion">${estadoEmoji[c.estado] || c.estado}</span></p>
+                <p><strong>📊 Estado:</strong> <span class="badge ${c.estado === 'Aprobada' ? 'badge-aprobada' : 'badge-cotizacion'}">${estadoEmoji[c.estado] || c.estado}</span></p>
                 ${c.notas ? `<p><strong>📝 Notas:</strong> ${c.notas}</p>` : ''}
             `;
-            document.getElementById('contenido-modal-cotizacion').innerHTML = h;
-            document.getElementById('modal-ver-cotizacion').style.display = 'flex';
+            abrirModalDetalle('📋 Detalle de Cotización', contenido);
         }
 
-        function cerrarModalCotizacion() { document.getElementById('modal-ver-cotizacion').style.display = 'none'; }
-        function cerrarModalDetalle() { document.getElementById('modal-detalle-cliente').style.display = 'none'; }
+        function verDetalleCotizacion(id) {
+            verDetalleCotizacionMejorada(id);
+        }
+
+        function cerrarModalCotizacion() { }
+        function cerrarModalDetalle() { }
 
         function verDetalleGasto(id) {
             let db = window.getDbData();
@@ -2298,10 +2302,9 @@
             abrirModalDetalle('🪙 Detalle de Caja Menor', contenido);
         }
 
-        // ===== FUNCIONES COTIZACIONES ===== (mantenidas igual)
+        // ===== FUNCIONES COTIZACIONES =====
         function abrirModalCotizacion() {
             const modal = document.getElementById('modal-cotizacion');
-            // Forzar limpieza SIEMPRE al abrir una nueva cotización
             if (!document.getElementById('c-id-edicion').value) {
                 document.getElementById('c-id-edicion').value = '';
                 document.getElementById('c-numero').value = '';
@@ -2443,6 +2446,17 @@
                 });
             }
             cerrarModalCotizacionFlotante(true);
+            
+            // Si el estado es Aprobada, automáticamente convertir a venta
+            if (estado === 'Aprobada') {
+                setTimeout(() => {
+                    let cotizacionGuardada = db.cotizaciones.find(c => c.numero === numero && c.cliente === cliente);
+                    if (cotizacionGuardada) {
+                        aprobarCotizacionYVenta(cotizacionGuardada.id);
+                    }
+                }, 500);
+            }
+            
             salvar();
         }
 
@@ -2482,46 +2496,93 @@
             }
         }
 
+        // FUNCIÓN MEJORADA: aprobarCotizacionYVenta - AHORA CARGA TODOS LOS DATOS
         function aprobarCotizacionYVenta(id) {
             let db = window.getDbData();
             let c = db.cotizaciones.find(x => x.id === id);
-            if (!c) return;
-
-            if (c.estado === 'Aprobada') {
-                return alert('Esta cotización ya está aprobada.');
+            if (!c) {
+                alert('Cotización no encontrada.');
+                return;
             }
 
-            if (!confirm(`¿Aprobar la cotización Nº ${c.numero} y preparar la venta?`)) return;
+            if (c.estado === 'Aprobada') {
+                alert('Esta cotización ya está aprobada.');
+                return;
+            }
 
+            if (!confirm(`¿Aprobar la cotización Nº ${c.numero} y convertirla en venta?`)) return;
+
+            // Cambiar estado de la cotización
             c.estado = 'Aprobada';
             salvar();
 
-            abrirModalVenta();
+            // ABRIR MODAL DE VENTA CON TODOS LOS DATOS DE LA COTIZACIÓN
+            const modal = document.getElementById('modal-venta');
+            modal.classList.add('activo');
 
+            // Cargar TODOS los datos de la cotización en el modal de venta
+            document.getElementById('v-id-edicion').value = '';
+            document.getElementById('v-factura').value = c.numero || '';
+            document.getElementById('v-factura').disabled = false;
+            document.getElementById('v-factura').style.background = 'white';
+            
             document.getElementById('v-cliente').value = c.cliente || '';
+            document.getElementById('v-cedula').value = '';
             document.getElementById('v-telefono').value = c.telefono || '';
             document.getElementById('v-correo').value = c.correo || '';
             document.getElementById('v-direccion').value = c.direccion || '';
-            document.getElementById('v-factura').value = c.numero || '';
+            document.getElementById('v-barrio').value = '';
             
+            // Cargar productos
             window.productosVenta = c.productosArray && c.productosArray.length > 0 
                 ? JSON.parse(JSON.stringify(c.productosArray))
                 : [];
             actualizarTablaProductosVenta();
             mostrarProductosVenta();
             
+            // Calcular total de productos
             let total = window.productosVenta.reduce((sum, p) => sum + (p.cantidad * p.precio), 0);
             document.getElementById('total-productos-venta').textContent = m(total);
             
-            document.getElementById('lbl-modal-venta-titulo').innerText = `✏️ Convertir Cotización Nº ${c.numero} en Venta`;
+            // Limpiar campos de abono
+            document.getElementById('v-abono').value = '';
+            document.getElementById('v-abono-banco').value = '';
+            document.getElementById('v-abono-efectivo').value = '';
+            document.getElementById('v-medio').value = 'Banco';
+            alternarVisibilidadMetodoPagoDividido('Banco');
+            
+            // Si la cotización tenía notas, pasarlas a observaciones
+            if (c.notas) {
+                document.getElementById('v-observaciones').value = `Cotización Nº ${c.numero}: ${c.notas}`;
+            } else {
+                document.getElementById('v-observaciones').value = `Cotización Nº ${c.numero} aprobada.`;
+            }
+            
+            // Fecha de registro
+            document.getElementById('v-fecha-registro').value = new Date().toISOString().split('T')[0];
+            
+            // Fecha pactada (usar el plazo de la cotización o calcular)
+            if (c.plazo) {
+                let dias = parseInt(c.plazo.match(/\d+/));
+                if (dias) {
+                    let fechaPactada = new Date();
+                    fechaPactada.setDate(fechaPactada.getDate() + dias);
+                    document.getElementById('v-fecha-pactada').value = fechaPactada.toISOString().split('T')[0];
+                }
+            }
+            
+            document.getElementById('lbl-modal-venta-titulo').innerText = `📋 Convertir Cotización Nº ${c.numero} en Venta`;
             document.getElementById('btn-guardar-venta-accion').innerText = '🚀 Guardar Venta';
+
+            // Guardar referencia de la cotización en el modal de venta
+            window.cotizacionOrigenId = id;
 
             setTimeout(() => {
                 alert(`✅ Cotización Nº ${c.numero} aprobada. Completa los detalles del pago y guarda la venta.`);
             }, 500);
         }
 
-        // ===== FUNCIONES WHATSAPP ===== (mantenidas igual)
+        // ===== FUNCIONES WHATSAPP =====
         function enviarCotizacionWhatsAppModal() {
             let telefono = document.getElementById('c-telefono').value.trim();
             if (!telefono) return alert('Por favor ingresa el número de teléfono del cliente.');
@@ -2662,7 +2723,6 @@
             }
             const modal = document.getElementById('modal-venta');
             
-            // Forzar limpieza SIEMPRE al abrir una nueva venta
             if (!document.getElementById('v-id-edicion').value) {
                 document.getElementById('v-id-edicion').value = '';
                 document.getElementById('v-cliente').value = '';
@@ -2720,6 +2780,7 @@
                 window.productosVenta = [];
             }
             document.getElementById('v-productos-list').innerHTML = '';
+            window.cotizacionOrigenId = null;
         }
 
         function abrirModalVentaConDatos(id) {
@@ -2727,7 +2788,6 @@
             let v = db.ventas.find(x => x.id === id);
             if (!v) return;
 
-            // Abrir el modal pero con los datos de la venta
             const modal = document.getElementById('modal-venta');
             modal.classList.add('activo');
 
@@ -2745,31 +2805,24 @@
             document.getElementById('v-fecha-pactada').value = v.fechaPactada || '';
             document.getElementById('v-observaciones').value = v.observaciones || '';
             
-            // Cargar productos
             window.productosVenta = v.productosArray && v.productosArray.length > 0 
                 ? JSON.parse(JSON.stringify(v.productosArray))
                 : [];
             actualizarTablaProductosVenta();
             mostrarProductosVenta();
             
-            // Cargar abono si existe
-            // Buscar el ingreso directo asociado a esta venta
             let ingresoAsociado = db.ingresosDirectos.find(i => i.origen.includes(`(${v.id})`) || i.origen.includes(`Factura #${v.factura}`) && i.origen.includes('Abono Inicial'));
             if (ingresoAsociado) {
-                // Si el ingreso es dividido, no podemos saber exactamente el desglose, pero lo dejamos en el campo unico
-                // Mejor lo dejamos en el campo de abono unico
                 if (ingresoAsociado.medio === 'Banco' || ingresoAsociado.medio === 'Efectivo') {
                     document.getElementById('v-medio').value = ingresoAsociado.medio;
                     document.getElementById('v-abono').value = ingresoAsociado.monto.toLocaleString('es-CO');
                     alternarVisibilidadMetodoPagoDividido(ingresoAsociado.medio);
                 } else {
-                    // Si es dividido, no lo podemos reconstruir, lo dejamos como está
                     document.getElementById('v-medio').value = 'Banco';
                     document.getElementById('v-abono').value = '';
                     alternarVisibilidadMetodoPagoDividido('Banco');
                 }
             } else {
-                // Si no hay abono, limpiar
                 document.getElementById('v-abono').value = '';
                 document.getElementById('v-abono-banco').value = '';
                 document.getElementById('v-abono-efectivo').value = '';
@@ -2956,13 +3009,10 @@
             }
 
             if (idEdicion && idEdicion !== "") {
-                // EDITAR VENTA EXISTENTE
                 let v = db.ventas.find(x => x.id === idEdicion);
                 if (v) {
-                    // Guardar el abono anterior para ajustar
                     let abonoAnterior = v.abonado || 0;
                     
-                    // Actualizar datos de la venta
                     v.factura = factura; 
                     v.cliente = cliente; 
                     v.cedula = cedula; 
@@ -2977,14 +3027,10 @@
                     v.productosArray = JSON.parse(JSON.stringify(window.productosVenta));
                     v.observaciones = observaciones;
                     
-                    // Actualizar el abono: eliminar el ingreso directo asociado y crear uno nuevo
-                    // Buscar ingresos directos asociados a esta venta
                     let ingresosAsociados = db.ingresosDirectos.filter(i => i.origen.includes(`(${idEdicion})`) || i.origen.includes(`Factura #${factura}`) && i.origen.includes('Abono Inicial'));
                     
-                    // Eliminar los ingresos antiguos
                     db.ingresosDirectos = db.ingresosDirectos.filter(i => !ingresosAsociados.includes(i));
                     
-                    // Crear nuevos ingresos con el nuevo abono
                     if (abonoBanco > 0) {
                         db.ingresosDirectos.push({
                             id: 'i_edit_b_' + Date.now(),
@@ -3006,12 +3052,10 @@
                         });
                     }
                     
-                    // Actualizar el abonado de la venta
                     v.abonado = abonoCalculadoTotal;
                 }
                 cerrarModalVenta(true);
             } else {
-                // NUEVA VENTA
                 let idVentaNueva = 'v_' + Date.now();
 
                 if (abonoBanco > 0) {
@@ -3052,6 +3096,15 @@
                     observaciones: observaciones
                 });
                 
+                if (window.cotizacionOrigenId) {
+                    let cotizacion = db.cotizaciones.find(c => c.id === window.cotizacionOrigenId);
+                    if (cotizacion) {
+                        cotizacion.estado = 'Aprobada';
+                        cotizacion.notas = (cotizacion.notas || '') + ' (Convertida en venta)';
+                    }
+                    window.cotizacionOrigenId = null;
+                }
+                
                 cerrarModalVenta(true);
             }
             salvar();
@@ -3062,7 +3115,6 @@
             if (confirm('¿Eliminar este contrato?')) {
                 let venta = db.ventas.find(x => x.id === id);
                 if (venta) {
-                    // Eliminar todos los ingresos directos asociados a esta venta (por ID y por factura)
                     db.ingresosDirectos = db.ingresosDirectos.filter(i => 
                         !i.origen.includes(`(${id})`) && 
                         !(i.origen.includes(`Factura #${venta.factura}`) && i.origen.includes('Abono Inicial'))
@@ -3078,7 +3130,7 @@
             abrirModalAbonoDirecto(factura || '', cliente, id);
         }
 
-        // ===== FUNCIONES DE EDITAR ABONO ===== (con observaciones)
+        // ===== FUNCIONES DE EDITAR ABONO =====
         function abrirModalEditarAbono(idIngreso) {
             let db = window.getDbData();
             let ingreso = db.ingresosDirectos.find(x => x.id === idIngreso);
@@ -3226,10 +3278,9 @@
             }
         }
 
-        // ===== FUNCIONES GASTOS ===== (mantenidas igual)
+        // ===== FUNCIONES GASTOS =====
         function abrirModalGasto() {
             const modal = document.getElementById('modal-gasto');
-            // Forzar limpieza SIEMPRE al abrir un nuevo gasto
             if (!document.getElementById('g-id-edicion').value) {
                 document.getElementById('g-id-edicion').value = '';
                 document.getElementById('g-cat').value = 'Servicios Publicos';
@@ -3452,7 +3503,7 @@
             } 
         }
 
-        // ===== FUNCIONES CAJA MENOR ===== (mantenidas igual)
+        // ===== FUNCIONES CAJA MENOR =====
         function cancelarEdicionCaja() {
             document.getElementById('cm-id-edicion').value = '';
             document.getElementById('cm-tipo').value = 'Gasto Menor';
@@ -3540,9 +3591,11 @@
                 despachoInfo = `
                     <hr style="margin:8px 0;">
                     <p><strong>🚛 DATOS DE DESPACHO:</strong></p>
+                    <p><strong>Fecha:</strong> ${v.despacho.fecha || 'No registrada'}</p>
                     <p><strong>Placa:</strong> ${v.despacho.placa || 'No registrada'}</p>
                     <p><strong>Conductor:</strong> ${v.despacho.conductor || 'No registrado'}</p>
                     <p><strong>Teléfono:</strong> ${v.despacho.telefono || 'No registrado'}</p>
+                    <p><strong>Observaciones:</strong> ${v.despacho.observaciones || 'Sin observaciones'}</p>
                     <p><strong>Fecha/Hora:</strong> ${v.despacho.fechaHora || 'No registrada'}</p>
                 `;
             }
@@ -3572,12 +3625,14 @@
             document.getElementById('modal-detalle-cliente').style.display = 'flex';
         }
 
-        // ===== FUNCIONES DE DESPACHO (con modal flotante) =====
+        // ===== FUNCIONES DE DESPACHO CON OBSERVACIONES =====
         function abrirModalDespacho(idVenta) {
             document.getElementById('despacho-venta-id').value = idVenta;
+            document.getElementById('despacho-fecha').value = new Date().toISOString().split('T')[0];
             document.getElementById('despacho-placa').value = '';
             document.getElementById('despacho-conductor').value = '';
             document.getElementById('despacho-telefono').value = '';
+            document.getElementById('despacho-observaciones').value = '';
             document.getElementById('modal-despacho').classList.add('activo');
         }
 
@@ -3588,9 +3643,11 @@
 
         function confirmarDespacho() {
             let idVenta = document.getElementById('despacho-venta-id').value;
+            let fecha = document.getElementById('despacho-fecha').value || new Date().toISOString().split('T')[0];
             let placa = document.getElementById('despacho-placa').value.trim();
             let conductor = document.getElementById('despacho-conductor').value.trim();
             let telefono = document.getElementById('despacho-telefono').value.trim();
+            let observaciones = document.getElementById('despacho-observaciones').value.trim();
 
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === idVenta);
@@ -3598,15 +3655,17 @@
 
             v.estadoEntrega = 'En Camino';
             v.despacho = {
+                fecha: fecha,
                 placa: placa || 'No registrada',
                 conductor: conductor || 'No registrado',
                 telefono: telefono || 'No registrado',
+                observaciones: observaciones || 'Sin observaciones',
                 fechaHora: new Date().toISOString().replace('T', ' ').substring(0, 16)
             };
 
             salvar();
             cerrarModalDespacho();
-            alert(`✅ Despacho confirmado para la factura Nº ${v.factura || 'S/N'}\n🚛 Conductor: ${conductor || 'No registrado'}\n📅 ${v.despacho.fechaHora}`);
+            alert(`✅ Despacho confirmado para la factura Nº ${v.factura || 'S/N'}\n🚛 Conductor: ${conductor || 'No registrado'}\n📅 ${fecha}`);
         }
 
         function abrirModalEditarDespacho(idVenta) {
@@ -3618,9 +3677,11 @@
             modal.classList.add('activo');
             document.getElementById('editar-despacho-venta-id').value = idVenta;
             document.getElementById('editar-despacho-estado').value = v.estadoEntrega || 'Pendiente';
+            document.getElementById('editar-despacho-fecha').value = v.despacho?.fecha || new Date().toISOString().split('T')[0];
             document.getElementById('editar-despacho-placa').value = v.despacho?.placa || '';
             document.getElementById('editar-despacho-conductor').value = v.despacho?.conductor || '';
             document.getElementById('editar-despacho-telefono').value = v.despacho?.telefono || '';
+            document.getElementById('editar-despacho-observaciones').value = v.despacho?.observaciones || '';
         }
 
         function cerrarModalEditarDespacho() {
@@ -3631,9 +3692,11 @@
         function guardarEdicionDespachoModal() {
             let idVenta = document.getElementById('editar-despacho-venta-id').value;
             let estado = document.getElementById('editar-despacho-estado').value;
+            let fecha = document.getElementById('editar-despacho-fecha').value || new Date().toISOString().split('T')[0];
             let placa = document.getElementById('editar-despacho-placa').value.trim();
             let conductor = document.getElementById('editar-despacho-conductor').value.trim();
             let telefono = document.getElementById('editar-despacho-telefono').value.trim();
+            let observaciones = document.getElementById('editar-despacho-observaciones').value.trim();
 
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === idVenta);
@@ -3643,9 +3706,11 @@
             if (!v.despacho) {
                 v.despacho = {};
             }
+            v.despacho.fecha = fecha;
             v.despacho.placa = placa || 'No registrada';
             v.despacho.conductor = conductor || 'No registrado';
             v.despacho.telefono = telefono || 'No registrado';
+            v.despacho.observaciones = observaciones || 'Sin observaciones';
             if (!v.despacho.fechaHora) {
                 v.despacho.fechaHora = new Date().toISOString().replace('T', ' ').substring(0, 16);
             }
@@ -3675,7 +3740,7 @@
             }
         }
 
-        // ===== FUNCIONES DE IMPRESIÓN ===== (mantenidas igual)
+        // ===== FUNCIONES DE IMPRESIÓN =====
         function mostrarConfirmacionImpresion(mensaje, callback) {
             document.getElementById('print-confirm-message').innerText = mensaje || '¿Deseas imprimir este documento?';
             document.getElementById('print-confirm-overlay').classList.add('activo');
@@ -3999,7 +4064,9 @@
                 "Conductor": v.despacho ? v.despacho.conductor || '' : '',
                 "Placa": v.despacho ? v.despacho.placa || '' : '',
                 "Tel. Conductor": v.despacho ? v.despacho.telefono || '' : '',
-                "Fecha Despacho": v.despacho ? v.despacho.fechaHora || '' : '',
+                "Fecha Despacho": v.despacho ? v.despacho.fecha || '' : '',
+                "Observaciones Despacho": v.despacho ? v.despacho.observaciones || '' : '',
+                "Fecha/Hora Despacho": v.despacho ? v.despacho.fechaHora || '' : '',
                 "Observaciones": v.observaciones || ''
             }));
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dataVentas), "Ventas");
@@ -4051,7 +4118,6 @@
 
             const pestana = window.moduloActual || 'dashboard';
             
-            // Obtener filtros de la pestaña actual
             let txtFiltro = '';
             let fDesde = '';
             let fHasta = '';
@@ -4143,7 +4209,6 @@
             db.cotizaciones.sort((a, b) => new Date(b.fecha || '') - new Date(a.fecha || ''));
             db.cajaMenor.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
-            // KPIs - SOLO DEL MES ACTUAL (para los recuadros superiores)
             let hoy = new Date();
             let primerDiaMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1).toISOString().split('T')[0];
             let ultimoDiaMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).toISOString().split('T')[0];
@@ -4179,10 +4244,8 @@
                 if (currentVal) nSelect.value = currentVal;
             }
 
-            // Dashboard - solo se muestra en la pestaña de dashboard
             if (pestana === 'dashboard') {
                 document.getElementById('mod-dashboard').style.display = 'block';
-                // Dashboard Entradas
                 const bEntradas = document.querySelector('#t-dashboard-entradas tbody');
                 if (bEntradas) {
                     bEntradas.innerHTML = '';
@@ -4245,7 +4308,6 @@
                     });
                 }
 
-                // Dashboard Salidas
                 const bSalidas = document.querySelector('#t-dashboard-salidas tbody');
                 if (bSalidas) {
                     bSalidas.innerHTML = '';
@@ -4301,7 +4363,6 @@
                 document.getElementById('mod-dashboard').style.display = 'none';
             }
 
-            // Ventas - solo en pestaña de Ventas
             if (pestana === 'ventas') {
                 document.getElementById('mod-ventas').style.display = 'block';
                 const bVentas = document.querySelector('#t-ventas tbody');
@@ -4338,7 +4399,6 @@
                 document.getElementById('mod-ventas').style.display = 'none';
             }
 
-            // Entregas - solo en pestaña de Entregas y solo Pendiente/En Camino
             if (pestana === 'entregas') {
                 document.getElementById('mod-entregas').style.display = 'block';
                 const bEntregas = document.querySelector('#t-entregas tbody');
@@ -4359,6 +4419,7 @@
                                 <strong>${v.despacho.conductor || 'N/R'}</strong>
                                 <div class="tel">📱 ${v.despacho.telefono || 'N/R'}</div>
                                 <div style="font-size:0.65rem; color:var(--text-muted);">${v.despacho.placa || ''}</div>
+                                <div style="font-size:0.6rem; color:var(--text-muted);">📅 ${v.despacho.fecha || ''}</div>
                             </div>`;
                         } else {
                             infoConductor = '—';
@@ -4391,7 +4452,6 @@
                 document.getElementById('mod-entregas').style.display = 'none';
             }
 
-            // Cobros - solo en pestaña de Cobros
             if (pestana === 'cobros') {
                 document.getElementById('mod-cobros').style.display = 'block';
                 const bCobros = document.querySelector('#t-cobros tbody');
@@ -4425,7 +4485,6 @@
                 document.getElementById('mod-cobros').style.display = 'none';
             }
 
-            // Cotizaciones - solo en pestaña de Cotizaciones
             if (pestana === 'cotizaciones') {
                 document.getElementById('mod-cotizaciones').style.display = 'block';
                 const bCotizaciones = document.querySelector('#t-cotizaciones tbody');
@@ -4435,7 +4494,7 @@
                         let textoBusqueda = c.cliente + " " + c.numero + " " + c.productos + " " + c.fecha + " " + c.telefono + " " + c.direccion;
                         if (txtFiltro && !textoBusqueda.toLowerCase().includes(txtFiltro)) return;
                         
-                        let estadoEmoji = { 'Pendiente': '⏳ Pendiente', 'Aprobada': '✅ Aprobada', 'Rechazada': '❌ Rechazada', 'Vencida': '⏰ Vencida' };
+                        let estadoEmoji = { 'Pendiente': '⏳ Pendiente', 'Aprobada': '✅ Aprobada' };
                         let estadoBadge = c.estado === 'Aprobada' ? 'badge-aprobada' : 'badge-cotizacion';
                         let productosCortos = c.productos ? c.productos.substring(0, 50) + (c.productos.length > 50 ? '...' : '') : '';
                         
@@ -4455,7 +4514,7 @@
                                 <td><span class="badge ${estadoBadge}">${estadoEmoji[c.estado] || c.estado}</span></td>
                                 <td>
                                     <div style="display:flex; gap:3px; flex-wrap:wrap;">
-                                        <button class="btn-accion btn-ojito" onclick="verDetalleCotizacion('${c.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
+                                        <button class="btn-accion btn-ojito" onclick="verDetalleCotizacionMejorada('${c.id}')" style="padding:2px 4px;" title="Ver detalle">👁️</button>
                                         ${botonAprobar}
                                         <button class="btn-accion btn-whatsapp" onclick="enviarWhatsAppCotizacion('${c.id}')" style="padding:2px 4px; color:white;">💬</button>
                                         <button class="btn-accion" style="background:#25D366; color:white; padding:2px 4px;" onclick="enviarCotizacionExistenteWhatsApp('${c.id}')">📋</button>
@@ -4470,7 +4529,6 @@
                 document.getElementById('mod-cotizaciones').style.display = 'none';
             }
 
-            // Nómina - solo en pestaña de Nómina
             if (pestana === 'nomina') {
                 document.getElementById('mod-nomina').style.display = 'block';
                 const bTrabajadores = document.querySelector('#t-trabajadores tbody');
@@ -4518,7 +4576,6 @@
                 document.getElementById('mod-nomina').style.display = 'none';
             }
 
-            // Gastos - solo en pestaña de Gastos
             if (pestana === 'gastos') {
                 document.getElementById('mod-gastos').style.display = 'block';
                 const bGastos = document.querySelector('#t-gastos tbody');
@@ -4547,7 +4604,6 @@
                 document.getElementById('mod-gastos').style.display = 'none';
             }
 
-            // Caja Menor - solo en pestaña de Caja Menor
             if (pestana === 'cajamenor') {
                 document.getElementById('mod-cajamenor').style.display = 'block';
                 const bMenor = document.querySelector('#t-cajamenor tbody');
@@ -4585,7 +4641,6 @@
 
             document.getElementById('contenedor-kpis-principal').style.display = id === 'dashboard' ? 'grid' : 'none';
 
-            // Restaurar búsqueda de la pestaña
             if (id === 'dashboard') {
                 document.getElementById('f-buscar').value = window.filtrosPorPestana?.dashboard?.busqueda || '';
                 document.getElementById('f-desde').value = window.filtrosPorPestana?.dashboard?.desde || '';
@@ -4608,7 +4663,6 @@
             };
             document.getElementById('lbl-buscador-dinamico').innerText = labels[id] || "🔍 Buscar en este módulo";
 
-            // Filtros de fecha SOLO visibles en Vista Rápida
             if (id === 'dashboard') {
                 document.getElementById('div-filtro-desde').style.display = 'flex';
                 document.getElementById('div-filtro-hasta').style.display = 'flex';
@@ -4642,7 +4696,6 @@
             });
         });
 
-        // Inicializar filtros por pestaña
         window.filtrosPorPestana = {
             dashboard: { busqueda: '', desde: '', hasta: '', tipo: 'TODOS' },
             ventas: { busqueda: '' },
