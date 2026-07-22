@@ -1237,16 +1237,18 @@
         </div>
     </div>
 
-    <!-- MODAL DESPACHO (flotante) -->
+    <!-- MODAL DESPACHO (flotante) CON OBSERVACIONES -->
     <div class="modal-overlay" id="modal-despacho">
         <div class="modal-flotante" style="max-width:450px;">
             <span class="close-modal-top" onclick="cerrarModalDespacho()">&times;</span>
             <h3 style="color:var(--accent);">🚛 Datos del Despacho</h3>
             <input type="hidden" id="despacho-venta-id">
             <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.5rem;">
+                <div class="campo"><label>Fecha de Despacho</label><input type="date" id="despacho-fecha"></div>
                 <div class="campo"><label>Placa del Vehículo</label><input type="text" id="despacho-placa" placeholder="Ej: ABC-123"></div>
                 <div class="campo"><label>Nombre del Conductor</label><input type="text" id="despacho-conductor" placeholder="Nombre completo"></div>
                 <div class="campo"><label>Teléfono del Conductor</label><input type="text" id="despacho-telefono" placeholder="Celular"></div>
+                <div class="campo"><label>Observaciones</label><textarea id="despacho-observaciones" placeholder="Notas sobre el despacho..." rows="2"></textarea></div>
                 <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
                     <button class="btn btn-verde" onclick="confirmarDespacho()" style="flex:1;">✅ Confirmar Despacho</button>
                     <button class="btn btn-cerrar-modal" onclick="cerrarModalDespacho()" style="flex:0.5;">Cancelar</button>
@@ -1255,7 +1257,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDITAR DESPACHO -->
+    <!-- MODAL EDITAR DESPACHO CON OBSERVACIONES -->
     <div class="modal-overlay" id="modal-editar-despacho">
         <div class="modal-flotante" style="max-width:450px;">
             <span class="close-modal-top" onclick="cerrarModalEditarDespacho()">&times;</span>
@@ -1269,9 +1271,11 @@
                         <option value="Entregado">✅ Entregado</option>
                     </select>
                 </div>
+                <div class="campo"><label>Fecha de Despacho</label><input type="date" id="editar-despacho-fecha"></div>
                 <div class="campo"><label>Placa del Vehículo</label><input type="text" id="editar-despacho-placa" placeholder="Ej: ABC-123"></div>
                 <div class="campo"><label>Nombre del Conductor</label><input type="text" id="editar-despacho-conductor" placeholder="Nombre completo"></div>
                 <div class="campo"><label>Teléfono del Conductor</label><input type="text" id="editar-despacho-telefono" placeholder="Celular"></div>
+                <div class="campo"><label>Observaciones</label><textarea id="editar-despacho-observaciones" placeholder="Notas sobre el despacho..." rows="2"></textarea></div>
                 <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
                     <button class="btn btn-verde" onclick="guardarEdicionDespachoModal()" style="flex:1;">💾 Guardar Cambios</button>
                     <button class="btn btn-cerrar-modal" onclick="cerrarModalEditarDespacho()" style="flex:0.5;">Cancelar</button>
@@ -1839,7 +1843,7 @@
             } 
         }
 
-        // ===== MODAL ABONO DIRECTO (CORREGIDO) =====
+        // ===== MODAL ABONO DIRECTO =====
         function abrirModalAbonoDirectoDesdeVentas() {
             if (window.moduloActual !== 'ventas') {
                 irA('ventas');
@@ -2138,9 +2142,11 @@
                 despachoInfo = `
                     <hr style="margin:8px 0;">
                     <p><strong>🚛 DATOS DE DESPACHO:</strong></p>
+                    <p><strong>Fecha:</strong> ${v.despacho.fecha || 'No registrada'}</p>
                     <p><strong>Placa:</strong> ${v.despacho.placa || 'No registrada'}</p>
                     <p><strong>Conductor:</strong> ${v.despacho.conductor || 'No registrado'}</p>
                     <p><strong>Teléfono:</strong> ${v.despacho.telefono || 'No registrado'}</p>
+                    <p><strong>Observaciones:</strong> ${v.despacho.observaciones || 'Sin observaciones'}</p>
                     <p><strong>Fecha/Hora:</strong> ${v.despacho.fechaHora || 'No registrada'}</p>
                 `;
             }
@@ -2182,9 +2188,11 @@
             if (v.despacho) {
                 despachoInfo = `
                     <p><strong>🚛 DATOS DE DESPACHO:</strong></p>
+                    <p><strong>Fecha:</strong> ${v.despacho.fecha || 'No registrada'}</p>
                     <p><strong>Placa:</strong> ${v.despacho.placa || 'No registrada'}</p>
                     <p><strong>Conductor:</strong> ${v.despacho.conductor || 'No registrado'}</p>
                     <p><strong>Teléfono:</strong> ${v.despacho.telefono || 'No registrado'}</p>
+                    <p><strong>Observaciones:</strong> ${v.despacho.observaciones || 'Sin observaciones'}</p>
                     <p><strong>Fecha/Hora:</strong> ${v.despacho.fechaHora || 'No registrada'}</p>
                 `;
             }
@@ -2224,7 +2232,6 @@
             abrirModalDetalle('🚨 Detalle del Cobro', contenido);
         }
 
-        // NUEVA FUNCIÓN: verDetalleCotizacionMejorada (modal flotante)
         function verDetalleCotizacionMejorada(id) {
             let db = window.getDbData();
             let c = db.cotizaciones.find(x => x.id === id);
@@ -2254,18 +2261,12 @@
             abrirModalDetalle('📋 Detalle de Cotización', contenido);
         }
 
-        // Mantener función antigua por compatibilidad
         function verDetalleCotizacion(id) {
             verDetalleCotizacionMejorada(id);
         }
 
-        function cerrarModalCotizacion() { 
-            // Ya no se usa, pero se mantiene
-        }
-        
-        function cerrarModalDetalle() { 
-            // Ya no se usa, pero se mantiene
-        }
+        function cerrarModalCotizacion() { }
+        function cerrarModalDetalle() { }
 
         function verDetalleGasto(id) {
             let db = window.getDbData();
@@ -2495,7 +2496,7 @@
             }
         }
 
-        // FUNCIÓN MEJORADA: aprobarCotizacionYVenta
+        // FUNCIÓN MEJORADA: aprobarCotizacionYVenta - AHORA CARGA TODOS LOS DATOS
         function aprobarCotizacionYVenta(id) {
             let db = window.getDbData();
             let c = db.cotizaciones.find(x => x.id === id);
@@ -2516,17 +2517,21 @@
             salvar();
 
             // ABRIR MODAL DE VENTA CON TODOS LOS DATOS DE LA COTIZACIÓN
-            abrirModalVenta();
+            const modal = document.getElementById('modal-venta');
+            modal.classList.add('activo');
 
             // Cargar TODOS los datos de la cotización en el modal de venta
+            document.getElementById('v-id-edicion').value = '';
             document.getElementById('v-factura').value = c.numero || '';
             document.getElementById('v-factura').disabled = false;
             document.getElementById('v-factura').style.background = 'white';
             
             document.getElementById('v-cliente').value = c.cliente || '';
+            document.getElementById('v-cedula').value = '';
             document.getElementById('v-telefono').value = c.telefono || '';
             document.getElementById('v-correo').value = c.correo || '';
             document.getElementById('v-direccion').value = c.direccion || '';
+            document.getElementById('v-barrio').value = '';
             
             // Cargar productos
             window.productosVenta = c.productosArray && c.productosArray.length > 0 
@@ -2558,7 +2563,6 @@
             
             // Fecha pactada (usar el plazo de la cotización o calcular)
             if (c.plazo) {
-                // Intentar extraer días del plazo
                 let dias = parseInt(c.plazo.match(/\d+/));
                 if (dias) {
                     let fechaPactada = new Date();
@@ -2566,9 +2570,6 @@
                     document.getElementById('v-fecha-pactada').value = fechaPactada.toISOString().split('T')[0];
                 }
             }
-            
-            // Limpiar ID de edición para que sea una venta nueva
-            document.getElementById('v-id-edicion').value = '';
             
             document.getElementById('lbl-modal-venta-titulo').innerText = `📋 Convertir Cotización Nº ${c.numero} en Venta`;
             document.getElementById('btn-guardar-venta-accion').innerText = '🚀 Guardar Venta';
@@ -3095,7 +3096,6 @@
                     observaciones: observaciones
                 });
                 
-                // Si esta venta viene de una cotización aprobada, marcar la cotización como procesada
                 if (window.cotizacionOrigenId) {
                     let cotizacion = db.cotizaciones.find(c => c.id === window.cotizacionOrigenId);
                     if (cotizacion) {
@@ -3591,9 +3591,11 @@
                 despachoInfo = `
                     <hr style="margin:8px 0;">
                     <p><strong>🚛 DATOS DE DESPACHO:</strong></p>
+                    <p><strong>Fecha:</strong> ${v.despacho.fecha || 'No registrada'}</p>
                     <p><strong>Placa:</strong> ${v.despacho.placa || 'No registrada'}</p>
                     <p><strong>Conductor:</strong> ${v.despacho.conductor || 'No registrado'}</p>
                     <p><strong>Teléfono:</strong> ${v.despacho.telefono || 'No registrado'}</p>
+                    <p><strong>Observaciones:</strong> ${v.despacho.observaciones || 'Sin observaciones'}</p>
                     <p><strong>Fecha/Hora:</strong> ${v.despacho.fechaHora || 'No registrada'}</p>
                 `;
             }
@@ -3623,12 +3625,14 @@
             document.getElementById('modal-detalle-cliente').style.display = 'flex';
         }
 
-        // ===== FUNCIONES DE DESPACHO =====
+        // ===== FUNCIONES DE DESPACHO CON OBSERVACIONES =====
         function abrirModalDespacho(idVenta) {
             document.getElementById('despacho-venta-id').value = idVenta;
+            document.getElementById('despacho-fecha').value = new Date().toISOString().split('T')[0];
             document.getElementById('despacho-placa').value = '';
             document.getElementById('despacho-conductor').value = '';
             document.getElementById('despacho-telefono').value = '';
+            document.getElementById('despacho-observaciones').value = '';
             document.getElementById('modal-despacho').classList.add('activo');
         }
 
@@ -3639,9 +3643,11 @@
 
         function confirmarDespacho() {
             let idVenta = document.getElementById('despacho-venta-id').value;
+            let fecha = document.getElementById('despacho-fecha').value || new Date().toISOString().split('T')[0];
             let placa = document.getElementById('despacho-placa').value.trim();
             let conductor = document.getElementById('despacho-conductor').value.trim();
             let telefono = document.getElementById('despacho-telefono').value.trim();
+            let observaciones = document.getElementById('despacho-observaciones').value.trim();
 
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === idVenta);
@@ -3649,15 +3655,17 @@
 
             v.estadoEntrega = 'En Camino';
             v.despacho = {
+                fecha: fecha,
                 placa: placa || 'No registrada',
                 conductor: conductor || 'No registrado',
                 telefono: telefono || 'No registrado',
+                observaciones: observaciones || 'Sin observaciones',
                 fechaHora: new Date().toISOString().replace('T', ' ').substring(0, 16)
             };
 
             salvar();
             cerrarModalDespacho();
-            alert(`✅ Despacho confirmado para la factura Nº ${v.factura || 'S/N'}\n🚛 Conductor: ${conductor || 'No registrado'}\n📅 ${v.despacho.fechaHora}`);
+            alert(`✅ Despacho confirmado para la factura Nº ${v.factura || 'S/N'}\n🚛 Conductor: ${conductor || 'No registrado'}\n📅 ${fecha}`);
         }
 
         function abrirModalEditarDespacho(idVenta) {
@@ -3669,9 +3677,11 @@
             modal.classList.add('activo');
             document.getElementById('editar-despacho-venta-id').value = idVenta;
             document.getElementById('editar-despacho-estado').value = v.estadoEntrega || 'Pendiente';
+            document.getElementById('editar-despacho-fecha').value = v.despacho?.fecha || new Date().toISOString().split('T')[0];
             document.getElementById('editar-despacho-placa').value = v.despacho?.placa || '';
             document.getElementById('editar-despacho-conductor').value = v.despacho?.conductor || '';
             document.getElementById('editar-despacho-telefono').value = v.despacho?.telefono || '';
+            document.getElementById('editar-despacho-observaciones').value = v.despacho?.observaciones || '';
         }
 
         function cerrarModalEditarDespacho() {
@@ -3682,9 +3692,11 @@
         function guardarEdicionDespachoModal() {
             let idVenta = document.getElementById('editar-despacho-venta-id').value;
             let estado = document.getElementById('editar-despacho-estado').value;
+            let fecha = document.getElementById('editar-despacho-fecha').value || new Date().toISOString().split('T')[0];
             let placa = document.getElementById('editar-despacho-placa').value.trim();
             let conductor = document.getElementById('editar-despacho-conductor').value.trim();
             let telefono = document.getElementById('editar-despacho-telefono').value.trim();
+            let observaciones = document.getElementById('editar-despacho-observaciones').value.trim();
 
             let db = window.getDbData();
             let v = db.ventas.find(x => x.id === idVenta);
@@ -3694,9 +3706,11 @@
             if (!v.despacho) {
                 v.despacho = {};
             }
+            v.despacho.fecha = fecha;
             v.despacho.placa = placa || 'No registrada';
             v.despacho.conductor = conductor || 'No registrado';
             v.despacho.telefono = telefono || 'No registrado';
+            v.despacho.observaciones = observaciones || 'Sin observaciones';
             if (!v.despacho.fechaHora) {
                 v.despacho.fechaHora = new Date().toISOString().replace('T', ' ').substring(0, 16);
             }
@@ -4050,7 +4064,9 @@
                 "Conductor": v.despacho ? v.despacho.conductor || '' : '',
                 "Placa": v.despacho ? v.despacho.placa || '' : '',
                 "Tel. Conductor": v.despacho ? v.despacho.telefono || '' : '',
-                "Fecha Despacho": v.despacho ? v.despacho.fechaHora || '' : '',
+                "Fecha Despacho": v.despacho ? v.despacho.fecha || '' : '',
+                "Observaciones Despacho": v.despacho ? v.despacho.observaciones || '' : '',
+                "Fecha/Hora Despacho": v.despacho ? v.despacho.fechaHora || '' : '',
                 "Observaciones": v.observaciones || ''
             }));
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dataVentas), "Ventas");
@@ -4403,6 +4419,7 @@
                                 <strong>${v.despacho.conductor || 'N/R'}</strong>
                                 <div class="tel">📱 ${v.despacho.telefono || 'N/R'}</div>
                                 <div style="font-size:0.65rem; color:var(--text-muted);">${v.despacho.placa || ''}</div>
+                                <div style="font-size:0.6rem; color:var(--text-muted);">📅 ${v.despacho.fecha || ''}</div>
                             </div>`;
                         } else {
                             infoConductor = '—';
